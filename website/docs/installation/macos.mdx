@@ -1,0 +1,42 @@
+---
+id: macos
+title: macOS
+sidebar_label: 🍏 macOS
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import InstallHomebrew from "./homebrew.mdx";
+
+## Installation
+
+<Tabs
+  defaultValue="homebrew"
+  groupId="install"
+  values={[
+    { label: 'homebrew', value: 'homebrew', },
+    { label: 'manual', value: 'manual', }
+  ]
+}>
+<TabItem value="homebrew">
+
+<InstallHomebrew />
+
+</TabItem>
+<TabItem value="manual">
+
+Install the latest version for your system by running the following command:
+
+```bash
+curl -s https://aliae.dev/install.sh | bash -s
+```
+
+By default the script will install to `/usr/local/bin` or the existing aliae executable's installation folder.
+If you want to install to a different location you can specify it using the `-d` flag:
+
+```bash
+curl -s https://aliae.dev/install.sh | bash -s -- -d ~/bin
+```
+
+</TabItem>
+</Tabs>

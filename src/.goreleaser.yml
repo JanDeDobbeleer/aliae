@@ -1,0 +1,47 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+before:
+  hooks:
+    - go mod tidy
+    - go install github.com/tc-hib/go-winres@latest
+    - go-winres make --product-version=git-tag --file-version=git-tag --arch="amd64,386,arm64"
+builds:
+  -
+    binary: "aliae-{{ .Os }}-{{ .Arch }}"
+    no_unique_dist_dir: true
+    flags:
+      - -a
+    ldflags:
+      - -s -w -X main.Version={{.Version}} -extldflags "-static"
+    tags:
+      - netgo
+      - osusergo
+      - static_build
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
+      - "386"
+    ignore:
+      - goos: darwin
+        goarch: "386"
+      - goos: linux
+        goarch: "386"
+      - goos: darwin
+        goarch: arm
+      - goos: windows
+        goarch: arm
+archives:
+  - id: aliae
+    format: binary
+    name_template: "aliae-{{ .Os }}-{{ .Arch }}"
+checksum:
+  name_template: 'checksums.txt'
+changelog:
+  skip: true

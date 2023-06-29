@@ -1,0 +1,30 @@
+PackageIdentifier: JanDeDobbeleer.Aliae
+PackageVersion: <VERSION>
+PackageLocale: en-US
+Publisher: Jan De Dobbeleer
+PublisherUrl: https://github.com/JanDeDobbeleer/aliae/
+PublisherSupportUrl: https://github.com/JanDeDobbeleer/aliae/issues
+Author: Jan De Dobbeleer
+PackageName: Aliae
+PackageUrl: https://aliae.dev/
+License: MIT
+LicenseUrl: https://github.com/JanDeDobbeleer/aliae/raw/main/COPYING
+ShortDescription: Cross shell and platform alias management
+Moniker: aliae
+Tags:
+- "console"
+- "command-line"
+- "shell"
+- "powershell"
+- "wsl"
+- "developer-tools"
+- "utilities"
+- "cli"
+- "cmd"
+- "ps"
+- "terminal"
+- "aliae"
+ManifestType: defaultLocale
+ManifestVersion: 1.4.0
+ReleaseNotesUrl: https://github.com/JanDeDobbeleer/aliae/releases/tag/v<VERSION>
+

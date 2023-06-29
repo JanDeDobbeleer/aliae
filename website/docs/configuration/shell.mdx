@@ -1,0 +1,187 @@
+---
+id: shell
+title: Shell
+sidebar_label: 🐚 Shell
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+<Tabs
+  defaultValue="powershell"
+  groupId="shell"
+  values={[
+    { label: 'bash', value: 'bash', },
+    { label: 'cmd', value: 'cmd', },
+    { label: 'fish', value: 'fish', },
+    { label: 'nu', value: 'nu', },
+    { label: 'powershell', value: 'powershell', },
+    { label: 'tcsh', value: 'tcsh', },
+    { label: 'xonsh', value: 'xonsh', },
+    { label: 'zsh', value: 'zsh', },
+  ]
+}>
+<TabItem value="bash">
+
+Add the following to `~/.bashrc` (could be `~/.profile` or `~/.bash_profile` depending on your environment):
+
+```bash
+eval "$(aliae init bash)"
+```
+
+Once added, reload your profile for the changes to take effect.
+
+```bash
+exec bash
+```
+
+Or, when using `~/.profile`.
+
+```bash
+. ~/.profile
+```
+
+</TabItem>
+<TabItem value="cmd">
+
+The integration with cmd assumes you have [Clink][clink] installed. If you don't, you'll need
+to install it and enjoy all of its features. Follow the installation instructions and make sure
+you select autostart.
+
+Integrating aliae with Clink is easy: create a new file called aliae.lua in your Clink
+scripts directory (run `clink info` inside cmd to find that file's location).
+
+```lua title="aliae.lua"
+load(io.popen('aliae init cmd'):read("*a"))()
+```
+
+Once added, restart cmd for the changes to take effect.
+
+</TabItem>
+<TabItem value="fish">
+
+Initialize aliae in `~/.config/fish/config.fish`:
+
+```fish
+aliae init fish | source
+```
+
+Once added, reload your config for the changes to take effect.
+
+```bash
+exec fish
+```
+
+</TabItem>
+<TabItem value="nu">
+
+:::caution
+aliae requires Nushell v0.78.0 or higher.
+:::
+
+Add the following line to the Nushell env file (`$nu.env-path`):
+
+```bash
+aliae init nu
+```
+
+This saves the initialization script to `~/.aliae.nu`.
+Now, edit the Nushell config file (`$nu.config-path`) and add the following line at the bottom:
+
+```bash
+source ~/.aliae.nu
+```
+
+If you want to save the initialization script elsewhere, you can change the first line to something like this:
+
+```bash
+aliae init nu --print | save /mylocation/myscript.nu --force
+```
+
+And change the `source` line to:
+
+```bash
+source /mylocation/myscript.nu
+```
+
+Once added, restart Nushell for the changes to take effect.
+
+</TabItem>
+<TabItem value="powershell">
+
+Edit your PowerShell profile script, you can find its location under the `$PROFILE` variable in your preferred PowerShell version. For example, using notepad:
+
+```powershell
+notepad $PROFILE
+```
+
+:::info
+When the above command gives an error, make sure to create the profile first.
+
+```powershell
+New-Item -Path $PROFILE -Type File -Force
+```
+
+In this scenario, it can also be that PowerShell blocks running local scripts. To solve that, set PowerShell
+to only require remote scripts to be signed using `Set-ExecutionPolicy RemoteSigned`, or [sign the profile][sign].
+:::
+
+Then add the following line.
+
+```powershell
+aliae init pwsh | Invoke-Expression
+```
+
+Once added, reload your profile for the changes to take effect.
+
+```powershell
+. $PROFILE
+```
+
+</TabItem>
+<TabItem value="tcsh">
+
+Add the following at the end of `~/.tcshrc`:
+
+```bash
+eval `aliae init tcsh`
+```
+
+Once added, reload your profile for the changes to take effect.
+
+```bash
+exec tcsh
+```
+
+</TabItem>
+<TabItem value="xonsh">
+
+Add the following line at the end of `~/.xonshrc`:
+
+```bash
+execx($(aliae init xonsh))
+```
+
+Once added, reload your profile for the changes to take effect.
+
+```bash
+exec xonsh
+```
+
+</TabItem>
+<TabItem value="zsh">
+
+Add the following to `~/.zshrc`:
+
+```bash
+eval "$(aliae init zsh)"
+```
+
+Once added, reload your profile for the changes to take effect.
+
+```bash
+exec zsh
+```
+
+</TabItem>
+</Tabs>

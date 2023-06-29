@@ -1,0 +1,88 @@
+---
+id: windows
+title: Windows
+sidebar_label: ⊞ Windows
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+## Installation
+
+<Tabs
+  defaultValue="winget"
+  groupId="install"
+  values={[
+    { label: 'winget', value: 'winget', },
+    { label: 'scoop', value: 'scoop', },
+    { label: 'manual', value: 'manual', },
+  ]
+}>
+<TabItem value="winget">
+
+Open a PowerShell prompt and run the following command:
+
+```powershell
+winget install JanDeDobbeleer.Aliae -s winget
+```
+
+</TabItem>
+<TabItem value="scoop">
+
+Open a PowerShell prompt and run the following command:
+
+```powershell
+scoop install https://github.com/JanDeDobbeleer/aliae/releases/latest/download/aliae.json
+```
+
+</TabItem>
+<TabItem value="manual">
+
+Open a PowerShell prompt and run the following command:
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://aliae.dev/install.ps1'))
+```
+
+</TabItem>
+</Tabs>
+
+## Update
+
+<Tabs
+  defaultValue="winget"
+  groupId="install"
+  values={[
+    { label: 'winget', value: 'winget', },
+    { label: 'scoop', value: 'scoop', },
+    { label: 'manual', value: 'manual', },
+  ]
+}>
+<TabItem value="winget">
+
+Open a PowerShell prompt and run the following command:
+
+```powershell
+winget upgrade JanDeDobbeleer.Aliae -s winget
+```
+
+</TabItem>
+<TabItem value="scoop">
+
+Open a PowerShell prompt and run the following command:
+
+```powershell
+scoop update Aliae
+```
+
+</TabItem>
+<TabItem value="manual">
+
+Open a PowerShell prompt and run the following command:
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://aliae.dev/install.ps1'))
+```
+
+</TabItem>
+</Tabs>

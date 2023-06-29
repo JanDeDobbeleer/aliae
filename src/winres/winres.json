@@ -1,0 +1,44 @@
+{
+  "RT_GROUP_ICON": {
+    "APP": {
+      "0000": [
+        "icon.png",
+        "icon64.png",
+        "icon48.png",
+        "icon32.png",
+        "icon16.png"
+      ]
+    }
+  },
+  "RT_MANIFEST": {
+    "#1": {
+      "0409": {
+        "description": "Cross shell and platform alias management.",
+        "minimum-os": "win8",
+        "execution-level": "as invoker",
+        "long-path-aware": true,
+        "segment-heap": true
+      }
+    }
+  },
+  "RT_VERSION": {
+    "#1": {
+      "0000": {
+        "fixed": {
+          "file_version": "0.0.0.0",
+          "product_version": "0.0.0.0"
+        },
+        "info": {
+          "0409": {
+            "CompanyName": "github.com/jandedobbeleer",
+            "FileDescription": "Cross shell and platform alias management.",
+            "InternalName": "aliae",
+            "LegalCopyright": "© Jan De Dobbeleer. Licensed under MIT.",
+            "OriginalFilename": "aliae.exe",
+            "ProductName": "aliae"
+          }
+        }
+      }
+    }
+  }
+}

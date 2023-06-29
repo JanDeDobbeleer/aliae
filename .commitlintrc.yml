@@ -1,0 +1,29 @@
+---
+extends:
+  - '@commitlint/config-conventional'
+rules:
+  type-enum:
+  - 2
+  - always
+  - - chore
+    - feat
+    - fix
+    - docs
+    - refactor
+    - perf
+    - test
+    - revert
+  body-max-line-length:
+    - 2
+    - always
+    - 200
+help: |
+  **Possible types**:
+  `chore`:    Change build process, tooling or dependencies.
+  `feat`:     Adds a new feature.
+  `fix`:      Solves a bug.
+  `docs`:     Adds or alters documentation.
+  `refactor`: Rewrites code without feature, performance or bug changes.
+  `perf`:     Improves performance.
+  `test`:     Adds or modifies tests.
+  `revert`:   Changes that reverting other changes

@@ -1,0 +1,29 @@
+---
+id: alias
+title: Alias
+sidebar_label: 📝 Alias
+---
+
+By default, aliae expects a `YAML` file called `.aliae.yaml` in the user `HOME` folder.
+You can however also specify a custom location using the `--config` flag on initialization.
+
+```bash
+eval "$(aliae init zsh --config '/Users/aliae/configs/aliae.yaml')"
+```
+
+The custom location can be a local file, or a URL pointing to a remote config.
+
+### Config layout
+
+All shared aliae are defined using the `aliae` property:
+
+```yaml
+aliae:
+  - alias: a
+    value: aliae
+  - alias: hello-world
+    value: echo "hello world"
+    type: function
+```
+
+An alias can be a command (default), or a function definition.
