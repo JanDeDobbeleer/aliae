@@ -2,13 +2,11 @@ package shell
 
 import (
 	"fmt"
-	"math/rand"
+	"strings"
 )
 
 const (
 	XONSH = "xonsh"
-
-	letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 )
 
 func (a *Alias) Xonsh() *Alias {
@@ -16,9 +14,8 @@ func (a *Alias) Xonsh() *Alias {
 	case Command:
 		a.template = `aliases['{{ .Alias }}'] = '{{ .Value }}'`
 	case Function:
-		// as we can use any alias name, but not any function name
-		// we need to generate a random function name
-		funcName := randStringBytes()
+		// some xonsh aliases are not valid python function names
+		funcName := strings.ReplaceAll(a.Alias, `-`, ``)
 		template := fmt.Sprintf(`@aliases.register("{{ .Alias }}")
 def __%s():
     {{ .Value }}
@@ -33,12 +30,4 @@ func (e *Echo) Xonsh() *Echo {
 	e.template = `message = """{{ .Message }}"""
 print(message)`
 	return e
-}
-
-func randStringBytes() string {
-	b := make([]byte, 10)
-	for i := range b {
-		b[i] = letterBytes[rand.Intn(len(letterBytes))]
-	}
-	return string(b)
 }
