@@ -16,8 +16,8 @@ module.exports = {
       label: "⚙️ Configuration",
       collapsed: false,
       items: [
-        "configuration/shell",
         "configuration/alias",
+        "configuration/shell",
       ],
     },
     {
