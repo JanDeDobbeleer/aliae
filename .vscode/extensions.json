@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "golang.go",
+    "github.vscode-pull-request-github",
+    "esbenp.prettier-vscode",
+    "davidanson.vscode-markdownlint",
+    "yzhang.markdown-all-in-one",
+    "redhat.vscode-yaml"
+  ]
+}

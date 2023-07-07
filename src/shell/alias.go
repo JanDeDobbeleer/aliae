@@ -1,10 +1,5 @@
 package shell
 
-import (
-	"bytes"
-	"text/template"
-)
-
 type Alias struct {
 	Alias string `yaml:"alias"`
 	Value string `yaml:"value"`
@@ -47,18 +42,5 @@ func (a *Alias) String(shell string) string {
 }
 
 func (a *Alias) Render() string {
-	tmpl, err := template.New("alias").Parse(a.template)
-	if err != nil {
-		return err.Error()
-	}
-
-	buffer := new(bytes.Buffer)
-	defer buffer.Reset()
-
-	err = tmpl.Execute(buffer, a)
-	if err != nil {
-		return err.Error()
-	}
-
-	return buffer.String()
+	return render(a.template, a)
 }

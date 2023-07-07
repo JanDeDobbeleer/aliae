@@ -14,3 +14,11 @@ p:close()`
 
 	return a
 }
+
+func (e *Echo) Cmd() *Echo {
+	e.template = `message = [[
+{{ .Message }}
+]]
+print(message)`
+	return e
+}

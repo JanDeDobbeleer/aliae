@@ -22,6 +22,11 @@ func (a *Alias) Nu() *Alias {
 	return a
 }
 
+func (e *Echo) Nu() *Echo {
+	e.template = `echo "{{ .Message }}"`
+	return e
+}
+
 func home() string {
 	home := os.Getenv("HOME")
 	if len(home) > 0 {

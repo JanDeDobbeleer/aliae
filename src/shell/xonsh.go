@@ -29,6 +29,12 @@ def __%s():
 	return a
 }
 
+func (e *Echo) Xonsh() *Echo {
+	e.template = `message = """{{ .Message }}"""
+print(message)`
+	return e
+}
+
 func randStringBytes() string {
 	b := make([]byte, 10)
 	for i := range b {

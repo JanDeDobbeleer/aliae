@@ -17,3 +17,8 @@ func (a *Alias) Zsh() *Alias {
 
 	return a
 }
+
+func (e *Echo) Zsh() *Echo {
+	e.template = `echo "{{ .Message }}"`
+	return e
+}
