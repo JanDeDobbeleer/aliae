@@ -16,3 +16,11 @@ func (a *Alias) Pwsh() *Alias {
 
 	return a
 }
+
+func (e *Echo) Pwsh() *Echo {
+	e.template = `$message = @"
+{{ .Message }}
+"@
+Write-Host $message`
+	return e
+}

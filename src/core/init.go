@@ -9,13 +9,17 @@ import (
 )
 
 func Init(configPath, sh string, printOutput bool) string {
-	aliae, err := config.LoadConfig(configPath)
-	if err != nil {
-		return err.Error()
-	}
-
 	if sh == shell.PWSH && !printOutput {
 		return fmt.Sprintf("(@(& aliae init pwsh --config=%s --print) -join \"`n\") | Invoke-Expression", configPath)
+	}
+
+	aliae, err := config.LoadConfig(configPath)
+	if err != nil {
+		errorString := formatError(err, sh)
+		if sh == shell.NU {
+			return createNuInit(errorString)
+		}
+		return errorString
 	}
 
 	var builder strings.Builder
@@ -37,10 +41,20 @@ func Init(configPath, sh string, printOutput bool) string {
 		return script
 	}
 
-	err = shell.NuInit(script)
+	return createNuInit(script)
+}
+
+func createNuInit(script string) string {
+	err := shell.NuInit(script)
 	if err != nil {
-		return err.Error()
+		return formatError(err, shell.NU)
 	}
 
 	return ""
+}
+
+func formatError(err error, sh string) string {
+	message := fmt.Sprintf("aliae error:\n%s", err.Error())
+	e := shell.Echo{Message: message}
+	return e.Error().String(sh)
 }

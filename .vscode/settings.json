@@ -1,0 +1,16 @@
+{
+  "go.lintTool": "golangci-lint",
+  "go.useLanguageServer": true,
+  "go.lintFlags": ["--fast"],
+  "go.testOnSave": true,
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "go.formatTool": "gofmt",
+  "go.formatFlags": [
+    "-s"
+  ]
+}

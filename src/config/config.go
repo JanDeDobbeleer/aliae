@@ -78,7 +78,7 @@ func getRemoteConfig(url string) (*Aliae, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Failed to fetch config file: %s\n→ %s", resp.Status, url)
+		return nil, fmt.Errorf("Failed to download config file: %s\n→ %s", url, resp.Status)
 	}
 
 	data, err := io.ReadAll(resp.Body)
@@ -92,5 +92,8 @@ func getRemoteConfig(url string) (*Aliae, error) {
 func parseConfig(data []byte) (*Aliae, error) {
 	var aliae Aliae
 	err := yaml.Unmarshal(data, &aliae)
-	return &aliae, err
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse config file: %s", err)
+	}
+	return &aliae, nil
 }
