@@ -13,11 +13,11 @@ module.exports = {
     },
     {
       type: "category",
-      label: "⚙️ Configuration",
+      label: "⚙️ Setup",
       collapsed: false,
       items: [
-        "configuration/alias",
-        "configuration/shell",
+        "setup/configuration",
+        "setup/shell",
       ],
     },
     {

@@ -85,5 +85,5 @@ Done!
 Restart your terminal and have a look at the
 documentation on how to proceed from here.
 
-https://aliae.dev/docs/configuration/shell
+https://aliae.dev/docs/setup/shell
 '@

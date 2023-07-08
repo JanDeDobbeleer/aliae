@@ -16,7 +16,7 @@ var (
 		Short: "Initialize your shell and config",
 		Long: `Initialize your shell and config.
 
-See the documentation to initialize your shell: https://aliae.dev/docs/configuration/shell.`,
+See the documentation to initialize your shell: https://aliae.dev/docs/setup/shell.`,
 		ValidArgs: []string{
 			"bash",
 			"zsh",
