@@ -6,8 +6,16 @@ type Alias struct {
 	Type  Type   `yaml:"type"`
 	Shell string `yaml:"shell"`
 
+	// PowerShell only options
+	Description string `yaml:"description"`
+	Force       bool   `yaml:"force"`
+	Option      Option `yaml:"option"`
+	Scope       Option `yaml:"scope"`
+
 	template string
 }
+
+type Option string
 
 type Type string
 

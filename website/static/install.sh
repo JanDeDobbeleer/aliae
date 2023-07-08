@@ -129,7 +129,7 @@ install() {
     curl -s -L https://github.com/JanDeDobbeleer/aliae/releases/latest/download/posh-${target} -o $executable
     chmod +x $executable
 
-    info "🚀 Installation complete.\n\nYou can follow the instructions at https://aliae.dev/docs/configuration/shell"
+    info "🚀 Installation complete.\n\nYou can follow the instructions at https://aliae.dev/docs/setup/shell"
     info "to setup your shell to use aliae.\n"
 }
 
