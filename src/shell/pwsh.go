@@ -14,10 +14,10 @@ const (
 	Global         Option = "Global"
 	Local          Option = "Local"
 	NumberedScopes Option = "Numbered scopes"
-	Script         Option = "Script"
+	ScriptScope    Option = "Script"
 )
 
-func (a *Alias) Pwsh() *Alias {
+func (a *Alias) pwsh() *Alias {
 	switch a.Type {
 	case Command:
 		a.template = `Set-Alias -Name {{ .Alias }} -Value {{ .Value }}{{ if .Description }} -Description '{{ .Description }}'{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ .Scope }}{{ end }}` //nolint: lll
@@ -30,11 +30,16 @@ func (a *Alias) Pwsh() *Alias {
 	return a
 }
 
-func (e *Echo) Pwsh() *Echo {
+func (e *Echo) pwsh() *Echo {
 	e.template = `$message = @"
 {{ .Message }}
 "@
 Write-Host $message`
+	return e
+}
+
+func (e *Variable) pwsh() *Variable {
+	e.template = `$env:{{ .Name }} = {{ formatString .Value }}`
 	return e
 }
 
@@ -49,7 +54,7 @@ func isPwshOption(option Option) bool {
 
 func isPwshScope(option Option) bool {
 	switch option { //nolint:exhaustive
-	case Global, Local, Private, NumberedScopes, Script:
+	case Global, Local, Private, NumberedScopes, ScriptScope:
 		return true
 	default:
 		return false

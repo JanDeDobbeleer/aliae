@@ -9,7 +9,7 @@ const (
 	XONSH = "xonsh"
 )
 
-func (a *Alias) Xonsh() *Alias {
+func (a *Alias) xonsh() *Alias {
 	switch a.Type {
 	case Command:
 		a.template = `aliases['{{ .Alias }}'] = '{{ .Value }}'`
@@ -18,16 +18,20 @@ func (a *Alias) Xonsh() *Alias {
 		funcName := strings.ReplaceAll(a.Alias, `-`, ``)
 		template := fmt.Sprintf(`@aliases.register("{{ .Alias }}")
 def __%s():
-    {{ .Value }}
-`, funcName)
+    {{ .Value }}`, funcName)
 		a.template = template
 	}
 
 	return a
 }
 
-func (e *Echo) Xonsh() *Echo {
+func (e *Echo) xonsh() *Echo {
 	e.template = `message = """{{ .Message }}"""
 print(message)`
+	return e
+}
+
+func (e *Variable) xonsh() *Variable {
+	e.template = `${{ .Name }} = {{ formatString .Value }}`
 	return e
 }

@@ -16,20 +16,20 @@ func (e *Echo) Error() *Echo {
 func (e *Echo) String(shell string) string {
 	switch shell {
 	case ZSH, BASH, FISH, TCSH:
-		return e.Zsh().Render()
+		return e.zsh().render()
 	case NU:
-		return e.Nu().Render()
+		return e.nu().render()
 	case PWSH:
-		return e.Pwsh().Render()
+		return e.pwsh().render()
 	case CMD:
-		return e.Cmd().Render()
+		return e.cmd().render()
 	case XONSH:
-		return e.Xonsh().Render()
+		return e.xonsh().render()
 	default:
 		return ""
 	}
 }
 
-func (e *Echo) Render() string {
+func (e *Echo) render() string {
 	return render(e.template, e)
 }

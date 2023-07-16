@@ -37,7 +37,7 @@ p:close()`,
 		{
 			Case:     "TCSH",
 			Shell:    TCSH,
-			Expected: "alias foo 'bar'",
+			Expected: "alias foo 'bar';",
 		},
 		{
 			Case:     "XONSH",
@@ -58,7 +58,7 @@ p:close()`,
 
 	for _, tc := range cases {
 		alias.template = ""
-		assert.Equal(t, tc.Expected, alias.String(tc.Shell), tc.Case)
+		assert.Equal(t, tc.Expected, alias.string(tc.Shell), tc.Case)
 	}
 }
 
@@ -110,8 +110,7 @@ end`,
 			Shell: XONSH,
 			Expected: `@aliases.register("foo")
 def __foo():
-    bar
-`,
+    bar`,
 		},
 		{
 			Case:  "XONSH - illegal character",
@@ -119,8 +118,7 @@ def __foo():
 			Shell: XONSH,
 			Expected: `@aliases.register("foo-bar")
 def __foobar():
-    bar
-`,
+    bar`,
 		},
 		{
 			Case:  "ZSH",
@@ -145,6 +143,59 @@ def __foobar():
 			alias.Alias = tc.Alias
 		}
 
-		assert.Equal(t, tc.Expected, alias.String(tc.Shell), tc.Case)
+		assert.Equal(t, tc.Expected, alias.string(tc.Shell), tc.Case)
+	}
+}
+
+func TestAliaeFilter(t *testing.T) {
+	aliae := Aliae{
+		&Alias{Alias: "FOO", Value: "bar"},
+		&Alias{Alias: "BAR", Value: "foo"},
+		&Alias{Alias: "BAZ", Value: "baz", Shell: ZSH},
+	}
+	filtered := aliae.filter(FISH)
+	assert.Len(t, filtered, 2)
+}
+
+func TestAliaeRender(t *testing.T) {
+	cases := []struct {
+		Case     string
+		Aliae    Aliae
+		Expected string
+	}{
+		{
+			Case: "Single alias",
+			Aliae: Aliae{
+				&Alias{Alias: "FOO", Value: "bar"},
+			},
+			Expected: `alias FOO="bar"`,
+		},
+		{
+			Case: "Invalid type",
+			Aliae: Aliae{
+				&Alias{Alias: "FOO", Value: "bar", Type: "invalid"},
+			},
+		},
+		{
+			Case: "Double alias",
+			Aliae: Aliae{
+				&Alias{Alias: "FOO", Value: "bar"},
+				&Alias{Alias: "BAR", Value: "foo"},
+			},
+			Expected: `alias FOO="bar"
+alias BAR="foo"`,
+		},
+		{
+			Case: "Filtered out",
+			Aliae: Aliae{
+				&Alias{Alias: "FOO", Value: "bar", Shell: FISH},
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		Script.Reset()
+		tc.Aliae.Render(BASH)
+		assert.Equal(t, tc.Expected, Script.String(), tc.Case)
 	}
 }

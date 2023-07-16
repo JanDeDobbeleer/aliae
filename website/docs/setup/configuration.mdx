@@ -13,9 +13,25 @@ eval "$(aliae init zsh --config '/Users/aliae/configs/aliae.yaml')"
 
 The custom location can be a local file, or a URL pointing to a remote config.
 
-## Layout
+## Example
 
-All shared aliases are defined using the `aliae` property:
+```yaml
+aliae:
+  - alias: a
+    value: aliae
+  - alias: hello-world
+    value: echo "hello world"
+    type: function
+env:
+  - name: ALIAE_CONFIG
+    value: /Users/Jan/configs/aliae.yaml
+```
+
+## Aliae
+
+Specify the same aliases cross shell.
+
+### Syntax
 
 ```yaml
 aliae:
@@ -25,8 +41,6 @@ aliae:
     value: echo "hello world"
     type: function
 ```
-
-## Aliae
 
 ### Alias
 
@@ -60,6 +74,25 @@ import TabItem from "@theme/TabItem";
 
 </TabItem>
 </Tabs>
+
+## Env
+
+Specify the same environment variables cross shell.
+
+### Syntax
+
+```yaml
+env:
+  - name: ALIAE_CONFIG
+    value: /Users/Jan/configs/aliae.yaml
+```
+
+### Variable
+
+| Name    | Type     | Description        |
+| ------- | -------- | ------------------ |
+| `name`  | `string` | the variable name  |
+| `value` | `any`    | the variable value |
 
 [set-alias-option]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-7.3#-option
 [set-scope-option]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-7.3#-scope

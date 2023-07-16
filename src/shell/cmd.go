@@ -6,7 +6,7 @@ const (
 	CMD = "cmd"
 )
 
-func (a *Alias) Cmd() *Alias {
+func (a *Alias) cmd() *Alias {
 	if a.Type == Command {
 		a.template = `local p = assert(io.popen("doskey {{ .Alias }}={{ .Value }}"))
 p:close()`
@@ -15,10 +15,15 @@ p:close()`
 	return a
 }
 
-func (e *Echo) Cmd() *Echo {
+func (e *Echo) cmd() *Echo {
 	e.template = `message = [[
 {{ .Message }}
 ]]
 print(message)`
+	return e
+}
+
+func (e *Variable) cmd() *Variable {
+	e.template = `os.setenv("{{ .Name }}", {{ formatString .Value }})`
 	return e
 }
