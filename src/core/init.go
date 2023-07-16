@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/jandedobbeleer/aliae/src/config"
 	"github.com/jandedobbeleer/aliae/src/shell"
@@ -22,20 +21,10 @@ func Init(configPath, sh string, printOutput bool) string {
 		return errorString
 	}
 
-	var builder strings.Builder
+	aliae.Aliae.Render(sh)
+	aliae.Env.Render(sh)
 
-	for i, alias := range aliae.Aliae {
-		if len(alias.Shell) != 0 && alias.Shell != sh {
-			continue
-		}
-
-		builder.WriteString(alias.String(sh))
-		if i < len(aliae.Aliae)-1 {
-			builder.WriteString("\n\n")
-		}
-	}
-
-	script := builder.String()
+	script := shell.Script.String()
 
 	if sh != shell.NU || printOutput {
 		return script

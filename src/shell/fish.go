@@ -4,7 +4,7 @@ const (
 	FISH = "fish"
 )
 
-func (a *Alias) Fish() *Alias {
+func (a *Alias) fish() *Alias {
 	switch a.Type {
 	case Command:
 		a.template = `alias {{ .Alias }} {{ .Value }}`
@@ -15,4 +15,9 @@ end`
 	}
 
 	return a
+}
+
+func (e *Variable) fish() *Variable {
+	e.template = `set --global {{ .Name }} {{ .Value }}`
+	return e
 }

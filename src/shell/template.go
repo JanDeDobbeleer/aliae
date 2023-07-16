@@ -2,6 +2,7 @@ package shell
 
 import (
 	"bytes"
+	"fmt"
 	"text/template"
 )
 
@@ -26,6 +27,14 @@ func funcMap() template.FuncMap {
 	funcMap := map[string]interface{}{
 		"isPwshOption": isPwshOption,
 		"isPwshScope":  isPwshScope,
+		"formatString": formatString,
 	}
 	return template.FuncMap(funcMap)
+}
+
+func formatString(variable interface{}) interface{} {
+	if val, OK := variable.(string); OK {
+		return fmt.Sprintf(`"%s"`, val)
+	}
+	return variable
 }

@@ -99,6 +99,6 @@ func TestPowerShellCommandAlias(t *testing.T) {
 
 	for _, tc := range cases {
 		tc.Alias.Type = Command
-		assert.Equal(t, tc.Expected, tc.Alias.Pwsh().Render(), tc.Case)
+		assert.Equal(t, tc.Expected, tc.Alias.pwsh().render(), tc.Case)
 	}
 }

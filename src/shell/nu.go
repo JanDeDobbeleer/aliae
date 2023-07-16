@@ -6,10 +6,12 @@ import (
 )
 
 const (
-	NU = "nu"
+	NU              = "nu"
+	NuEnvBlockStart = "export-env {\n"
+	NuEnvBlockEnd   = "\n}"
 )
 
-func (a *Alias) Nu() *Alias {
+func (a *Alias) nu() *Alias {
 	switch a.Type {
 	case Command:
 		a.template = `alias {{ .Alias }} = {{ .Value }}`
@@ -22,8 +24,13 @@ func (a *Alias) Nu() *Alias {
 	return a
 }
 
-func (e *Echo) Nu() *Echo {
+func (e *Echo) nu() *Echo {
 	e.template = `echo "{{ .Message }}"`
+	return e
+}
+
+func (e *Variable) nu() *Variable {
+	e.template = `    $env.{{ .Name }} = {{ .Value }}`
 	return e
 }
 
