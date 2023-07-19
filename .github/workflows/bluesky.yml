@@ -1,4 +1,4 @@
-name: Social
+name: Bluesky
 on:
   release:
     types: [published]
@@ -20,7 +20,7 @@ jobs:
           BLUESKY_IDENTIFIER: ${{ secrets.BLUESKY_IDENTIFIER }}
           BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
           OWNER: JanDeDobbeleer
-          REPO: oh-my-posh
+          REPO: aliae
         run: |
           npm install
           node main.js
