@@ -31,5 +31,9 @@ func (e *Echo) String(shell string) string {
 }
 
 func (e *Echo) render() string {
-	return render(e.template, e)
+	script, err := render(e.template, e)
+	if err != nil {
+		return err.Error()
+	}
+	return script
 }

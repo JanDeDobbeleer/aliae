@@ -3,13 +3,14 @@ package shell
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"text/template"
 )
 
-func render(text string, context interface{}) string {
+func render(text string, context interface{}) (string, error) {
 	parsedTemplate, err := template.New("alias").Funcs(funcMap()).Parse(text)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
 
 	buffer := new(bytes.Buffer)
@@ -17,10 +18,10 @@ func render(text string, context interface{}) string {
 
 	err = parsedTemplate.Execute(buffer, context)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
 
-	return buffer.String()
+	return buffer.String(), nil
 }
 
 func funcMap() template.FuncMap {
@@ -28,6 +29,7 @@ func funcMap() template.FuncMap {
 		"isPwshOption": isPwshOption,
 		"isPwshScope":  isPwshScope,
 		"formatString": formatString,
+		"env":          os.Getenv,
 	}
 	return template.FuncMap(funcMap)
 }

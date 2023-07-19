@@ -17,6 +17,7 @@ module.exports = {
       collapsed: false,
       items: [
         "setup/configuration",
+        "setup/if",
         "setup/shell",
       ],
     },

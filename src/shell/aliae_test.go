@@ -151,7 +151,7 @@ func TestAliaeFilter(t *testing.T) {
 	aliae := Aliae{
 		&Alias{Alias: "FOO", Value: "bar"},
 		&Alias{Alias: "BAR", Value: "foo"},
-		&Alias{Alias: "BAZ", Value: "baz", Shell: ZSH},
+		&Alias{Alias: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
 	}
 	filtered := aliae.filter(FISH)
 	assert.Len(t, filtered, 2)
@@ -188,7 +188,7 @@ alias BAR="foo"`,
 		{
 			Case: "Filtered out",
 			Aliae: Aliae{
-				&Alias{Alias: "FOO", Value: "bar", Shell: FISH},
+				&Alias{Alias: "FOO", Value: "bar", If: `eq .Shell "fish"`},
 			},
 		},
 	}
