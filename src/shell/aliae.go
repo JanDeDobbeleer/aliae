@@ -12,7 +12,7 @@ type Alias struct {
 	Alias string `yaml:"alias"`
 	Value string `yaml:"value"`
 	Type  Type   `yaml:"type"`
-	Shell string `yaml:"shell"`
+	If    If     `yaml:"if"`
 
 	// PowerShell only options
 	Description string `yaml:"description"`
@@ -58,7 +58,11 @@ func (a *Alias) string(shell string) string {
 }
 
 func (a *Alias) render() string {
-	return render(a.template, a)
+	script, err := render(a.template, a)
+	if err != nil {
+		return err.Error()
+	}
+	return script
 }
 
 func (a Aliae) Render(shell string) {
@@ -89,7 +93,7 @@ func (a Aliae) filter(shell string) Aliae {
 	var aliae Aliae
 
 	for _, alias := range a {
-		if len(alias.Shell) != 0 && alias.Shell != shell {
+		if alias.If.Ignore(shell) {
 			continue
 		}
 		aliae = append(aliae, alias)

@@ -5,7 +5,7 @@ type Env []*Variable
 type Variable struct {
 	Name  string      `yaml:"name"`
 	Value interface{} `yaml:"value"`
-	Shell string      `yaml:"shell"`
+	If    If          `yaml:"if"`
 
 	template string
 }
@@ -32,7 +32,11 @@ func (e *Variable) string(shell string) string {
 }
 
 func (e *Variable) render() string {
-	return render(e.template, e)
+	script, err := render(e.template, e)
+	if err != nil {
+		return err.Error()
+	}
+	return script
 }
 
 func (e Env) Render(shell string) {
@@ -70,7 +74,7 @@ func (e Env) filter(shell string) Env {
 	var env Env
 
 	for _, variable := range e {
-		if len(variable.Shell) != 0 && variable.Shell != shell {
+		if variable.If.Ignore(shell) {
 			continue
 		}
 		env = append(env, variable)

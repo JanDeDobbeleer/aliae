@@ -69,7 +69,7 @@ func TestEnvFilter(t *testing.T) {
 	env := Env{
 		&Variable{Name: "FOO", Value: "bar"},
 		&Variable{Name: "BAR", Value: "foo"},
-		&Variable{Name: "BAZ", Value: "baz", Shell: ZSH},
+		&Variable{Name: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
 	}
 	filtered := env.filter(FISH)
 	assert.Len(t, filtered, 2)
@@ -85,8 +85,14 @@ func TestEnvRender(t *testing.T) {
 	}{
 		{
 			Case:  "PWSH - No elements",
-			Env:   Env{&Variable{Name: "HELLO", Value: "world", Shell: FISH}},
+			Env:   Env{&Variable{Name: "HELLO", Value: "world", If: `eq .Shell "fish"`}},
 			Shell: PWSH,
+		},
+		{
+			Case:     "PWSH - If true",
+			Env:      Env{&Variable{Name: "HELLO", Value: "world", If: `eq .Shell "pwsh"`}},
+			Shell:    PWSH,
+			Expected: `$env:HELLO = "world"`,
 		},
 		{
 			Case:     "PWSH - Single variable",
