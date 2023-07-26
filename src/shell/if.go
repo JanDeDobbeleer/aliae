@@ -15,7 +15,7 @@ func (i If) Ignore() bool {
 
 	template := fmt.Sprintf(`{{ if %s }}false{{ else }}true{{ end }}`, i)
 
-	got, err := render(template, context.Current)
+	got, err := parse(template, context.Current)
 	if err != nil {
 		return false
 	}

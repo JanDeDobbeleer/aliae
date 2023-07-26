@@ -6,9 +6,21 @@ import (
 	"os"
 	"strings"
 	"text/template"
+
+	"github.com/jandedobbeleer/aliae/src/context"
 )
 
-func render(text string, context interface{}) (string, error) {
+type Template string
+
+func (t Template) Parse() Template {
+	if value, err := parse(string(t), context.Current); err == nil {
+		return Template(value)
+	}
+
+	return t
+}
+
+func parse(text string, ctx interface{}) (string, error) {
 	if !strings.Contains(text, "{{") || !strings.Contains(text, "}}") {
 		return text, nil
 	}
@@ -21,7 +33,7 @@ func render(text string, context interface{}) (string, error) {
 	buffer := new(bytes.Buffer)
 	defer buffer.Reset()
 
-	err = parsedTemplate.Execute(buffer, context)
+	err = parsedTemplate.Execute(buffer, ctx)
 	if err != nil {
 		return "", err
 	}
@@ -40,8 +52,10 @@ func funcMap() template.FuncMap {
 }
 
 func formatString(variable interface{}) interface{} {
-	if val, OK := variable.(string); OK {
-		return fmt.Sprintf(`"%s"`, val)
+	switch variable.(type) {
+	case string, Template:
+		return fmt.Sprintf(`"%s"`, variable)
+	default:
+		return variable
 	}
-	return variable
 }

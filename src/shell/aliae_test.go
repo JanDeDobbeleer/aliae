@@ -208,7 +208,7 @@ alias BAR="foo"`,
 func TestAliasWithTemplate(t *testing.T) {
 	cases := []struct {
 		Case     string
-		Value    string
+		Value    Template
 		Expected string
 	}{
 		{

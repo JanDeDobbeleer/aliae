@@ -13,18 +13,16 @@ var (
 type Aliae []*Alias
 
 type Alias struct {
-	Alias string `yaml:"alias"`
-	Value string `yaml:"value"`
-	Type  Type   `yaml:"type"`
-	If    If     `yaml:"if"`
+	Alias string   `yaml:"alias"`
+	Value Template `yaml:"value"`
+	Type  Type     `yaml:"type"`
+	If    If       `yaml:"if"`
 
 	// PowerShell only options
 	Description string `yaml:"description"`
 	Force       bool   `yaml:"force"`
 	Option      Option `yaml:"option"`
 	Scope       Option `yaml:"scope"`
-
-	*context.Runtime
 
 	template string
 }
@@ -64,13 +62,9 @@ func (a *Alias) string() string {
 }
 
 func (a *Alias) render() string {
-	a.Runtime = context.Current
+	a.Value = a.Value.Parse()
 
-	if value, err := render(a.Value, a); err == nil {
-		a.Value = value
-	}
-
-	script, err := render(a.template, a)
+	script, err := parse(a.template, a)
 	if err != nil {
 		return err.Error()
 	}

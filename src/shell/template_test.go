@@ -31,7 +31,7 @@ func TestFormatString(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		got, _ := render(text, tc)
+		got, _ := parse(text, tc)
 		assert.Equal(t, tc.Expected, got, tc.Case)
 	}
 }

@@ -35,7 +35,7 @@ func (e *Echo) String() string {
 }
 
 func (e *Echo) render() string {
-	script, err := render(e.template, e)
+	script, err := parse(e.template, e)
 	if err != nil {
 		return err.Error()
 	}
