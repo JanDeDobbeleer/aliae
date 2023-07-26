@@ -3,6 +3,7 @@ package shell
 import (
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -58,7 +59,8 @@ p:close()`,
 
 	for _, tc := range cases {
 		alias.template = ""
-		assert.Equal(t, tc.Expected, alias.string(tc.Shell), tc.Case)
+		context.Current = &context.Runtime{Shell: tc.Shell}
+		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}
 }
 
@@ -143,7 +145,8 @@ def __foobar():
 			alias.Alias = tc.Alias
 		}
 
-		assert.Equal(t, tc.Expected, alias.string(tc.Shell), tc.Case)
+		context.Current = &context.Runtime{Shell: tc.Shell}
+		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}
 }
 
@@ -153,7 +156,8 @@ func TestAliaeFilter(t *testing.T) {
 		&Alias{Alias: "BAR", Value: "foo"},
 		&Alias{Alias: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
 	}
-	filtered := aliae.filter(FISH)
+	context.Current = &context.Runtime{Shell: "FISH"}
+	filtered := aliae.filter()
 	assert.Len(t, filtered, 2)
 }
 
@@ -195,7 +199,38 @@ alias BAR="foo"`,
 
 	for _, tc := range cases {
 		Script.Reset()
-		tc.Aliae.Render(BASH)
+		context.Current = &context.Runtime{Shell: BASH}
+		tc.Aliae.Render()
 		assert.Equal(t, tc.Expected, Script.String(), tc.Case)
+	}
+}
+
+func TestAliasWithTemplate(t *testing.T) {
+	cases := []struct {
+		Case     string
+		Value    string
+		Expected string
+	}{
+		{
+			Case:     "No template",
+			Value:    "cd ~",
+			Expected: `alias a="cd ~"`,
+		},
+		{
+			Case:     "Home in template",
+			Value:    "{{ .Home }}/go/bin/aliae",
+			Expected: `alias a="/Users/jan/go/bin/aliae"`,
+		},
+		{
+			Case:     "Advanced template",
+			Value:    "{{ .Home }}/go/bin/aliae{{ if eq .OS \"windows\" }}.exe{{ end }}",
+			Expected: `alias a="/Users/jan/go/bin/aliae.exe"`,
+		},
+	}
+
+	for _, tc := range cases {
+		alias := &Alias{Alias: "a", Value: tc.Value}
+		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: "windows"}
+		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}
 }

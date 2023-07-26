@@ -3,6 +3,7 @@ package shell
 import (
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -77,6 +78,7 @@ print(message)`,
 		if tc.Error {
 			echo = echo.Error()
 		}
-		assert.Equal(t, tc.Expected, echo.String(tc.Shell), tc.Case)
+		context.Current = &context.Runtime{Shell: tc.Shell}
+		assert.Equal(t, tc.Expected, echo.String(), tc.Case)
 	}
 }

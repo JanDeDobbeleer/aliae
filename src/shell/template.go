@@ -4,10 +4,15 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"strings"
 	"text/template"
 )
 
 func render(text string, context interface{}) (string, error) {
+	if !strings.Contains(text, "{{") || !strings.Contains(text, "}}") {
+		return text, nil
+	}
+
 	parsedTemplate, err := template.New("alias").Funcs(funcMap()).Parse(text)
 	if err != nil {
 		return "", err

@@ -3,6 +3,8 @@ package shell
 import (
 	"os"
 	"path/filepath"
+
+	"github.com/jandedobbeleer/aliae/src/context"
 )
 
 const (
@@ -34,21 +36,8 @@ func (e *Variable) nu() *Variable {
 	return e
 }
 
-func home() string {
-	home := os.Getenv("HOME")
-	if len(home) > 0 {
-		return home
-	}
-	// fallback to older implemenations on Windows
-	home = os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
-	if home == "" {
-		home = os.Getenv("USERPROFILE")
-	}
-	return home
-}
-
 func NuInit(script string) error {
-	initPath := filepath.Join(home(), ".aliae.nu")
+	initPath := filepath.Join(context.Home(), ".aliae.nu")
 
 	f, err := os.OpenFile(initPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {

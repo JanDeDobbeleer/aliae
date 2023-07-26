@@ -3,6 +3,7 @@ package shell
 import (
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,6 +35,7 @@ func TestIf(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		assert.Equal(t, tc.Expected, tc.If.Ignore(ZSH), tc.Case)
+		context.Current = &context.Runtime{Shell: "zsh"}
+		assert.Equal(t, tc.Expected, tc.If.Ignore(), tc.Case)
 	}
 }
