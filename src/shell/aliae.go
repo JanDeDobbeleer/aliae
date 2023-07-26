@@ -1,6 +1,10 @@
 package shell
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/jandedobbeleer/aliae/src/context"
+)
 
 var (
 	Script strings.Builder
@@ -20,6 +24,8 @@ type Alias struct {
 	Option      Option `yaml:"option"`
 	Scope       Option `yaml:"scope"`
 
+	*context.Runtime
+
 	template string
 }
 
@@ -32,12 +38,12 @@ const (
 	Function Type = "function"
 )
 
-func (a *Alias) string(shell string) string {
+func (a *Alias) string() string {
 	if len(a.Type) == 0 {
 		a.Type = Command
 	}
 
-	switch shell {
+	switch context.Current.Shell {
 	case ZSH, BASH:
 		return a.zsh().render()
 	case PWSH:
@@ -58,15 +64,22 @@ func (a *Alias) string(shell string) string {
 }
 
 func (a *Alias) render() string {
+	a.Runtime = context.Current
+
+	if value, err := render(a.Value, a); err == nil {
+		a.Value = value
+	}
+
 	script, err := render(a.template, a)
 	if err != nil {
 		return err.Error()
 	}
+
 	return script
 }
 
-func (a Aliae) Render(shell string) {
-	a = a.filter(shell)
+func (a Aliae) Render() {
+	a = a.filter()
 
 	if len(a) == 0 {
 		return
@@ -74,7 +87,7 @@ func (a Aliae) Render(shell string) {
 
 	first := true
 	for _, alias := range a {
-		script := alias.string(shell)
+		script := alias.string()
 		if len(script) == 0 {
 			continue
 		}
@@ -89,11 +102,11 @@ func (a Aliae) Render(shell string) {
 	}
 }
 
-func (a Aliae) filter(shell string) Aliae {
+func (a Aliae) filter() Aliae {
 	var aliae Aliae
 
 	for _, alias := range a {
-		if alias.If.Ignore(shell) {
+		if alias.If.Ignore() {
 			continue
 		}
 		aliae = append(aliae, alias)

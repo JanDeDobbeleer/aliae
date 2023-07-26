@@ -3,6 +3,7 @@ package shell
 import (
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -61,7 +62,38 @@ func TestEnvironmentVariable(t *testing.T) {
 
 	for _, tc := range cases {
 		env.template = ""
-		assert.Equal(t, tc.Expected, env.string(tc.Shell), tc.Case)
+		context.Current = &context.Runtime{Shell: tc.Shell}
+		assert.Equal(t, tc.Expected, env.string(), tc.Case)
+	}
+}
+
+func TestEnvironmentVariableWithTemplate(t *testing.T) {
+	cases := []struct {
+		Case     string
+		Value    string
+		Expected string
+	}{
+		{
+			Case:     "No template",
+			Value:    "~",
+			Expected: `export HELLO="~"`,
+		},
+		{
+			Case:     "Home in template",
+			Value:    "{{ .Home }}/.posh.omp.json",
+			Expected: `export HELLO="/Users/jan/.posh.omp.json"`,
+		},
+		{
+			Case:     "Shell in template",
+			Value:    "{{ .Home }}/.posh-{{ .Shell }}.omp.json",
+			Expected: `export HELLO="/Users/jan/.posh-bash.omp.json"`,
+		},
+	}
+
+	for _, tc := range cases {
+		env := &Variable{Name: "HELLO", Value: tc.Value}
+		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan"}
+		assert.Equal(t, tc.Expected, env.string(), tc.Case)
 	}
 }
 
@@ -71,7 +103,8 @@ func TestEnvFilter(t *testing.T) {
 		&Variable{Name: "BAR", Value: "foo"},
 		&Variable{Name: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
 	}
-	filtered := env.filter(FISH)
+	context.Current = &context.Runtime{Shell: "FISH"}
+	filtered := env.filter()
 	assert.Len(t, filtered, 2)
 }
 
@@ -134,7 +167,8 @@ $env:FOO = "bar"`,
 		if tc.NonEmptyScript {
 			Script.WriteString("foo")
 		}
-		tc.Env.Render(tc.Shell)
+		context.Current = &context.Runtime{Shell: tc.Shell}
+		tc.Env.Render()
 		assert.Equal(t, tc.Expected, Script.String(), tc.Case)
 	}
 }

@@ -1,0 +1,29 @@
+---
+id: templates
+title: Templates
+sidebar_label: {} Templates
+---
+
+## Example
+
+```yaml
+env:
+  - name: POSH_THEME
+    value: {{ .Home }}/.configs/posh.omp.yaml
+```
+
+## Description
+
+Some fields have [text/template][go-text-template] abilities, allowing to reuse the same
+configuration across multiple environments resulting in environment specific values.
+
+Out of the box you get the following functionality:
+
+| Name     | Type       | Description                                                 | Example                                                            |
+| -------- | ---------- | ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| `.Shell` | `string`   | the current shell name                                      | `{{ .Shell }}`                                                     |
+| `.Home`  | `string`   | the user's `$HOME` folder                                   | `{{ .Home }}/go/bin/aliae`                                         |
+| `.OS`    | `string`   | the current operating system (`windows`, `darwin`, `linux`) | `{{ .Home }}/go/bin/aliae{{ if eq .OS \"windows\" }}.exe{{ end }}` |
+| `env`    | `function` | retrieve an environment variable value                      | `{{ env \"POSH_THEME\" }}`                                         |
+
+[go-text-template]: https://golang.org/pkg/text/template/

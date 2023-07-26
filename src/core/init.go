@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jandedobbeleer/aliae/src/config"
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/jandedobbeleer/aliae/src/shell"
 )
 
@@ -12,17 +13,19 @@ func Init(configPath, sh string, printOutput bool) string {
 		return fmt.Sprintf("(@(& aliae init pwsh --config=%s --print) -join \"`n\") | Invoke-Expression", configPath)
 	}
 
+	context.Init(sh)
+
 	aliae, err := config.LoadConfig(configPath)
 	if err != nil {
-		errorString := formatError(err, sh)
+		errorString := formatError(err)
 		if sh == shell.NU {
 			return createNuInit(errorString)
 		}
 		return errorString
 	}
 
-	aliae.Aliae.Render(sh)
-	aliae.Env.Render(sh)
+	aliae.Aliae.Render()
+	aliae.Env.Render()
 
 	script := shell.Script.String()
 
@@ -36,14 +39,14 @@ func Init(configPath, sh string, printOutput bool) string {
 func createNuInit(script string) string {
 	err := shell.NuInit(script)
 	if err != nil {
-		return formatError(err, shell.NU)
+		return formatError(err)
 	}
 
 	return ""
 }
 
-func formatError(err error, sh string) string {
+func formatError(err error) string {
 	message := fmt.Sprintf("aliae error:\n%s", err.Error())
 	e := shell.Echo{Message: message}
-	return e.Error().String(sh)
+	return e.Error().String()
 }

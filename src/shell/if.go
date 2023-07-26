@@ -2,24 +2,20 @@ package shell
 
 import (
 	"fmt"
-	"runtime"
+
+	"github.com/jandedobbeleer/aliae/src/context"
 )
 
 type If string
 
-func (i If) Ignore(shell string) bool {
+func (i If) Ignore() bool {
 	if len(i) == 0 {
 		return false
 	}
 
 	template := fmt.Sprintf(`{{ if %s }}false{{ else }}true{{ end }}`, i)
 
-	context := struct {
-		Shell string
-		OS    string
-	}{shell, runtime.GOOS}
-
-	got, err := render(template, context)
+	got, err := render(template, context.Current)
 	if err != nil {
 		return false
 	}

@@ -47,7 +47,7 @@ aliae:
 | Name    | Type     | Description                                                                                                                                       |
 | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `alias` | `string` | the alias name                                                                                                                                    |
-| `value` | `string` | the command(s) you want to execute                                                                                                                |
+| `value` | `string` | the command(s) you want to execute, supports [templating][templates]                                                                              |
 | `type`  | `string` | <ul><li>`command`: a regular alias, value is a one-liner (**default**) </li><li>`function`: a code block to be placed inside a function</li></ul> |
 | `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if]                                                                           |
 
@@ -93,10 +93,11 @@ env:
 | Name    | Type     | Description                                                             |
 | ------- | -------- | ----------------------------------------------------------------------- |
 | `name`  | `string` | the variable name                                                       |
-| `value` | `any`    | the variable value                                                      |
+| `value` | `any`    | the variable value, supports [templating][templates]                    |
 | `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if] |
 
 [go-text-template]: https://golang.org/pkg/text/template/
 [if]: if.mdx
 [set-alias-option]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-7.3#-option
 [set-scope-option]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-7.3#-scope
+[templates]: templates.mdx

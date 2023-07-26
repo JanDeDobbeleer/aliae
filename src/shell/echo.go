@@ -1,6 +1,10 @@
 package shell
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/jandedobbeleer/aliae/src/context"
+)
 
 type Echo struct {
 	Message string
@@ -13,8 +17,8 @@ func (e *Echo) Error() *Echo {
 	return e
 }
 
-func (e *Echo) String(shell string) string {
-	switch shell {
+func (e *Echo) String() string {
+	switch context.Current.Shell {
 	case ZSH, BASH, FISH, TCSH:
 		return e.zsh().render()
 	case NU:
