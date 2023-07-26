@@ -27,77 +27,10 @@ env:
     value: /Users/Jan/configs/aliae.yaml
 ```
 
-## Aliae
+You can find out more about the configuration options below.
 
-Specify the same aliases cross shell.
+- [Alias][alias]
+- [Environment variables][env]
 
-### Syntax
-
-```yaml
-aliae:
-  - alias: a
-    value: aliae
-  - alias: hello-world
-    value: echo "hello world"
-    type: function
-```
-
-### Alias
-
-| Name    | Type     | Description                                                                                                                                       |
-| ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `alias` | `string` | the alias name                                                                                                                                    |
-| `value` | `string` | the command(s) you want to execute, supports [templating][templates]                                                                              |
-| `type`  | `string` | <ul><li>`command`: a regular alias, value is a one-liner (**default**) </li><li>`function`: a code block to be placed inside a function</li></ul> |
-| `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if]                                                                           |
-
-### Shell specific configuration
-
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-
-<Tabs
-  defaultValue="powershell"
-  groupId="shell"
-  values={[
-    { label: 'powershell', value: 'powershell', }
-  ]
-}>
-
-<TabItem value="powershell">
-
-| Name          | Type      | Description                                                                                                                                                                                              |
-| ------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `description` | `string`  | specifies a description of the alias                                                                                                                                                                     |
-| `force`       | `boolean` | use the `force` parameter to change or delete an alias that has the Option parameter set to ReadOnly. The Force parameter cannot change or delete an alias with the `option` parameter set to `Constant` |
-| `option`      | `string`  | see the [PowerShell documentation][set-alias-option]                                                                                                                                                     |
-| `scope`       | `string`  | see the [PowerShell documentation][set-scope-option]                                                                                                                                                     |
-
-</TabItem>
-</Tabs>
-
-## Env
-
-Specify the same environment variables cross shell.
-
-### Syntax
-
-```yaml
-env:
-  - name: ALIAE_CONFIG
-    value: /Users/Jan/configs/aliae.yaml
-```
-
-### Variable
-
-| Name    | Type     | Description                                                             |
-| ------- | -------- | ----------------------------------------------------------------------- |
-| `name`  | `string` | the variable name                                                       |
-| `value` | `any`    | the variable value, supports [templating][templates]                    |
-| `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if] |
-
-[go-text-template]: https://golang.org/pkg/text/template/
-[if]: if.mdx
-[set-alias-option]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-7.3#-option
-[set-scope-option]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-7.3#-scope
-[templates]: templates.mdx
+[alias]: alias.mdx
+[env]: env.mdx

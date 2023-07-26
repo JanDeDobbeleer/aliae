@@ -9,8 +9,6 @@ type Variable struct {
 	Value interface{} `yaml:"value"`
 	If    If          `yaml:"if"`
 
-	*context.Runtime
-
 	template string
 }
 
@@ -36,15 +34,12 @@ func (e *Variable) string() string {
 }
 
 func (e *Variable) render() string {
-	e.Runtime = context.Current
-
 	if text, OK := e.Value.(string); OK {
-		if value, err := render(text, e); err == nil {
-			e.Value = value
-		}
+		template := Template(text)
+		e.Value = template.Parse()
 	}
 
-	script, err := render(e.template, e)
+	script, err := parse(e.template, e)
 	if err != nil {
 		return err.Error()
 	}
