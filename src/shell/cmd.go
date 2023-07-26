@@ -27,3 +27,8 @@ func (e *Variable) cmd() *Variable {
 	e.template = `os.setenv("{{ .Name }}", {{ formatString .Value }})`
 	return e
 }
+
+func (p *PathEntry) cmd() *PathEntry {
+	p.template = `os.setenv("PATH", "{{ cleanString .Value }};" .. os.getenv("PATH"))`
+	return p
+}

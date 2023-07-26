@@ -73,8 +73,6 @@ func (a *Alias) render() string {
 }
 
 func (a Aliae) Render() {
-	a = a.filter()
-
 	if len(a) == 0 {
 		return
 	}
@@ -82,7 +80,7 @@ func (a Aliae) Render() {
 	first := true
 	for _, alias := range a {
 		script := alias.string()
-		if len(script) == 0 {
+		if len(script) == 0 || alias.If.Ignore() {
 			continue
 		}
 
@@ -94,17 +92,4 @@ func (a Aliae) Render() {
 
 		first = false
 	}
-}
-
-func (a Aliae) filter() Aliae {
-	var aliae Aliae
-
-	for _, alias := range a {
-		if alias.If.Ignore() {
-			continue
-		}
-		aliae = append(aliae, alias)
-	}
-
-	return aliae
 }

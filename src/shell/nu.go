@@ -32,7 +32,12 @@ func (e *Echo) nu() *Echo {
 }
 
 func (e *Variable) nu() *Variable {
-	e.template = `    $env.{{ .Name }} = {{ .Value }}`
+	e.template = `    $env.{{ .Name }} = {{ formatString .Value }}`
+	return e
+}
+
+func (e *PathEntry) nu() *PathEntry {
+	e.template = `let-env PATH = ($env.PATH | prepend "{{ .Value }}")`
 	return e
 }
 

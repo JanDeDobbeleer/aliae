@@ -16,3 +16,8 @@ func (e *Variable) tcsh() *Variable {
 	e.template = `setenv {{ .Name }} {{ .Value }};`
 	return e
 }
+
+func (p *PathEntry) tcsh() *PathEntry {
+	p.template = `set path = ( {{ .Value }} $path );`
+	return p
+}

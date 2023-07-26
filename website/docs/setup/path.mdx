@@ -1,0 +1,32 @@
+---
+id: path
+title: Path
+sidebar_label: 🛣️ Path
+---
+
+Specify the same `PATH` entries cross shell.
+
+### Syntax
+
+```yaml
+path:
+  - value: |
+      {{ .Home }}/homebrew/bin
+      /usr/local/bin/
+      /opt/local/bin/
+    if: eq .OS "darwin"
+  - value: |
+      {{ .Home }}/go/bin/
+      {{ env "VOLTA_HOME" }}/bin
+```
+
+### Path
+
+| Name    | Type     | Description                                                                                |
+| ------- | -------- | ------------------------------------------------------------------------------------------ |
+| `value` | `string` | the path entires you want to add, separated by a newline. Supports [templating][templates] |
+| `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if]                    |
+
+[templates]: templates.mdx
+[go-text-template]: https://golang.org/pkg/text/template/
+[if]: if.mdx

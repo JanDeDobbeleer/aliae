@@ -46,6 +46,7 @@ func funcMap() template.FuncMap {
 		"isPwshOption": isPwshOption,
 		"isPwshScope":  isPwshScope,
 		"formatString": formatString,
+		"cleanString":  cleanString,
 		"env":          os.Getenv,
 	}
 	return template.FuncMap(funcMap)
@@ -54,7 +55,23 @@ func funcMap() template.FuncMap {
 func formatString(variable interface{}) interface{} {
 	switch variable.(type) {
 	case string, Template:
-		return fmt.Sprintf(`"%s"`, variable)
+		return fmt.Sprintf(`"%s"`, cleanString(variable))
+	default:
+		return variable
+	}
+}
+
+func cleanString(variable interface{}) interface{} {
+	clean := func(v string) string {
+		v = strings.ReplaceAll(v, `\`, `\\`)
+		return v
+	}
+
+	switch v := variable.(type) {
+	case Template:
+		return clean(string(v))
+	case string:
+		return clean(v)
 	default:
 		return variable
 	}
