@@ -27,3 +27,8 @@ func (e *Variable) zsh() *Variable {
 	e.template = `export {{ .Name }}={{ formatString .Value }}`
 	return e
 }
+
+func (e *PathEntry) zsh() *PathEntry {
+	e.template = `export PATH="{{ .Value }}:$PATH"`
+	return e
+}

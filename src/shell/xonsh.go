@@ -35,3 +35,8 @@ func (e *Variable) xonsh() *Variable {
 	e.template = `${{ .Name }} = {{ formatString .Value }}`
 	return e
 }
+
+func (p *PathEntry) xonsh() *PathEntry {
+	p.template = `$PATH.add('{{ .Value }}', True, False)`
+	return p
+}

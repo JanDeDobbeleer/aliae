@@ -28,7 +28,7 @@ p:close()`,
 		{
 			Case:     "FISH",
 			Shell:    FISH,
-			Expected: "alias foo bar",
+			Expected: "alias foo 'bar'",
 		},
 		{
 			Case:     "NU",
@@ -148,17 +148,6 @@ def __foobar():
 		context.Current = &context.Runtime{Shell: tc.Shell}
 		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}
-}
-
-func TestAliaeFilter(t *testing.T) {
-	aliae := Aliae{
-		&Alias{Alias: "FOO", Value: "bar"},
-		&Alias{Alias: "BAR", Value: "foo"},
-		&Alias{Alias: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
-	}
-	context.Current = &context.Runtime{Shell: "FISH"}
-	filtered := aliae.filter()
-	assert.Len(t, filtered, 2)
 }
 
 func TestAliaeRender(t *testing.T) {

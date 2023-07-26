@@ -32,7 +32,7 @@ func TestEnvironmentVariable(t *testing.T) {
 		{
 			Case:     "NU",
 			Shell:    NU,
-			Expected: "    $env.HELLO = world",
+			Expected: `    $env.HELLO = "world"`,
 		},
 		{
 			Case:     "TCSH",
@@ -157,7 +157,7 @@ $env:FOO = "bar"`,
 			Env:   Env{&Variable{Name: "HELLO", Value: "world"}},
 			Shell: NU,
 			Expected: `export-env {
-    $env.HELLO = world
+    $env.HELLO = "world"
 }`,
 		},
 	}
