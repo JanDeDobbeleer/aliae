@@ -8,7 +8,7 @@ import (
 )
 
 func TestEnvironmentVariable(t *testing.T) {
-	env := &Variable{Name: "HELLO", Value: "world"}
+	env := &Env{Name: "HELLO", Value: "world"}
 	cases := []struct {
 		Case     string
 		Shell    string
@@ -91,17 +91,17 @@ func TestEnvironmentVariableWithTemplate(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		env := &Variable{Name: "HELLO", Value: tc.Value}
+		env := &Env{Name: "HELLO", Value: tc.Value}
 		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan"}
 		assert.Equal(t, tc.Expected, env.string(), tc.Case)
 	}
 }
 
 func TestEnvFilter(t *testing.T) {
-	env := Env{
-		&Variable{Name: "FOO", Value: "bar"},
-		&Variable{Name: "BAR", Value: "foo"},
-		&Variable{Name: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
+	env := Envs{
+		&Env{Name: "FOO", Value: "bar"},
+		&Env{Name: "BAR", Value: "foo"},
+		&Env{Name: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
 	}
 	context.Current = &context.Runtime{Shell: "FISH"}
 	filtered := env.filter()
@@ -112,30 +112,30 @@ func TestEnvRender(t *testing.T) {
 	cases := []struct {
 		Case           string
 		Shell          string
-		Env            Env
+		Env            Envs
 		NonEmptyScript bool
 		Expected       string
 	}{
 		{
 			Case:  "PWSH - No elements",
-			Env:   Env{&Variable{Name: "HELLO", Value: "world", If: `eq .Shell "fish"`}},
+			Env:   Envs{&Env{Name: "HELLO", Value: "world", If: `eq .Shell "fish"`}},
 			Shell: PWSH,
 		},
 		{
 			Case:     "PWSH - If true",
-			Env:      Env{&Variable{Name: "HELLO", Value: "world", If: `eq .Shell "pwsh"`}},
+			Env:      Envs{&Env{Name: "HELLO", Value: "world", If: `eq .Shell "pwsh"`}},
 			Shell:    PWSH,
 			Expected: `$env:HELLO = "world"`,
 		},
 		{
 			Case:     "PWSH - Single variable",
-			Env:      Env{&Variable{Name: "HELLO", Value: "world"}},
+			Env:      Envs{&Env{Name: "HELLO", Value: "world"}},
 			Shell:    PWSH,
 			Expected: `$env:HELLO = "world"`,
 		},
 		{
 			Case:           "PWSH - Single variable, non empty",
-			Env:            Env{&Variable{Name: "HELLO", Value: "world"}},
+			Env:            Envs{&Env{Name: "HELLO", Value: "world"}},
 			Shell:          PWSH,
 			NonEmptyScript: true,
 			Expected: `foo
@@ -144,9 +144,9 @@ $env:HELLO = "world"`,
 		},
 		{
 			Case: "PWSH - double variable",
-			Env: Env{
-				&Variable{Name: "HELLO", Value: "world"},
-				&Variable{Name: "FOO", Value: "bar"},
+			Env: Envs{
+				&Env{Name: "HELLO", Value: "world"},
+				&Env{Name: "FOO", Value: "bar"},
 			},
 			Shell: PWSH,
 			Expected: `$env:HELLO = "world"
@@ -154,7 +154,7 @@ $env:FOO = "bar"`,
 		},
 		{
 			Case:  "NU - Single variable",
-			Env:   Env{&Variable{Name: "HELLO", Value: "world"}},
+			Env:   Envs{&Env{Name: "HELLO", Value: "world"}},
 			Shell: NU,
 			Expected: `export-env {
     $env.HELLO = "world"

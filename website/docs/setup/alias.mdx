@@ -9,10 +9,10 @@ Specify the same alias cross shell.
 ### Syntax
 
 ```yaml
-aliae:
-  - alias: a
+alias:
+  - name: a
     value: aliae
-  - alias: hello-world
+  - name: hello-world
     value: echo "hello world"
     type: function
 ```
@@ -21,7 +21,7 @@ aliae:
 
 | Name    | Type     | Description                                                                                                                                       |
 | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `alias` | `string` | the alias name                                                                                                                                    |
+| `name`  | `string` | the alias name                                                                                                                                    |
 | `value` | `string` | the command(s) you want to execute, supports [templating][templates]                                                                              |
 | `type`  | `string` | <ul><li>`command`: a regular alias, value is a one-liner (**default**) </li><li>`function`: a code block to be placed inside a function</li></ul> |
 | `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if]                                                                           |

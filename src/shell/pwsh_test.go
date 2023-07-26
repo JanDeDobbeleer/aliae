@@ -17,14 +17,14 @@ func TestPowerShellCommandAlias(t *testing.T) {
 			Case:     "PWSH",
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar",
-			Alias:    &Alias{Alias: "foo", Value: "bar"},
+			Alias:    &Alias{Name: "foo", Value: "bar"},
 		},
 		{
 			Case:     "PWSH - Description",
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar -Description 'This is a description'",
 			Alias: &Alias{
-				Alias:       "foo",
+				Name:        "foo",
 				Value:       "bar",
 				Description: "This is a description",
 			},
@@ -34,7 +34,7 @@ func TestPowerShellCommandAlias(t *testing.T) {
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar -Force",
 			Alias: &Alias{
-				Alias: "foo",
+				Name:  "foo",
 				Value: "bar",
 				Force: true,
 			},
@@ -44,7 +44,7 @@ func TestPowerShellCommandAlias(t *testing.T) {
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar -Option AllScope",
 			Alias: &Alias{
-				Alias:  "foo",
+				Name:   "foo",
 				Value:  "bar",
 				Option: AllScope,
 			},
@@ -54,7 +54,7 @@ func TestPowerShellCommandAlias(t *testing.T) {
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar -Scope Global",
 			Alias: &Alias{
-				Alias: "foo",
+				Name:  "foo",
 				Value: "bar",
 				Scope: Global,
 			},
@@ -64,7 +64,7 @@ func TestPowerShellCommandAlias(t *testing.T) {
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar -Description 'This is a description' -Force",
 			Alias: &Alias{
-				Alias:       "foo",
+				Name:        "foo",
 				Value:       "bar",
 				Description: "This is a description",
 				Force:       true,
@@ -75,7 +75,7 @@ func TestPowerShellCommandAlias(t *testing.T) {
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar -Description 'This is a description' -Force -Scope Global",
 			Alias: &Alias{
-				Alias:       "foo",
+				Name:        "foo",
 				Value:       "bar",
 				Description: "This is a description",
 				Force:       true,
@@ -87,7 +87,7 @@ func TestPowerShellCommandAlias(t *testing.T) {
 			Shell:    PWSH,
 			Expected: "Set-Alias -Name foo -Value bar -Description 'This is a description' -Force -Option AllScope -Scope Global",
 			Alias: &Alias{
-				Alias:       "foo",
+				Name:        "foo",
 				Value:       "bar",
 				Description: "This is a description",
 				Force:       true,

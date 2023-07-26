@@ -6,45 +6,45 @@ import (
 	"github.com/jandedobbeleer/aliae/src/context"
 )
 
-type Path []*PathEntry
+type Paths []*Path
 
-type PathEntry struct {
+type Path struct {
 	Value Template `yaml:"value"`
 	If    If       `yaml:"if"`
 
 	template string
 }
 
-func (e *PathEntry) string() string {
+func (p *Path) string() string {
 	switch context.Current.Shell {
 	case ZSH, BASH:
-		return e.zsh().render()
+		return p.zsh().render()
 	case PWSH:
-		return e.pwsh().render()
+		return p.pwsh().render()
 	case NU:
-		return e.nu().render()
+		return p.nu().render()
 	case FISH:
-		return e.fish().render()
+		return p.fish().render()
 	case TCSH:
-		return e.tcsh().render()
+		return p.tcsh().render()
 	case XONSH:
-		return e.xonsh().render()
+		return p.xonsh().render()
 	case CMD:
-		return e.cmd().render()
+		return p.cmd().render()
 	default:
 		return ""
 	}
 }
 
-func (e *PathEntry) render() string {
-	e.Value = e.Value.Parse()
+func (p *Path) render() string {
+	p.Value = p.Value.Parse()
 
 	var builder strings.Builder
 	ctx := struct {
 		Value string
 	}{}
 
-	splitted := strings.Split(string(e.Value), "\n")
+	splitted := strings.Split(string(p.Value), "\n")
 
 	first := true
 	for _, line := range splitted {
@@ -57,7 +57,7 @@ func (e *PathEntry) render() string {
 		}
 
 		ctx.Value = line
-		script, err := parse(e.template, ctx)
+		script, err := parse(p.template, ctx)
 		if err != nil {
 			builder.WriteString(err.Error())
 		}
@@ -70,7 +70,7 @@ func (e *PathEntry) render() string {
 	return builder.String()
 }
 
-func (p Path) Render() {
+func (p Paths) Render() {
 	if len(p) == 0 {
 		return
 	}

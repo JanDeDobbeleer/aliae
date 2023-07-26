@@ -16,9 +16,9 @@ const (
 func (a *Alias) nu() *Alias {
 	switch a.Type {
 	case Command:
-		a.template = `alias {{ .Alias }} = {{ .Value }}`
+		a.template = `alias {{ .Name }} = {{ .Value }}`
 	case Function:
-		a.template = `def {{ .Alias }} [] {
+		a.template = `def {{ .Name }} [] {
     {{ .Value }}
 }`
 	}
@@ -31,14 +31,14 @@ func (e *Echo) nu() *Echo {
 	return e
 }
 
-func (e *Variable) nu() *Variable {
+func (e *Env) nu() *Env {
 	e.template = `    $env.{{ .Name }} = {{ formatString .Value }}`
 	return e
 }
 
-func (e *PathEntry) nu() *PathEntry {
-	e.template = `let-env PATH = ($env.PATH | prepend "{{ .Value }}")`
-	return e
+func (p *Path) nu() *Path {
+	p.template = `let-env PATH = ($env.PATH | prepend "{{ .Value }}")`
+	return p
 }
 
 func NuInit(script string) error {

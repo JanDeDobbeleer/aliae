@@ -32,9 +32,9 @@ var (
 )
 
 type Aliae struct {
-	Aliae shell.Aliae `yaml:"aliae"`
-	Env   shell.Env   `yaml:"env"`
-	Path  shell.Path  `yaml:"path"`
+	Aliae shell.Aliae `yaml:"alias"`
+	Envs  shell.Envs  `yaml:"env"`
+	Paths shell.Paths `yaml:"path"`
 }
 
 func LoadConfig(configPath string) (*Aliae, error) {

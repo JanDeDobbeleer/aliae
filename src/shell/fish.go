@@ -7,9 +7,9 @@ const (
 func (a *Alias) fish() *Alias {
 	switch a.Type {
 	case Command:
-		a.template = `alias {{ .Alias }} '{{ .Value }}'`
+		a.template = `alias {{ .Name }} '{{ .Value }}'`
 	case Function:
-		a.template = `function {{ .Alias }}
+		a.template = `function {{ .Name }}
     {{ .Value }}
 end`
 	}
@@ -17,12 +17,12 @@ end`
 	return a
 }
 
-func (e *Variable) fish() *Variable {
+func (e *Env) fish() *Env {
 	e.template = `set --global {{ .Name }} {{ .Value }}`
 	return e
 }
 
-func (e *PathEntry) fish() *PathEntry {
+func (e *Path) fish() *Path {
 	e.template = `fish_add_path {{ .Value }}`
 	return e
 }
