@@ -2,9 +2,9 @@ package shell
 
 import "github.com/jandedobbeleer/aliae/src/context"
 
-type Env []*Variable
+type Envs []*Env
 
-type Variable struct {
+type Env struct {
 	Name  string      `yaml:"name"`
 	Value interface{} `yaml:"value"`
 	If    If          `yaml:"if"`
@@ -12,7 +12,7 @@ type Variable struct {
 	template string
 }
 
-func (e *Variable) string() string {
+func (e *Env) string() string {
 	switch context.Current.Shell {
 	case ZSH, BASH:
 		return e.zsh().render()
@@ -33,7 +33,7 @@ func (e *Variable) string() string {
 	}
 }
 
-func (e *Variable) render() string {
+func (e *Env) render() string {
 	if text, OK := e.Value.(string); OK {
 		template := Template(text)
 		e.Value = template.Parse()
@@ -47,7 +47,7 @@ func (e *Variable) render() string {
 	return script
 }
 
-func (e Env) Render() {
+func (e Envs) Render() {
 	e = e.filter()
 
 	if len(e) == 0 {
@@ -78,8 +78,8 @@ func (e Env) Render() {
 	}
 }
 
-func (e Env) filter() Env {
-	var env Env
+func (e Envs) filter() Envs {
+	var env Envs
 
 	for _, variable := range e {
 		if variable.If.Ignore() {

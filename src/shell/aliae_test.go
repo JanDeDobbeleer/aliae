@@ -8,7 +8,7 @@ import (
 )
 
 func TestAliasCommand(t *testing.T) {
-	alias := &Alias{Alias: "foo", Value: "bar"}
+	alias := &Alias{Name: "foo", Value: "bar"}
 	cases := []struct {
 		Case     string
 		Shell    string
@@ -68,7 +68,7 @@ func TestAliasFunction(t *testing.T) {
 	cases := []struct {
 		Case     string
 		Shell    string
-		Alias    string
+		Name     string
 		Expected string
 	}{
 		{
@@ -116,7 +116,7 @@ def __foo():
 		},
 		{
 			Case:  "XONSH - illegal character",
-			Alias: "foo-bar",
+			Name:  "foo-bar",
 			Shell: XONSH,
 			Expected: `@aliases.register("foo-bar")
 def __foobar():
@@ -139,10 +139,10 @@ def __foobar():
 	}
 
 	for _, tc := range cases {
-		alias := &Alias{Alias: "foo", Value: "bar", Type: Function}
+		alias := &Alias{Name: "foo", Value: "bar", Type: Function}
 
-		if len(tc.Alias) > 0 {
-			alias.Alias = tc.Alias
+		if len(tc.Name) > 0 {
+			alias.Name = tc.Name
 		}
 
 		context.Current = &context.Runtime{Shell: tc.Shell}
@@ -159,21 +159,21 @@ func TestAliaeRender(t *testing.T) {
 		{
 			Case: "Single alias",
 			Aliae: Aliae{
-				&Alias{Alias: "FOO", Value: "bar"},
+				&Alias{Name: "FOO", Value: "bar"},
 			},
 			Expected: `alias FOO="bar"`,
 		},
 		{
 			Case: "Invalid type",
 			Aliae: Aliae{
-				&Alias{Alias: "FOO", Value: "bar", Type: "invalid"},
+				&Alias{Name: "FOO", Value: "bar", Type: "invalid"},
 			},
 		},
 		{
 			Case: "Double alias",
 			Aliae: Aliae{
-				&Alias{Alias: "FOO", Value: "bar"},
-				&Alias{Alias: "BAR", Value: "foo"},
+				&Alias{Name: "FOO", Value: "bar"},
+				&Alias{Name: "BAR", Value: "foo"},
 			},
 			Expected: `alias FOO="bar"
 alias BAR="foo"`,
@@ -181,7 +181,7 @@ alias BAR="foo"`,
 		{
 			Case: "Filtered out",
 			Aliae: Aliae{
-				&Alias{Alias: "FOO", Value: "bar", If: `eq .Shell "fish"`},
+				&Alias{Name: "FOO", Value: "bar", If: `eq .Shell "fish"`},
 			},
 		},
 	}
@@ -218,7 +218,7 @@ func TestAliasWithTemplate(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		alias := &Alias{Alias: "a", Value: tc.Value}
+		alias := &Alias{Name: "a", Value: tc.Value}
 		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: "windows"}
 		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}

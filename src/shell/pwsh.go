@@ -28,9 +28,9 @@ func (a *Alias) pwsh() *Alias {
 
 	switch a.Type {
 	case Command:
-		a.template = `Set-Alias -Name {{ .Alias }} -Value {{ .Value }}{{ if .Description }} -Description '{{ .Description }}'{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ .Scope }}{{ end }}` //nolint: lll
+		a.template = `Set-Alias -Name {{ .Name }} -Value {{ .Value }}{{ if .Description }} -Description '{{ .Description }}'{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ .Scope }}{{ end }}` //nolint: lll
 	case Function:
-		a.template = `function {{ .Alias }}() {
+		a.template = `function {{ .Name }}() {
     {{ .Value }}
 }`
 	}
@@ -46,14 +46,14 @@ Write-Host $message`
 	return e
 }
 
-func (e *Variable) pwsh() *Variable {
+func (e *Env) pwsh() *Env {
 	e.template = `$env:{{ .Name }} = {{ formatString .Value }}`
 	return e
 }
 
-func (e *PathEntry) pwsh() *PathEntry {
-	e.template = `$env:Path = '{{ .Value }};' + $env:Path`
-	return e
+func (p *Path) pwsh() *Path {
+	p.template = `$env:Path = '{{ .Value }};' + $env:Path`
+	return p
 }
 
 func isPwshOption(option Option) bool {

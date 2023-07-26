@@ -8,9 +8,9 @@ const (
 func (a *Alias) zsh() *Alias {
 	switch a.Type {
 	case Command:
-		a.template = `alias {{ .Alias }}="{{ .Value }}"`
+		a.template = `alias {{ .Name }}="{{ .Value }}"`
 	case Function:
-		a.template = `{{ .Alias }}() {
+		a.template = `{{ .Name }}() {
     {{ .Value }}
 }`
 	}
@@ -23,12 +23,12 @@ func (e *Echo) zsh() *Echo {
 	return e
 }
 
-func (e *Variable) zsh() *Variable {
+func (e *Env) zsh() *Env {
 	e.template = `export {{ .Name }}={{ formatString .Value }}`
 	return e
 }
 
-func (e *PathEntry) zsh() *PathEntry {
-	e.template = `export PATH="{{ .Value }}:$PATH"`
-	return e
+func (p *Path) zsh() *Path {
+	p.template = `export PATH="{{ .Value }}:$PATH"`
+	return p
 }

@@ -13,7 +13,7 @@ var (
 type Aliae []*Alias
 
 type Alias struct {
-	Alias string   `yaml:"alias"`
+	Name  string   `yaml:"name"`
 	Value Template `yaml:"value"`
 	Type  Type     `yaml:"type"`
 	If    If       `yaml:"if"`
