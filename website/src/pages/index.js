@@ -8,27 +8,28 @@ import styles from "./styles.module.css";
 
 const features = [
   {
-    title: <>Ease of use</>,
+    title: <>Extensible</>,
     description:
       <>
-        Easily add and manage alaises for your shells. From simple aliases
-        to more complex commands, you can manage them all in one place.
+        Easily extend and manage alaises, environment variables, PATH entries and scripts for your shells.
+        From simple aliases to more complex functionality, you can manage them all in one place.
       </>,
   },
   {
-    title: <>Portable</>,
+    title: <>Unified experience</>,
     description:
       <>
         No matter which shell or platform you're using, or even how many, you can
         carry the configuration from one shell and/or machine to another
-        for the same alaises everywhere you work.
+        for the same experience everywhere you work.
       </>
   },
     {
-      title: <>Native capabilities</>,
+      title: <>Focus on what matters</>,
       description:
         <>
-          Use the full feature set of every shell when defining aliases.
+          Focus on what you need instead of searching through shell specific documentation.
+          The same commands and syntax work across all shells and platforms. It's that simple.
         </>
     }
 ];

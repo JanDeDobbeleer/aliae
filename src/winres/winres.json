@@ -13,7 +13,7 @@
   "RT_MANIFEST": {
     "#1": {
       "0409": {
-        "description": "Cross shell and platform alias management.",
+        "description": "Cross platform shell management.",
         "minimum-os": "win8",
         "execution-level": "as invoker",
         "long-path-aware": true,
@@ -31,7 +31,7 @@
         "info": {
           "0409": {
             "CompanyName": "github.com/jandedobbeleer",
-            "FileDescription": "Cross shell and platform alias management.",
+            "FileDescription": "Cross platform shell management.",
             "InternalName": "aliae",
             "LegalCopyright": "© Jan De Dobbeleer. Licensed under MIT.",
             "OriginalFilename": "aliae.exe",

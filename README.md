@@ -1,6 +1,6 @@
 # aliae 🌱
 
-Cross shell and platform alias management.
+Cross platform shell management.
 
 [![License][license]](LISENCE)
 

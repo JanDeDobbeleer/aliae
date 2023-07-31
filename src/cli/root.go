@@ -17,8 +17,8 @@ var (
 
 var RootCmd = &cobra.Command{
 	Use:   "aliae",
-	Short: "aliae is a tool to do cross shell/platform alias management",
-	Long: `aliae is a tool to do cross shell/platform alias management.
+	Short: "aliae is a tool to do cross platform shell management",
+	Long: `aliae is a tool to do cross platform shell management.
 It can use the same configuration everywhere to offer a consistent
 experience, regardless of where you are. For a detailed guide
 on getting started, have a look at the docs at https://aliae.dev`,
