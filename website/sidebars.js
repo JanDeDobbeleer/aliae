@@ -20,6 +20,7 @@ module.exports = {
         "setup/alias",
         "setup/env",
         "setup/path",
+        "setup/script",
         "setup/if",
         "setup/templates",
         "setup/shell",
