@@ -11,7 +11,7 @@ const features = [
     title: <>Extensible</>,
     description:
       <>
-        Easily extend and manage alaises, environment variables, PATH entries and scripts for your shells.
+        Easily extend and manage aliases, environment variables, PATH entries and scripts for your shells.
         From simple aliases to more complex functionality, you can manage them all in one place.
       </>,
   },
