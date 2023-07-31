@@ -13,7 +13,7 @@ func (a *Alias) tcsh() *Alias {
 }
 
 func (e *Env) tcsh() *Env {
-	e.template = `setenv {{ .Name }} {{ .Value }};`
+	e.template = `setenv {{ .Name }} {{ formatString .Value }};`
 	return e
 }
 

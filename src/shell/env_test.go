@@ -37,7 +37,7 @@ func TestEnvironmentVariable(t *testing.T) {
 		{
 			Case:     "TCSH",
 			Shell:    TCSH,
-			Expected: "setenv HELLO world;",
+			Expected: `setenv HELLO "world";`,
 		},
 		{
 			Case:     "XONSH",
