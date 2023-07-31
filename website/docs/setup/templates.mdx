@@ -19,11 +19,12 @@ configuration across multiple environments resulting in environment specific val
 
 Out of the box you get the following functionality:
 
-| Name     | Type       | Description                                                 | Example                                                            |
-| -------- | ---------- | ----------------------------------------------------------- | ------------------------------------------------------------------ |
-| `.Shell` | `string`   | the current shell name                                      | `{{ .Shell }}`                                                     |
-| `.Home`  | `string`   | the user's `$HOME` folder                                   | `{{ .Home }}/go/bin/aliae`                                         |
-| `.OS`    | `string`   | the current operating system (`windows`, `darwin`, `linux`) | `{{ .Home }}/go/bin/aliae{{ if eq .OS \"windows\" }}.exe{{ end }}` |
-| `env`    | `function` | retrieve an environment variable value                      | `{{ env \"POSH_THEME\" }}`                                         |
+| Name     | Type       | Description                                                 | Example                                                          |
+| -------- | ---------- | ----------------------------------------------------------- | ---------------------------------------------------------------- |
+| `.Shell` | `string`   | the current shell name                                      | `{{ .Shell }}`                                                   |
+| `.Home`  | `string`   | the user's `$HOME` folder                                   | `{{ .Home }}/go/bin/aliae`                                       |
+| `.OS`    | `string`   | the current operating system (`windows`, `darwin`, `linux`) | `{{ .Home }}/go/bin/aliae{{ if eq .OS "windows" }}.exe{{ end }}` |
+| `env`    | `function` | retrieve an environment variable value                      | `{{ env "POSH_THEME" }}`                                         |
+| `match`  | `function` | match a shell name to one or multiple options               | `{{ match .Shell "zsh" "bash" }}`                                |
 
 [go-text-template]: https://golang.org/pkg/text/template/

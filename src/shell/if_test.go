@@ -32,6 +32,16 @@ func TestIf(t *testing.T) {
 			If:       `eq .Shell "pwsh"`,
 			Expected: true,
 		},
+		{
+			Case:     "Only two shells",
+			If:       `match .Shell "bash" "zsh"`,
+			Expected: false,
+		},
+		{
+			Case:     "Only two shells",
+			If:       `match .Shell "pwsh" "nu"`,
+			Expected: true,
+		},
 	}
 
 	for _, tc := range cases {
