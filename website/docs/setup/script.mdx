@@ -1,0 +1,42 @@
+---
+id: script
+title: Script
+sidebar_label: ✍🏽 script
+---
+
+Specify the same script cross shell.
+
+### Syntax
+
+```yaml
+script:
+  - value: |
+      oh-my-posh init nu
+      source ~/.oh-my-posh.nu
+    if: match .Shell "nu"
+  - value: |
+      load(io.popen('oh-my-posh init cmd'):read("*a"))()
+    if: match .Shell "cmd"
+  - value: |
+      oh-my-posh init pwsh | Invoke-Expression
+    if: match .Shell "pwsh"
+  - value: |
+      [[ -f "$HOME/.fig/shell/{{ .Shell }}rc.pre.{{ .Shell }}" ]] && builtin source "$HOME/.fig/shell/{{ .Shell }}rc.pre.{{ .Shell }}"
+
+      eval "$(oh-my-posh init {{ .Shell }})"
+      [ -f ~/.fzf.{{ .Shell }} ] && source ~/.fzf.{{ .Shell }}
+
+      [[ -f "$HOME/.fig/shell/{{ .Shell }}rc.post.{{ .Shell }}" ]] && builtin source "$HOME/.fig/shell/{{ .Shell }}rc.post.{{ .Shell }}"
+    if: match .Shell "bash" "zsh"
+```
+
+### Path
+
+| Name    | Type     | Description                                                             |
+| ------- | -------- | ----------------------------------------------------------------------- |
+| `value` | `string` | the script you want to load. Supports [templating][templates]           |
+| `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if] |
+
+[templates]: templates.mdx
+[go-text-template]: https://golang.org/pkg/text/template/
+[if]: if.mdx

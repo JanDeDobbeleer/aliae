@@ -27,6 +27,7 @@ func Init(configPath, sh string, printOutput bool) string {
 	aliae.Aliae.Render()
 	aliae.Envs.Render()
 	aliae.Paths.Render()
+	aliae.Scripts.Render()
 
 	script := shell.DotFile.String()
 
