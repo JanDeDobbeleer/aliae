@@ -9,7 +9,7 @@ PackageName: Aliae
 PackageUrl: https://aliae.dev/
 License: MIT
 LicenseUrl: https://github.com/JanDeDobbeleer/aliae/raw/main/LICENSE
-ShortDescription: Cross shell and platform alias management
+ShortDescription: Cross platform shell management
 Moniker: aliae
 Tags:
 - "console"
@@ -24,6 +24,7 @@ Tags:
 - "ps"
 - "terminal"
 - "aliae"
+- "dotfiles"
 ManifestType: defaultLocale
 ManifestVersion: 1.4.0
 ReleaseNotesUrl: https://github.com/JanDeDobbeleer/aliae/releases/tag/v<VERSION>

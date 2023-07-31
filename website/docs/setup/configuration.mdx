@@ -16,21 +16,60 @@ The custom location can be a local file, or a URL pointing to a remote config.
 ## Example
 
 ```yaml
-aliae:
-  - alias: a
+alias:
+  - name: a
     value: aliae
-  - alias: hello-world
+  - name: hello-world
     value: echo "hello world"
     type: function
 env:
-  - name: ALIAE_CONFIG
-    value: /Users/Jan/configs/aliae.yaml
+  - name: POSH_THEME
+    value: '{{ if match .OS "darwin"}}{{ .Home }}{{ else }}Y:{{ end }}/.posh.omp.jsonc'
+  - name: EDITOR
+    value: code-insiders --wait
+path:
+  - value: |
+      {{ .Home }}/homebrew/bin
+      /usr/local/bin/
+      /opt/local/bin/
+    if: match .OS "darwin"
+  - value: |
+      {{ .Home }}/go/bin/
+script:
+  - value: |
+      oh-my-posh init nu
+      source ~/.oh-my-posh.nu
+    if: match .Shell "nu"
+  - value: |
+      load(io.popen('oh-my-posh init cmd'):read("*a"))()
+    if: match .Shell "cmd"
+  - value: |
+      oh-my-posh init pwsh | Invoke-Expression
+    if: match .Shell "pwsh"
+  - value: |
+      xontrib load autovox
+      xontrib load vox
+      xontrib load voxapi
+      xontrib load bashisms
+      execx($(oh-my-posh init xonsh))
+    if: match .Shell "xonsh"
+  - value: |
+      eval `oh-my-posh init tcsh`
+    if: match .Shell "tcsh"
+  - value: |
+      eval "$(oh-my-posh init {{ .Shell }})"
+    if: match .Shell "bash" "zsh"
 ```
 
 You can find out more about the configuration options below.
 
 - [Alias][alias]
-- [Environment variables][env]
+- [Function][alias]
+- [Environment variable][env]
+- [PATH entry][path]
+- [Script][script]
 
-[alias]: alias.mdx
-[env]: env.mdx
+[alias]: setup/alias.mdx
+[env]: setup/env.mdx
+[path]: setup/path.mdx
+[script]: setup/script.mdx

@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   title: 'aliae',
-  tagline: 'Cross shell and platform alias management.',
+  tagline: 'Cross platform shell management.',
   url: 'https://aliae.dev',
   baseUrl: '/',
   favicon: 'img/favicon.ico',

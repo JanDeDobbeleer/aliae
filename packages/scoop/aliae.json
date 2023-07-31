@@ -1,6 +1,6 @@
 {
   "version": "<VERSION>",
-  "description": "Cross shell and platform alias management",
+  "description": "Cross platform shell management",
   "homepage": "https://aliae.dev",
   "license": {
     "identifier": "MIT",
