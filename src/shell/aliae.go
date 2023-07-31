@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	Script strings.Builder
+	DotFile strings.Builder
 )
 
 type Aliae []*Alias
@@ -85,10 +85,10 @@ func (a Aliae) Render() {
 		}
 
 		if !first {
-			Script.WriteString("\n")
+			DotFile.WriteString("\n")
 		}
 
-		Script.WriteString(script)
+		DotFile.WriteString(script)
 
 		first = false
 	}

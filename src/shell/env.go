@@ -54,27 +54,27 @@ func (e Envs) Render() {
 		return
 	}
 
-	if Script.Len() > 0 {
-		Script.WriteString("\n\n")
+	if DotFile.Len() > 0 {
+		DotFile.WriteString("\n\n")
 	}
 
 	if context.Current.Shell == NU {
-		Script.WriteString(NuEnvBlockStart)
+		DotFile.WriteString(NuEnvBlockStart)
 	}
 
 	first := true
 	for _, variable := range e {
 		if !first {
-			Script.WriteString("\n")
+			DotFile.WriteString("\n")
 		}
 
-		Script.WriteString(variable.string())
+		DotFile.WriteString(variable.string())
 
 		first = false
 	}
 
 	if context.Current.Shell == NU {
-		Script.WriteString(NuEnvBlockEnd)
+		DotFile.WriteString(NuEnvBlockEnd)
 	}
 }
 
