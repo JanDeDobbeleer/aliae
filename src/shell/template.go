@@ -48,6 +48,7 @@ func funcMap() template.FuncMap {
 		"formatString": formatString,
 		"cleanString":  cleanString,
 		"env":          os.Getenv,
+		"match":        match,
 	}
 	return template.FuncMap(funcMap)
 }
@@ -75,4 +76,13 @@ func cleanString(variable interface{}) interface{} {
 	default:
 		return variable
 	}
+}
+
+func match(variable string, values ...string) bool {
+	for _, value := range values {
+		if variable == value {
+			return true
+		}
+	}
+	return false
 }
