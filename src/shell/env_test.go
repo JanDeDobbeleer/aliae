@@ -163,12 +163,12 @@ $env:FOO = "bar"`,
 	}
 
 	for _, tc := range cases {
-		Script.Reset()
+		DotFile.Reset()
 		if tc.NonEmptyScript {
-			Script.WriteString("foo")
+			DotFile.WriteString("foo")
 		}
 		context.Current = &context.Runtime{Shell: tc.Shell}
 		tc.Env.Render()
-		assert.Equal(t, tc.Expected, Script.String(), tc.Case)
+		assert.Equal(t, tc.Expected, DotFile.String(), tc.Case)
 	}
 }
