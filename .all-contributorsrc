@@ -9,7 +9,17 @@
   "imageSize": 100,
   "commit": true,
   "commitConvention": "angular",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "DavidDeSloovere",
+      "name": "David De Sloovere",
+      "avatar_url": "https://avatars.githubusercontent.com/u/352626?v=4",
+      "profile": "https://blog.deltacode.be",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
   "contributorsPerLine": 7,
   "skipCi": true,
   "commitType": "docs"
