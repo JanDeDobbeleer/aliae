@@ -26,7 +26,7 @@ func (a *Alias) pwsh() *Alias {
 		a.Type = Function
 	}
 
-	switch a.Type {
+	switch a.Type { //nolint:exhaustive
 	case Command:
 		a.template = `Set-Alias -Name {{ .Name }} -Value {{ .Value }}{{ if .Description }} -Description '{{ .Description }}'{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ .Scope }}{{ end }}` //nolint: lll
 	case Function:

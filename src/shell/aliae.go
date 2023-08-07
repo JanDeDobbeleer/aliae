@@ -34,11 +34,16 @@ type Type string
 const (
 	Command  Type = "command"
 	Function Type = "function"
+	Git      Type = "git"
 )
 
 func (a *Alias) string() string {
 	if len(a.Type) == 0 {
 		a.Type = Command
+	}
+
+	if a.Type == Git {
+		return a.git()
 	}
 
 	switch context.Current.Shell {

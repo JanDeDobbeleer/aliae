@@ -10,7 +10,7 @@ const (
 )
 
 func (a *Alias) xonsh() *Alias {
-	switch a.Type {
+	switch a.Type { //nolint:exhaustive
 	case Command:
 		a.template = `aliases['{{ .Name }}'] = '{{ .Value }}'`
 	case Function:
