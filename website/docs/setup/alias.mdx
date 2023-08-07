@@ -15,16 +15,19 @@ alias:
   - name: hello-world
     value: echo "hello world"
     type: function
+  - name: sync
+    value: "!git fetch origin; git rebase origin/main"
+    type: git
 ```
 
 ### Alias
 
-| Name    | Type     | Description                                                                                                                                       |
-| ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`  | `string` | the alias name                                                                                                                                    |
-| `value` | `string` | the command(s) you want to execute, supports [templating][templates]                                                                              |
-| `type`  | `string` | <ul><li>`command`: a regular alias, value is a one-liner (**default**) </li><li>`function`: a code block to be placed inside a function</li></ul> |
-| `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if]                                                                           |
+| Name    | Type     | Description                                                                                                                                                                             |
+| ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`  | `string` | the alias name                                                                                                                                                                          |
+| `value` | `string` | the command(s) you want to execute, supports [templating][templates]                                                                                                                    |
+| `type`  | `string` | <ul><li>`command`: a regular alias, value is a one-liner (**default**) </li><li>`function`: a code block to be placed inside a function</li><li>`git`: a git alias definition</li></ul> |
+| `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if]                                                                                                                 |
 
 ### Shell specific configuration
 

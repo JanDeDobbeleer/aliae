@@ -6,7 +6,7 @@ const (
 )
 
 func (a *Alias) zsh() *Alias {
-	switch a.Type {
+	switch a.Type { //nolint:exhaustive
 	case Command:
 		a.template = `alias {{ .Name }}="{{ .Value }}"`
 	case Function:
