@@ -12,7 +12,7 @@ var (
 	printOutput bool
 
 	initCmd = &cobra.Command{
-		Use:   "init [bash|zsh|fish|powershell|pwsh|cmd|nu|tcsh|xonsh] --config ~/.aliae.yaml",
+		Use:   "init [bash|zsh|fish|pwsh|cmd|nu|tcsh|xonsh] --config ~/.aliae.yaml",
 		Short: "Initialize your shell and config",
 		Long: `Initialize your shell and config.
 
