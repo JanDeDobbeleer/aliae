@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -37,7 +38,14 @@ func (e *Env) nu() *Env {
 }
 
 func (p *Path) nu() *Path {
-	p.template = `let-env PATH = ($env.PATH | prepend "{{ .Value }}")`
+	template := `$env.%s = ($env.%s | prepend "{{ .Value }}")`
+	pathName := "PATH"
+
+	if context.Current.OS == context.WINDOWS {
+		pathName = "Path"
+	}
+
+	p.template = fmt.Sprintf(template, pathName, pathName)
 	return p
 }
 

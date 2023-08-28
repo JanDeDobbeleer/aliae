@@ -12,6 +12,7 @@ func TestPath(t *testing.T) {
 		Case     string
 		Shell    string
 		Path     *Path
+		OS       string
 		Expected string
 	}{
 		{
@@ -75,14 +76,22 @@ fish_add_path /usr/bin`,
 			Case:     "NU - single item",
 			Shell:    NU,
 			Path:     &Path{Value: "/usr/local/bin"},
-			Expected: `let-env PATH = ($env.PATH | prepend "/usr/local/bin")`,
+			Expected: `$env.PATH = ($env.PATH | prepend "/usr/local/bin")`,
 		},
 		{
 			Case:  "NU - multiple items",
 			Shell: NU,
 			Path:  &Path{Value: "/usr/local/bin\n/usr/bin"},
-			Expected: `let-env PATH = ($env.PATH | prepend "/usr/local/bin")
-let-env PATH = ($env.PATH | prepend "/usr/bin")`,
+			Expected: `$env.PATH = ($env.PATH | prepend "/usr/local/bin")
+$env.PATH = ($env.PATH | prepend "/usr/bin")`,
+		},
+		{
+			Case:  "NU - Windows",
+			Shell: NU,
+			OS:    context.WINDOWS,
+			Path:  &Path{Value: "/usr/local/bin\n/usr/bin"},
+			Expected: `$env.Path = ($env.Path | prepend "/usr/local/bin")
+$env.Path = ($env.Path | prepend "/usr/bin")`,
 		},
 		{
 			Case:     "TCSH - single item",
@@ -126,7 +135,7 @@ export PATH="/usr/bin:$PATH"`,
 	}
 
 	for _, tc := range cases {
-		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan"}
+		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan", OS: tc.OS}
 		assert.Equal(t, tc.Expected, tc.Path.string(), tc.Case)
 	}
 }
