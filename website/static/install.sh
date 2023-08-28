@@ -126,7 +126,7 @@ install() {
 
     info "⬇️  Downloading aliae from ${url}"
 
-    http_response=$(curl -s -L $url -o $executable -w "%{http_code}")
+    http_response=$(curl -s -f -L $url -o $executable -w "%{http_code}")
     if [ $http_response != "200" ]; then
         error "Unable to download executable at ${url}\nPlease validate your connection and/or proxy settings"
     fi
