@@ -48,6 +48,7 @@ func (p *Path) render() string {
 
 	first := true
 	for _, line := range splitted {
+		line = strings.TrimSpace(line)
 		if len(line) == 0 {
 			continue
 		}
