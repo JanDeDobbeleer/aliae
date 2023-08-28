@@ -89,9 +89,9 @@ $env.PATH = ($env.PATH | prepend "/usr/bin")`,
 			Case:  "NU - Windows",
 			Shell: NU,
 			OS:    context.WINDOWS,
-			Path:  &Path{Value: "/usr/local/bin\n/usr/bin"},
-			Expected: `$env.Path = ($env.Path | prepend "/usr/local/bin")
-$env.Path = ($env.Path | prepend "/usr/bin")`,
+			Path:  &Path{Value: "C:\\bin\nD:\\bin"},
+			Expected: `$env.Path = ($env.Path | prepend "C:\\bin")
+$env.Path = ($env.Path | prepend "D:\\bin")`,
 		},
 		{
 			Case:     "TCSH - single item",
