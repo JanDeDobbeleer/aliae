@@ -8,7 +8,7 @@ const (
 
 func (a *Alias) cmd() *Alias {
 	if a.Type == Command {
-		a.template = `local p = assert(io.popen("doskey {{ .Name }}={{ .Value }}"))
+		a.template = `local p = assert(io.popen("doskey {{ .Name }}={{ escapeString .Value }}"))
 p:close()`
 	}
 
@@ -29,6 +29,6 @@ func (e *Env) cmd() *Env {
 }
 
 func (p *Path) cmd() *Path {
-	p.template = `os.setenv("PATH", "{{ cleanString .Value }};" .. os.getenv("PATH"))`
+	p.template = `os.setenv("PATH", "{{ escapeString .Value }};" .. os.getenv("PATH"))`
 	return p
 }
