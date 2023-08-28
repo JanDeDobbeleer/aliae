@@ -13,6 +13,7 @@ Thanks goes to these wonderful people ([emoji key][acek]):
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://blog.deltacode.be"><img src="https://avatars.githubusercontent.com/u/352626?v=4?s=100" width="100px;" alt="David De Sloovere"/><br /><sub><b>David De Sloovere</b></sub></a><br /><a href="https://github.com/JanDeDobbeleer/aliae/commits?author=DavidDeSloovere" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/RuiNtD"><img src="https://avatars.githubusercontent.com/u/1149870?v=4?s=100" width="100px;" alt="RuiNtD"/><br /><sub><b>RuiNtD</b></sub></a><br /><a href="https://github.com/JanDeDobbeleer/aliae/commits?author=RuiNtD" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
