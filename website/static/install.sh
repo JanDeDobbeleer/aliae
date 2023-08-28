@@ -122,11 +122,15 @@ install() {
     info "\nℹ️  Installing aliae for ${target} in ${install_dir}"
 
     executable=${install_dir}/aliae
-    url=https://github.com/JanDeDobbeleer/aliae/releases/latest/download/posh-${target}
+    url=https://github.com/JanDeDobbeleer/aliae/releases/latest/download/aliae-${target}
 
     info "⬇️  Downloading aliae from ${url}"
 
-    curl -s -L https://github.com/JanDeDobbeleer/aliae/releases/latest/download/posh-${target} -o $executable
+    http_response=$(curl -s -L $url -o $executable -w "%{http_code}")
+    if [ $http_response != "200" ]; then
+        error "Unable to download executable at ${url}\nPlease validate your connection and/or proxy settings"
+    fi
+
     chmod +x $executable
 
     info "🚀 Installation complete.\n\nYou can follow the instructions at https://aliae.dev/docs/setup/shell"
