@@ -219,7 +219,7 @@ func TestAliasWithTemplate(t *testing.T) {
 
 	for _, tc := range cases {
 		alias := &Alias{Name: "a", Value: tc.Value}
-		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: "windows"}
+		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: context.WINDOWS}
 		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}
 }
