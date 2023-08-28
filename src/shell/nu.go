@@ -38,7 +38,7 @@ func (e *Env) nu() *Env {
 }
 
 func (p *Path) nu() *Path {
-	template := `$env.%s = ($env.%s | prepend "{{ .Value }}")`
+	template := `$env.%s = ($env.%s | prepend "{{ formatString .Value }}")`
 	pathName := "PATH"
 
 	if context.Current.OS == context.WINDOWS {
