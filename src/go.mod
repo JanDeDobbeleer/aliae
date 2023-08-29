@@ -1,6 +1,6 @@
 module github.com/jandedobbeleer/aliae/src
 
-go 1.20
+go 1.21
 
 require (
 	github.com/goccy/go-yaml v1.11.0
