@@ -5,3 +5,16 @@ const (
 	LINUX   = "linux"
 	DARWIN  = "darwin"
 )
+
+func PathDelimiter() string {
+	if Current == nil {
+		return ":"
+	}
+
+	switch Current.OS {
+	case WINDOWS:
+		return ";"
+	default:
+		return ":"
+	}
+}

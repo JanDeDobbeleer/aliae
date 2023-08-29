@@ -1,6 +1,11 @@
 package shell
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/jandedobbeleer/aliae/src/context"
+)
 
 const (
 	PWSH = "pwsh"
@@ -52,7 +57,8 @@ func (e *Env) pwsh() *Env {
 }
 
 func (p *Path) pwsh() *Path {
-	p.template = `$env:Path = '{{ .Value }};' + $env:Path`
+	template := fmt.Sprintf(`$env:PATH = '{{ .Value }}%s' + $env:PATH`, context.PathDelimiter())
+	p.template = template
 	return p
 }
 
