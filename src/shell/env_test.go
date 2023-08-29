@@ -172,3 +172,42 @@ $env:FOO = "bar"`,
 		assert.Equal(t, tc.Expected, DotFile.String(), tc.Case)
 	}
 }
+
+func TestEnvironmentVariableDelimiter(t *testing.T) {
+	cases := []struct {
+		Case     string
+		Expected string
+		Env      *Env
+	}{
+		{
+			Case:     "No delimiter",
+			Expected: `$env:HELLO = "world"`,
+			Env:      &Env{Name: "HELLO", Value: "world"},
+		},
+		{
+			Case:     "Single value with delimiter",
+			Expected: `$env:HELLO = "world"`,
+			Env:      &Env{Name: "HELLO", Value: "world\n", Delimiter: ";"},
+		},
+		{
+			Case:     "Multiple values",
+			Expected: `$env:HELLO = "world;foo"`,
+			Env:      &Env{Name: "HELLO", Value: "world\nfoo", Delimiter: ";"},
+		},
+		{
+			Case:     "Not a string value",
+			Expected: `$env:HELLO = 2`,
+			Env:      &Env{Name: "HELLO", Value: 2, Delimiter: ";"},
+		},
+		{
+			Case:     "Multiple values, with a template delimiter",
+			Expected: `$env:HELLO = "world:foo"`,
+			Env:      &Env{Name: "HELLO", Value: "world\nfoo", Delimiter: `{{ if eq .OS "windows" }};{{ else }}:{{ end }}`},
+		},
+	}
+
+	for _, tc := range cases {
+		context.Current = &context.Runtime{Shell: PWSH, OS: context.LINUX}
+		assert.Equal(t, tc.Expected, tc.Env.string(), tc.Case)
+	}
+}
