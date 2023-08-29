@@ -1,18 +1,25 @@
 package shell
 
-import "github.com/jandedobbeleer/aliae/src/context"
+import (
+	"strings"
+
+	"github.com/jandedobbeleer/aliae/src/context"
+)
 
 type Envs []*Env
 
 type Env struct {
-	Name  string      `yaml:"name"`
-	Value interface{} `yaml:"value"`
-	If    If          `yaml:"if"`
+	Name      string      `yaml:"name"`
+	Value     interface{} `yaml:"value"`
+	Delimiter Template    `yaml:"delimiter"`
+	If        If          `yaml:"if"`
 
 	template string
 }
 
 func (e *Env) string() string {
+	e.join()
+
 	switch context.Current.Shell {
 	case ZSH, BASH:
 		return e.zsh().render()
@@ -31,6 +38,32 @@ func (e *Env) string() string {
 	default:
 		return ""
 	}
+}
+
+func (e *Env) join() {
+	if len(e.Delimiter) == 0 {
+		return
+	}
+
+	text, OK := e.Value.(string)
+	if !OK {
+		return
+	}
+
+	splitted := strings.Split(text, "\n")
+	splitted = filterEmpty(splitted)
+	if len(splitted) == 1 {
+		e.Value = splitted[0]
+		return
+	}
+
+	for index, value := range splitted {
+		splitted[index] = strings.TrimSpace(value)
+	}
+
+	delimiter := e.Delimiter.String()
+
+	e.Value = strings.Join(splitted, delimiter)
 }
 
 func (e *Env) render() string {
@@ -89,4 +122,15 @@ func (e Envs) filter() Envs {
 	}
 
 	return env
+}
+
+func filterEmpty[S ~[]E, E string](s S) S {
+	var cleaned S
+	for _, a := range s {
+		if len(a) == 0 {
+			continue
+		}
+		cleaned = append(cleaned, a)
+	}
+	return cleaned
 }

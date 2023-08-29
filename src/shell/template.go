@@ -20,6 +20,10 @@ func (t Template) Parse() Template {
 	return t
 }
 
+func (t Template) String() string {
+	return string(t.Parse())
+}
+
 func parse(text string, ctx interface{}) (string, error) {
 	if !strings.Contains(text, "{{") || !strings.Contains(text, "}}") {
 		return text, nil
