@@ -132,6 +132,13 @@ $PATH.add('/usr/bin', True, False)`,
 			Expected: `export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/bin:$PATH"`,
 		},
+		{
+			Case:     "ZSH - Windows",
+			Shell:    ZSH,
+			OS:       context.WINDOWS,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: `export PATH="/usr/local/bin;$PATH"`,
+		},
 	}
 
 	for _, tc := range cases {
