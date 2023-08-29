@@ -24,27 +24,27 @@ func TestPath(t *testing.T) {
 			Case:     "PWSH - single item",
 			Shell:    PWSH,
 			Path:     &Path{Value: "/usr/local/bin"},
-			Expected: `$env:Path = '/usr/local/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH`,
 		},
 		{
 			Case:     "PWSH - single item with template",
 			Shell:    PWSH,
 			Path:     &Path{Value: "{{ .Home }}/.tools/bin"},
-			Expected: `$env:Path = '/Users/jan/.tools/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
 		},
 		{
 			Case:  "PWSH - single item with blank line",
 			Shell: PWSH,
 			Path:  &Path{Value: "/usr/local/bin\n\n/usr/bin"},
-			Expected: `$env:Path = '/usr/local/bin;' + $env:Path
-$env:Path = '/usr/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH
+$env:PATH = '/usr/bin:' + $env:PATH`,
 		},
 		{
 			Case:  "PWSH - multiple items",
 			Shell: PWSH,
 			Path:  &Path{Value: "/usr/local/bin\n/usr/bin"},
-			Expected: `$env:Path = '/usr/local/bin;' + $env:Path
-$env:Path = '/usr/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH
+$env:PATH = '/usr/bin:' + $env:PATH`,
 		},
 		{
 			Case:     "CMD - single item",
@@ -166,7 +166,7 @@ func TestPathRender(t *testing.T) {
 				&Path{Value: "/usr/bin", If: `eq .Shell "pwsh"`},
 			},
 			Shell:    PWSH,
-			Expected: `$env:Path = '/usr/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/usr/bin:' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - 1 PATH definition",
@@ -174,7 +174,7 @@ func TestPathRender(t *testing.T) {
 				&Path{Value: "/usr/bin"},
 			},
 			Shell:    PWSH,
-			Expected: `$env:Path = '/usr/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/usr/bin:' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - Single PATH, non empty",
@@ -185,7 +185,7 @@ func TestPathRender(t *testing.T) {
 			NonEmptyScript: true,
 			Expected: `foo
 
-$env:Path = '/usr/bin;' + $env:Path`,
+$env:PATH = '/usr/bin:' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - 2 PATH definitions",
@@ -194,8 +194,8 @@ $env:Path = '/usr/bin;' + $env:Path`,
 				&Path{Value: "/Users/jan/.tools/bin"},
 			},
 			Shell: PWSH,
-			Expected: `$env:Path = '/usr/bin;' + $env:Path
-$env:Path = '/Users/jan/.tools/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/usr/bin:' + $env:PATH
+$env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - 2 PATH definitions with conditional",
@@ -204,7 +204,7 @@ $env:Path = '/Users/jan/.tools/bin;' + $env:Path`,
 				&Path{Value: "/Users/jan/.tools/bin"},
 			},
 			Shell:    PWSH,
-			Expected: `$env:Path = '/Users/jan/.tools/bin;' + $env:Path`,
+			Expected: `$env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
 		},
 	}
 

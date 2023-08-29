@@ -1,5 +1,11 @@
 package shell
 
+import (
+	"fmt"
+
+	"github.com/jandedobbeleer/aliae/src/context"
+)
+
 const (
 	ZSH  = "zsh"
 	BASH = "bash"
@@ -29,6 +35,7 @@ func (e *Env) zsh() *Env {
 }
 
 func (p *Path) zsh() *Path {
-	p.template = `export PATH="{{ .Value }}:$PATH"`
+	template := fmt.Sprintf(`export PATH="{{ .Value }}%s$PATH"`, context.PathDelimiter())
+	p.template = template
 	return p
 }
