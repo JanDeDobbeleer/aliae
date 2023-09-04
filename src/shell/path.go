@@ -4,13 +4,15 @@ import (
 	"strings"
 
 	"github.com/jandedobbeleer/aliae/src/context"
+	"github.com/jandedobbeleer/aliae/src/registry"
 )
 
 type Paths []*Path
 
 type Path struct {
-	Value Template `yaml:"value"`
-	If    If       `yaml:"if"`
+	Value   Template `yaml:"value"`
+	If      If       `yaml:"if"`
+	Persist bool     `yaml:"persist"`
 
 	template string
 }
@@ -57,6 +59,10 @@ func (p *Path) render() string {
 			builder.WriteString("\n")
 		}
 
+		if p.Persist {
+			registry.PersistPathEntry(line)
+		}
+
 		ctx.Value = line
 		script, err := parse(p.template, ctx)
 		if err != nil {
@@ -78,8 +84,12 @@ func (p Paths) Render() {
 
 	first := true
 	for _, entry := range p {
+		if entry.If.Ignore() {
+			continue
+		}
+
 		script := entry.string()
-		if len(script) == 0 || entry.If.Ignore() {
+		if len(script) == 0 {
 			continue
 		}
 
