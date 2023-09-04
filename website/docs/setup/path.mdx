@@ -22,10 +22,11 @@ path:
 
 ### Path
 
-| Name    | Type     | Description                                                                                |
-| ------- | -------- | ------------------------------------------------------------------------------------------ |
-| `value` | `string` | the path entires you want to add, separated by a newline. Supports [templating][templates] |
-| `if`    | `string` | golang [template][go-text-template] conditional statement, see [if][if]                    |
+| Name      | Type      | Description                                                                                 |
+| --------- | --------- | ------------------------------------------------------------------------------------------- |
+| `value`   | `string`  | the path entires you want to add, separated by a newline. Supports [templating][templates]  |
+| `if`      | `string`  | golang [template][go-text-template] conditional statement, see [if][if]                     |
+| `persist` | `boolean` | if you want to persist the path entry into the registry for the current user (Windows only) |
 
 [templates]: templates.mdx
 [go-text-template]: https://golang.org/pkg/text/template/

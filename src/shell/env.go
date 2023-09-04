@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/jandedobbeleer/aliae/src/context"
+	"github.com/jandedobbeleer/aliae/src/registry"
 )
 
 type Envs []*Env
@@ -13,6 +14,7 @@ type Env struct {
 	Value     interface{} `yaml:"value"`
 	Delimiter Template    `yaml:"delimiter"`
 	If        If          `yaml:"if"`
+	Persist   bool        `yaml:"persist"`
 
 	template string
 }
@@ -118,6 +120,11 @@ func (e Envs) filter() Envs {
 		if variable.If.Ignore() {
 			continue
 		}
+
+		if variable.Persist {
+			registry.PersistEnvironmentVariable(variable.Name, variable.Value)
+		}
+
 		env = append(env, variable)
 	}
 
