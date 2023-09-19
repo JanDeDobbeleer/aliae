@@ -17,6 +17,7 @@ type Env struct {
 	Persist   bool        `yaml:"persist"`
 
 	template string
+	parsed   bool
 }
 
 func (e *Env) string() string {
@@ -68,11 +69,24 @@ func (e *Env) join() {
 	e.Value = strings.Join(splitted, delimiter)
 }
 
-func (e *Env) render() string {
-	if text, OK := e.Value.(string); OK {
-		template := Template(text)
-		e.Value = template.Parse()
+func (e *Env) parseValue() {
+	if e.parsed {
+		return
 	}
+
+	e.parsed = true
+
+	text, OK := e.Value.(string)
+	if !OK {
+		return
+	}
+
+	template := Template(text)
+	e.Value = template.Parse()
+}
+
+func (e *Env) render() string {
+	e.parseValue()
 
 	script, err := parse(e.template, e)
 	if err != nil {
@@ -122,6 +136,7 @@ func (e Envs) filter() Envs {
 		}
 
 		if variable.Persist {
+			variable.parseValue()
 			registry.PersistEnvironmentVariable(variable.Name, variable.Value)
 		}
 
