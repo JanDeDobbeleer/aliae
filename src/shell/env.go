@@ -21,8 +21,6 @@ type Env struct {
 }
 
 func (e *Env) string() string {
-	e.join()
-
 	switch context.Current.Shell {
 	case ZSH, BASH:
 		return e.zsh().render()
@@ -69,7 +67,7 @@ func (e *Env) join() {
 	e.Value = strings.Join(splitted, delimiter)
 }
 
-func (e *Env) parseValue() {
+func (e *Env) parse() {
 	if e.parsed {
 		return
 	}
@@ -83,10 +81,11 @@ func (e *Env) parseValue() {
 
 	template := Template(text)
 	e.Value = template.Parse().String()
+	e.join()
 }
 
 func (e *Env) render() string {
-	e.parseValue()
+	e.parse()
 
 	script, err := parse(e.template, e)
 	if err != nil {
@@ -136,7 +135,7 @@ func (e Envs) filter() Envs {
 		}
 
 		if variable.Persist {
-			variable.parseValue()
+			variable.parse()
 			registry.PersistEnvironmentVariable(variable.Name, variable.Value)
 		}
 
