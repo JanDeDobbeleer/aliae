@@ -82,7 +82,7 @@ func (e *Env) parseValue() {
 	}
 
 	template := Template(text)
-	e.Value = template.Parse()
+	e.Value = template.Parse().String()
 }
 
 func (e *Env) render() string {
