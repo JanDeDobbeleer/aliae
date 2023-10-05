@@ -7,3 +7,5 @@ on:
 jobs:
   contributors:
     uses: jandedobbeleer/workflows/.github/workflows/contributors.yml@main
+    with:
+      token: ${{ secrets.GH_PAT }}
