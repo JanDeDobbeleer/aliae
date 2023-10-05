@@ -10,5 +10,6 @@ jobs:
     with:
       identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
       password: ${{ secrets.BLUESKY_PASSWORD }}
+      token: ${{ secrets.GH_PAT }}
       title: "Something is sprouting 🌱"
 
