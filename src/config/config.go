@@ -44,6 +44,10 @@ func LoadConfig(configPath string) (*Aliae, error) {
 	}
 
 	if len(configPath) == 0 {
+		configPath = os.Getenv("ALIAE_CONFIG")
+	}
+
+	if len(configPath) == 0 {
 		configPath = path.Join(home(), ".aliae.yaml")
 	}
 

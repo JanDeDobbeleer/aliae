@@ -5,10 +5,16 @@ sidebar_label: 📝 Configuration
 ---
 
 By default, aliae expects a `YAML` file called `.aliae.yaml` in the user `HOME` folder.
-You can however also specify a custom location using the `--config` flag on initialization.
+You can however also specify a custom location using the `--config` flag on initialization, or
+by setting the `ALIAE_CONFIG` environment variable prior to initialization.
 
-```bash
+```zsh
 eval "$(aliae init zsh --config '/Users/aliae/configs/aliae.yaml')"
+
+# alternatively
+
+export ALIAE_CONFIG='/Users/aliae/configs/aliae.yaml'
+eval "$(aliae init zsh)"
 ```
 
 The custom location can be a local file, or a URL pointing to a remote config.
