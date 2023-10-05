@@ -8,8 +8,9 @@ jobs:
   bluesky:
     uses: jandedobbeleer/workflows/.github/workflows/bluesky.yml@main
     with:
+      title: "Something is sprouting 🌱"
+    secrets:
       identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
       password: ${{ secrets.BLUESKY_PASSWORD }}
       token: ${{ secrets.GH_PAT }}
-      title: "Something is sprouting 🌱"
 
