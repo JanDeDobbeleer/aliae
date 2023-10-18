@@ -80,7 +80,7 @@ func TestAliasFunction(t *testing.T) {
 			Case:  "PWSH",
 			Shell: PWSH,
 			Expected: `function foo() {
-    bar
+    bar $args
 }`,
 		},
 		{

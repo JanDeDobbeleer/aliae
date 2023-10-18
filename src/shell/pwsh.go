@@ -36,7 +36,7 @@ func (a *Alias) pwsh() *Alias {
 		a.template = `Set-Alias -Name {{ .Name }} -Value {{ .Value }}{{ if .Description }} -Description '{{ .Description }}'{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ .Scope }}{{ end }}` //nolint: lll
 	case Function:
 		a.template = `function {{ .Name }}() {
-    {{ .Value }}
+    {{ .Value }} $args
 }`
 	}
 
