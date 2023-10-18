@@ -46,6 +46,8 @@ func (a *Alias) string() string {
 		return a.git()
 	}
 
+	a.Value = a.Value.Parse()
+
 	switch context.Current.Shell {
 	case ZSH, BASH:
 		return a.zsh().render()
@@ -67,8 +69,6 @@ func (a *Alias) string() string {
 }
 
 func (a *Alias) render() string {
-	a.Value = a.Value.Parse()
-
 	script, err := parse(a.template, a)
 	if err != nil {
 		return err.Error()
