@@ -8,6 +8,7 @@ on:
   pull_request_target:
     types:
       - opened
+      - edited
 
 permissions:
   pull-requests: write
@@ -15,3 +16,5 @@ permissions:
 jobs:
   notify-when-maintainers-cannot-edit:
     uses: jandedobbeleer/workflows/.github/workflows/edit_rights.yml@main
+    secrets:
+      token: ${{ secrets.GH_PAT }}
