@@ -80,7 +80,7 @@ func TestAliasFunction(t *testing.T) {
 			Case:  "PWSH",
 			Shell: PWSH,
 			Expected: `function foo() {
-    bar $args
+    bar
 }`,
 		},
 		{
@@ -222,4 +222,12 @@ func TestAliasWithTemplate(t *testing.T) {
 		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: context.WINDOWS}
 		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}
+}
+
+func TestAliasWithSpacePowerShell(t *testing.T) {
+	alias := &Alias{Name: "foo", Value: "bar baz"}
+	context.Current = &context.Runtime{Shell: PWSH}
+	assert.Equal(t, `function foo() {
+	bar baz $args
+}`, alias.string())
 }

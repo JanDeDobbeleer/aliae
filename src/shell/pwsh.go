@@ -28,7 +28,10 @@ func (a *Alias) pwsh() *Alias {
 	// PowerShell can't handle aliases with switches
 	// unlike unix shells do so we wrap those in a function
 	if a.Type == Command && strings.Contains(string(a.Value), " ") {
-		a.Type = Function
+		a.template = `function {{ .Name }}() {
+	{{ .Value }} $args
+}`
+		return a
 	}
 
 	switch a.Type { //nolint:exhaustive
@@ -36,7 +39,7 @@ func (a *Alias) pwsh() *Alias {
 		a.template = `Set-Alias -Name {{ .Name }} -Value {{ .Value }}{{ if .Description }} -Description '{{ .Description }}'{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ .Scope }}{{ end }}` //nolint: lll
 	case Function:
 		a.template = `function {{ .Name }}() {
-    {{ .Value }} $args
+    {{ .Value }}
 }`
 	}
 
