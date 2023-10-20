@@ -6,11 +6,12 @@ on:
 
 jobs:
   bluesky:
-    uses: jandedobbeleer/workflows/.github/workflows/bluesky.yml@main
-    with:
-      title: "Something is sprouting 🌱"
-    secrets:
-      identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
-      password: ${{ secrets.BLUESKY_PASSWORD }}
-      token: ${{ secrets.GH_PAT }}
-
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish
+        uses: JanDeDobbeleer/bluesky-releasenotes-action@main
+        with:
+          title: "Something is sprouting 🌱"
+          bluesky-identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
+          bluesky-password: ${{ secrets.BLUESKY_PASSWORD }}
+          github-token: ${{ secrets.GH_PAT }}
