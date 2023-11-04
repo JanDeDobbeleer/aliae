@@ -13,12 +13,14 @@ type Runtime struct {
 	Shell string
 	OS    string
 	Home  string
+	Arch  string
 }
 
 func Init(shell string) {
 	Current = &Runtime{
 		Shell: shell,
 		OS:    runtime.GOOS,
+		Arch:  runtime.GOARCH,
 		Home:  Home(),
 	}
 }
