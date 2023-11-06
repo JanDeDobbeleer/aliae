@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/goccy/go-yaml v1.11.2
 	github.com/shirou/gopsutil v3.21.11+incompatible
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 )
 
 require (
@@ -26,6 +26,6 @@ require (
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.8.4
-	golang.org/x/sys v0.13.0
+	golang.org/x/sys v0.14.0
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 )
