@@ -14,6 +14,7 @@ type Runtime struct {
 	OS    string
 	Home  string
 	Arch  string
+	Path  *Path
 }
 
 func Init(shell string) {
@@ -22,6 +23,7 @@ func Init(shell string) {
 		OS:    runtime.GOOS,
 		Arch:  runtime.GOARCH,
 		Home:  Home(),
+		Path:  getPath(),
 	}
 }
 

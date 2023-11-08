@@ -55,6 +55,12 @@ func (p *Path) render() string {
 			continue
 		}
 
+		if context.Current.Path.Contains(line) {
+			continue
+		}
+
+		context.Current.Path.Append(line)
+
 		if !first {
 			builder.WriteString("\n")
 		}

@@ -142,7 +142,7 @@ export PATH="/usr/bin:$PATH"`,
 	}
 
 	for _, tc := range cases {
-		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan", OS: tc.OS}
+		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan", OS: tc.OS, Path: &context.Path{}}
 		assert.Equal(t, tc.Expected, tc.Path.string(), tc.Case)
 	}
 }
@@ -220,7 +220,7 @@ $env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
 		if tc.NonEmptyScript {
 			DotFile.WriteString("foo")
 		}
-		context.Current = &context.Runtime{Shell: tc.Shell}
+		context.Current = &context.Runtime{Shell: tc.Shell, Path: &context.Path{}}
 		tc.Paths.Render()
 		assert.Equal(t, tc.Expected, DotFile.String(), tc.Case)
 	}
