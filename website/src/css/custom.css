@@ -15,6 +15,7 @@
   --ifm-color-primary-lighter: rgb(95, 157, 237);
   --ifm-color-primary-lightest: rgb(8, 9, 10);
   --ifm-code-font-size: 95%;
+  --ifm-pre-background: #232136;
 }
 
 .footer--dark {
