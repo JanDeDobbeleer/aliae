@@ -89,6 +89,10 @@ func (a Aliae) Render() {
 			continue
 		}
 
+		if first && DotFile.Len() > 0 {
+			DotFile.WriteString("\n\n")
+		}
+
 		if !first {
 			DotFile.WriteString("\n")
 		}

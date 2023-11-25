@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 	"text/template"
 
@@ -53,6 +54,7 @@ func funcMap() template.FuncMap {
 		"escapeString": escapeString,
 		"env":          os.Getenv,
 		"match":        match,
+		"hasCommand":   hasCommand,
 	}
 	return template.FuncMap(funcMap)
 }
@@ -90,4 +92,9 @@ func match(variable string, values ...string) bool {
 		}
 	}
 	return false
+}
+
+func hasCommand(command string) bool {
+	_, err := exec.LookPath(command)
+	return err == nil
 }
