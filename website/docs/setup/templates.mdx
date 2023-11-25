@@ -19,13 +19,14 @@ configuration across multiple environments resulting in environment specific val
 
 Out of the box you get the following functionality:
 
-| Name     | Type       | Description                                                 | Example                                                                      |
-| -------- | ---------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `.Shell` | `string`   | the current shell name                                      | `{{ .Shell }}`                                                               |
-| `.Home`  | `string`   | the user's `$HOME` folder                                   | `{{ .Home }}/go/bin/aliae`                                                   |
-| `.OS`    | `string`   | the current operating system (`windows`, `darwin`, `linux`) | `{{ .Home }}/go/bin/aliae{{ if eq .OS "windows" }}.exe{{ end }}`             |
-| `.Arch`  | `string`   | the `aliae` executable's compiled architecture              | `{{ .Home }}/go/bin/aliae-{{ .Arch }}{{ if eq .OS "windows" }}.exe{{ end }}` |
-| `env`    | `function` | retrieve an environment variable value                      | `{{ env "POSH_THEME" }}`                                                     |
-| `match`  | `function` | match a shell name to one or multiple options               | `{{ match .Shell "zsh" "bash" }}`                                            |
+| Name         | Type      | Description                                                 | Example                                                                      |
+| ------------ | --------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `.Shell`     | `string`  | the current shell name                                      | `{{ .Shell }}`                                                               |
+| `.Home`      | `string`  | the user's `$HOME` folder                                   | `{{ .Home }}/go/bin/aliae`                                                   |
+| `.OS`        | `string`  | the current operating system (`windows`, `darwin`, `linux`) | `{{ .Home }}/go/bin/aliae{{ if eq .OS "windows" }}.exe{{ end }}`             |
+| `.Arch`      | `string`  | the `aliae` executable's compiled architecture              | `{{ .Home }}/go/bin/aliae-{{ .Arch }}{{ if eq .OS "windows" }}.exe{{ end }}` |
+| `env`        | `string`  | retrieve an environment variable value                      | `{{ env "POSH_THEME" }}`                                                     |
+| `match`      | `boolean` | match a shell name to one or multiple options               | `{{ match .Shell "zsh" "bash" }}`                                            |
+| `hasCommand` | `boolean` | check if an executable exists                               | `{{ hasCommand "oh-my-posh" }}`                                              |
 
 [go-text-template]: https://golang.org/pkg/text/template/
