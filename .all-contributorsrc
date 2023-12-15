@@ -27,6 +27,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "vedantmgoyal2009",
+      "name": "Vedant",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83997633?v=4",
+      "profile": "https://bittu.eu.org",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
