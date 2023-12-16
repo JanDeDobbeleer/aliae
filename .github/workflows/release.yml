@@ -54,7 +54,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: build --rm-dist
+          args: build --clean
           workdir: src
       - name: Release 🎓
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
