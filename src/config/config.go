@@ -39,12 +39,12 @@ type Aliae struct {
 }
 
 func LoadConfig(configPath string) (*Aliae, error) {
-	if strings.HasPrefix(configPath, "https://") {
-		return getRemoteConfig(configPath)
-	}
-
 	if len(configPath) == 0 {
 		configPath = os.Getenv("ALIAE_CONFIG")
+	}
+
+	if strings.HasPrefix(configPath, "https://") {
+		return getRemoteConfig(configPath)
 	}
 
 	if len(configPath) == 0 {
