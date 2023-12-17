@@ -13,6 +13,7 @@ rules:
     - perf
     - test
     - revert
+    - ci
   body-max-line-length:
     - 2
     - always
