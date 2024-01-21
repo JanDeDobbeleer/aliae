@@ -32,7 +32,7 @@ func (a *Alias) git() string {
 	}
 
 	// safe to add the alias
-	format := `git config --global alias.%s "%s"`
+	format := `git config --global alias.%s '%s'`
 	return fmt.Sprintf(format, a.Name, a.Value)
 }
 

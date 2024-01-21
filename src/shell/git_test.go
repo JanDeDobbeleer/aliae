@@ -25,7 +25,7 @@ func TestGit(t *testing.T) {
 		{
 			Case:     "Unknown value",
 			Alias:    &Alias{Name: "h", Value: "log --oneline --graph --decorate --all"},
-			Expected: `git config --global alias.h "log --oneline --graph --decorate --all"`,
+			Expected: `git config --global alias.h 'log --oneline --graph --decorate --all'`,
 		},
 	}
 
