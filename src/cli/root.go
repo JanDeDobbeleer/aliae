@@ -22,7 +22,7 @@ var RootCmd = &cobra.Command{
 It can use the same configuration everywhere to offer a consistent
 experience, regardless of where you are. For a detailed guide
 on getting started, have a look at the docs at https://aliae.dev`,
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, _ []string) {
 		if displayVersion {
 			fmt.Println(cliVersion)
 			return
