@@ -57,7 +57,7 @@ jobs:
           args: build --clean
           workdir: src
       - name: Release 🎓
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        uses: softprops/action-gh-release@3198ee18f814cdf787321b4a32a26ddbf37acc52
         with:
           tag_name: ${{ needs.changelog.outputs.tag }}
           body: ${{ needs.changelog.outputs.body }}
