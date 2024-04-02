@@ -51,6 +51,7 @@ func funcMap() template.FuncMap {
 		"isPwshOption": isPwshOption,
 		"isPwshScope":  isPwshScope,
 		"formatString": formatString,
+		"formatArray":  formatArray,
 		"escapeString": escapeString,
 		"env":          os.Getenv,
 		"match":        match,
@@ -63,6 +64,49 @@ func formatString(variable interface{}) interface{} {
 	switch variable.(type) {
 	case string, Template:
 		return fmt.Sprintf(`"%s"`, escapeString(variable))
+	default:
+		return variable
+	}
+}
+
+func splitString(variable interface{}) interface{} {
+	switch variable := variable.(type) {
+	case string:
+		variable = strings.TrimSpace(variable)
+		if len(variable) == 0 {
+			return []string{variable}
+		}
+
+		if strings.Contains(variable, "\n") {
+			return strings.Split(variable, "\n")
+		}
+
+		return strings.Fields(variable)
+	case Template:
+		return splitString(variable.String())
+	default:
+		return variable
+	}
+}
+
+func formatArray(variable interface{}, delim ...string) interface{} {
+	delimiter := " "
+	if len(delim) > 0 {
+		delimiter = delim[0]
+	}
+
+	switch variable := variable.(type) {
+	case string:
+		split := splitString(variable).([]string)
+		array := []string{}
+
+		for _, value := range split {
+			array = append(array, formatString(value).(string))
+		}
+
+		return strings.Join(array, delimiter)
+	case Template:
+		return formatArray(variable.String())
 	default:
 		return variable
 	}

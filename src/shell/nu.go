@@ -33,7 +33,15 @@ func (e *Echo) nu() *Echo {
 }
 
 func (e *Env) nu() *Env {
-	e.template = `    $env.{{ .Name }} = {{ formatString .Value }}`
+	switch e.Type {
+	case Array:
+		e.template = `    $env.{{ .Name }} = [{{ formatArray .Value }}]`
+	case String:
+		fallthrough
+	default:
+		e.template = `    $env.{{ .Name }} = {{ formatString .Value }}`
+	}
+
 	return e
 }
 

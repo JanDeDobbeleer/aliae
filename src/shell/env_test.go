@@ -8,51 +8,99 @@ import (
 )
 
 func TestEnvironmentVariable(t *testing.T) {
-	env := &Env{Name: "HELLO", Value: "world"}
+	envs := map[EnvType]Env{
+		String: {Name: "HELLO", Value: "world"},
+		Array:  {Name: "ARRAY", Value: "hello array world", Type: "array"},
+	}
 	cases := []struct {
 		Case     string
+		Env      Env
 		Shell    string
 		Expected string
 	}{
 		{
 			Case:     "PWSH",
 			Shell:    PWSH,
+			Env:      envs[String],
 			Expected: `$env:HELLO = "world"`,
+		},
+		{
+			Case:     "PWSH Array",
+			Shell:    PWSH,
+			Env:      envs[Array],
+			Expected: `$env:ARRAY = @("hello","array","world")`,
 		},
 		{
 			Case:     "CMD",
 			Shell:    CMD,
+			Env:      envs[String],
 			Expected: `os.setenv("HELLO", "world")`,
 		},
 		{
 			Case:     "FISH",
 			Shell:    FISH,
+			Env:      envs[String],
 			Expected: "set --global HELLO world",
+		},
+		{
+			Case:     "FISH Array",
+			Shell:    FISH,
+			Env:      envs[Array],
+			Expected: "set --global ARRAY hello array world",
 		},
 		{
 			Case:     "NU",
 			Shell:    NU,
+			Env:      envs[String],
 			Expected: `    $env.HELLO = "world"`,
+		},
+		{
+			Case:     "NU Array",
+			Shell:    NU,
+			Env:      envs[Array],
+			Expected: `    $env.ARRAY = ["hello" "array" "world"]`,
 		},
 		{
 			Case:     "TCSH",
 			Shell:    TCSH,
+			Env:      envs[String],
 			Expected: `setenv HELLO "world";`,
 		},
 		{
 			Case:     "XONSH",
 			Shell:    XONSH,
+			Env:      envs[String],
 			Expected: `$HELLO = "world"`,
+		},
+		{
+			Case:     "XONSH Array",
+			Shell:    XONSH,
+			Env:      envs[Array],
+			Expected: `$ARRAY = ["hello","array","world"]`,
 		},
 		{
 			Case:     "ZSH",
 			Shell:    ZSH,
+			Env:      envs[String],
 			Expected: `export HELLO="world"`,
+		},
+		{
+			Case:     "ZSH Array",
+			Shell:    ZSH,
+			Env:      envs[Array],
+			Expected: `export ARRAY=("hello" "array" "world")`,
 		},
 		{
 			Case:     "BASH",
 			Shell:    BASH,
+			Env:      envs[String],
 			Expected: `export HELLO="world"`,
+		},
+		{
+			Case:     "BASH Array",
+			Shell:    BASH,
+			Env:      envs[Array],
+			Expected: `export ARRAY=("hello" "array" "world")`,
 		},
 		{
 			Case:  "Unknown",
@@ -61,9 +109,9 @@ func TestEnvironmentVariable(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		env.template = ""
+		tc.Env.template = ""
 		context.Current = &context.Runtime{Shell: tc.Shell}
-		assert.Equal(t, tc.Expected, env.string(), tc.Case)
+		assert.Equal(t, tc.Expected, tc.Env.string(), tc.Case)
 	}
 }
 

@@ -32,7 +32,15 @@ print(message)`
 }
 
 func (e *Env) xonsh() *Env {
-	e.template = `${{ .Name }} = {{ formatString .Value }}`
+	switch e.Type {
+	case Array:
+		e.template = `${{ .Name }} = [{{ formatArray .Value "," }}]`
+	case String:
+		fallthrough
+	default:
+		e.template = `${{ .Name }} = {{ formatString .Value }}`
+	}
+
 	return e
 }
 
