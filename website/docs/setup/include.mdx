@@ -1,0 +1,27 @@
+---
+id: include
+title: Include
+sidebar_label: ➕ Include files
+---
+
+## Example
+
+```yaml title=".aliae.yaml"
+aliae: !include "{{ .Home }}/.aliae/aliases.yaml"
+env: !include_dir "{{ .Home }}/.aliae/envs"
+```
+
+```yaml title="$HOME/.aliae/aliases.yaml"
+- name: g
+  value: git
+- name: k
+  value: kubectl
+```
+
+## Description
+
+The `!include` and `!include_dir` yaml tags allow you to include a single file or a directory of .yaml files respectively.
+This allows for clean organization of aliae, envs, and all other things handled by Aliae.
+File/Directory paths support [templating][templates]
+
+[templates]: templates.mdx

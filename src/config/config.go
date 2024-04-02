@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -12,7 +13,6 @@ import (
 	"time"
 
 	"github.com/goccy/go-yaml"
-	"github.com/jandedobbeleer/aliae/src/shell"
 )
 
 type httpClient interface {
@@ -29,26 +29,15 @@ var (
 		ResponseHeaderTimeout: 10 * time.Second,
 	}
 	client httpClient = &http.Client{Transport: defaultTransport}
+
+	configPathCache string
 )
 
-type Aliae struct {
-	Aliae   shell.Aliae   `yaml:"alias"`
-	Envs    shell.Envs    `yaml:"env"`
-	Paths   shell.Paths   `yaml:"path"`
-	Scripts shell.Scripts `yaml:"script"`
-}
-
 func LoadConfig(configPath string) (*Aliae, error) {
-	if len(configPath) == 0 {
-		configPath = os.Getenv("ALIAE_CONFIG")
-	}
+	configPath = resolveConfigPath(configPath)
 
-	if strings.HasPrefix(configPath, "https://") {
+	if strings.HasPrefix(configPath, "http://") || strings.HasPrefix(configPath, "https://") {
 		return getRemoteConfig(configPath)
-	}
-
-	if len(configPath) == 0 {
-		configPath = path.Join(home(), ".aliae.yaml")
 	}
 
 	if filepath, err := os.Stat(configPath); os.IsNotExist(err) || filepath.IsDir() {
@@ -65,12 +54,28 @@ func home() string {
 	if len(home) > 0 {
 		return home
 	}
+
 	// fallback to older implemenations on Windows
 	home = os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
 	if len(home) == 0 {
 		home = os.Getenv("USERPROFILE")
 	}
+
 	return home
+}
+
+func resolveConfigPath(configPath string) string {
+	if len(configPath) == 0 {
+		configPath = os.Getenv("ALIAE_CONFIG")
+	}
+
+	if len(configPath) == 0 {
+		configPath = path.Join(home(), ".aliae.yaml")
+	}
+
+	configPathCache = configPath
+
+	return configPath
 }
 
 func getRemoteConfig(url string) (*Aliae, error) {
@@ -98,9 +103,12 @@ func getRemoteConfig(url string) (*Aliae, error) {
 
 func parseConfig(data []byte) (*Aliae, error) {
 	var aliae Aliae
-	err := yaml.Unmarshal(data, &aliae)
+
+	decoder := yaml.NewDecoder(bytes.NewBuffer(data), yaml.CustomUnmarshaler(customUnmarshaler))
+	err := decoder.Decode(&aliae)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse config file: %s", err)
 	}
+
 	return &aliae, nil
 }

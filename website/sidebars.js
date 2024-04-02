@@ -24,6 +24,7 @@ module.exports = {
         "setup/script",
         "setup/if",
         "setup/templates",
+        "setup/include"
       ],
     },
     {
