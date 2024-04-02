@@ -15,6 +15,7 @@ type Env struct {
 	Delimiter Template    `yaml:"delimiter"`
 	If        If          `yaml:"if"`
 	Persist   bool        `yaml:"persist"`
+	Type      EnvType     `yaml:"type"`
 
 	template string
 	parsed   bool
@@ -155,3 +156,10 @@ func filterEmpty[S ~[]E, E string](s S) S {
 	}
 	return cleaned
 }
+
+type EnvType string
+
+const (
+	String EnvType = "string"
+	Array  EnvType = "array"
+)

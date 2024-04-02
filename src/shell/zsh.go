@@ -30,7 +30,15 @@ func (e *Echo) zsh() *Echo {
 }
 
 func (e *Env) zsh() *Env {
-	e.template = `export {{ .Name }}={{ formatString .Value }}`
+	switch e.Type {
+	case Array:
+		e.template = `export {{ .Name }}=({{ formatArray .Value }})`
+	case String:
+		fallthrough
+	default:
+		e.template = `export {{ .Name }}={{ formatString .Value }}`
+	}
+
 	return e
 }
 
