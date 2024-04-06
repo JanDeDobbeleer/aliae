@@ -18,6 +18,7 @@ path:
   - value: |
       {{ .Home }}/go/bin/
       {{ env "VOLTA_HOME" }}/bin
+    force: true
 ```
 
 ### Path
@@ -27,6 +28,7 @@ path:
 | `value`   | `string`  | the path entires you want to add, separated by a newline. Supports [templating][templates]  |
 | `if`      | `string`  | golang [template][go-text-template] conditional statement, see [if][if]                     |
 | `persist` | `boolean` | if you want to persist the path entry into the registry for the current user (Windows only) |
+| `force`   | `boolean` | if you want to always export the path even if it already exists in your current shell       |
 
 [templates]: templates.mdx
 [go-text-template]: https://golang.org/pkg/text/template/

@@ -13,6 +13,7 @@ type Path struct {
 	Value   Template `yaml:"value"`
 	If      If       `yaml:"if"`
 	Persist bool     `yaml:"persist"`
+	Force   bool     `yaml:"force"`
 
 	template string
 }
@@ -55,7 +56,7 @@ func (p *Path) render() string {
 			continue
 		}
 
-		if context.Current.Path.Contains(line) {
+		if context.Current.Path.Contains(line) && !p.Force {
 			continue
 		}
 
