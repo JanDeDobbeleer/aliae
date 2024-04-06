@@ -225,3 +225,137 @@ $env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
 		assert.Equal(t, tc.Expected, DotFile.String(), tc.Case)
 	}
 }
+
+func TestPathForce(t *testing.T) {
+	cases := []struct {
+		Case     string
+		Shell    string
+		Path     *Path
+		OS       string
+		Expected string
+	}{
+		{
+			Case:  "Unknown shell",
+			Shell: "FOO",
+			Path:  &Path{Value: "/usr/local/bin"},
+		},
+		{
+			Case:     "PWSH - Force",
+			Shell:    PWSH,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH`,
+		},
+		{
+			Case:     "PWSH - Not Force",
+			Shell:    PWSH,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+		{
+			Case:     "CMD - Force",
+			Shell:    CMD,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `os.setenv("PATH", "/usr/local/bin;" .. os.getenv("PATH"))`,
+		},
+		{
+			Case:     "CMD - Not Force",
+			Shell:    CMD,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+		{
+			Case:     "FISH - Force",
+			Shell:    FISH,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `fish_add_path /usr/local/bin`,
+		},
+		{
+			Case:     "FISH - Not Force",
+			Shell:    FISH,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+		{
+			Case:     "NU - Force",
+			Shell:    NU,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `$env.PATH = ($env.PATH | prepend "/usr/local/bin")`,
+		},
+		{
+			Case:     "NU - Not Force",
+			Shell:    NU,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+		{
+			Case:  "NU - Windows Force",
+			Shell: NU,
+			OS:    context.WINDOWS,
+			Path:  &Path{Value: "C:\\bin\nD:\\bin", Force: true},
+			Expected: `$env.Path = ($env.Path | prepend "C:\\bin")
+$env.Path = ($env.Path | prepend "D:\\bin")`,
+		},
+		{
+			Case:     "NU - Windows Not Force",
+			Shell:    NU,
+			OS:       context.WINDOWS,
+			Path:     &Path{Value: "C:\\bin\nD:\\bin"},
+			Expected: ``,
+		},
+		{
+			Case:     "TCSH - Force",
+			Shell:    TCSH,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `set path = ( /usr/local/bin $path );`,
+		},
+		{
+			Case:     "TCSH - Not Force",
+			Shell:    TCSH,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+		{
+			Case:     "XONSH - Force",
+			Shell:    XONSH,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `$PATH.add('/usr/local/bin', True, False)`,
+		},
+		{
+			Case:     "XONSH - Not Force",
+			Shell:    XONSH,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+		{
+			Case:     "ZSH - Force",
+			Shell:    ZSH,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `export PATH="/usr/local/bin:$PATH"`,
+		},
+		{
+			Case:     "ZSH - Not Force",
+			Shell:    ZSH,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+		{
+			Case:     "ZSH - Windows Force",
+			Shell:    ZSH,
+			OS:       context.WINDOWS,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `export PATH="/usr/local/bin;$PATH"`,
+		},
+		{
+			Case:     "ZSH - Windows Not Force",
+			Shell:    ZSH,
+			OS:       context.WINDOWS,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: ``,
+		},
+	}
+
+	for _, tc := range cases {
+		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan", OS: tc.OS, Path: &context.Path{"/usr/local/bin", "C:\\bin", "D:\\bin"}}
+		assert.Equal(t, tc.Expected, tc.Path.string(), tc.Case)
+	}
+}
