@@ -34,17 +34,17 @@ var (
 )
 
 func LoadConfig(configPath string) (*Aliae, error) {
-	configPath = resolveConfigPath(configPath)
+	configPathCache = resolveConfigPath(configPath)
 
-	if strings.HasPrefix(configPath, "http://") || strings.HasPrefix(configPath, "https://") {
-		return getRemoteConfig(configPath)
+	if strings.HasPrefix(configPathCache, "http://") || strings.HasPrefix(configPathCache, "https://") {
+		return getRemoteConfig(configPathCache)
 	}
 
-	if filepath, err := os.Stat(configPath); os.IsNotExist(err) || filepath.IsDir() {
-		return nil, fmt.Errorf("Config file not found: %s", configPath)
+	if filepath, err := os.Stat(configPathCache); os.IsNotExist(err) || filepath.IsDir() {
+		return nil, fmt.Errorf("Config file not found: %s", configPathCache)
 	}
 
-	data, _ := os.ReadFile(configPath)
+	data, _ := os.ReadFile(configPathCache)
 
 	return parseConfig(data)
 }
@@ -72,8 +72,6 @@ func resolveConfigPath(configPath string) string {
 	if len(configPath) == 0 {
 		configPath = path.Join(home(), ".aliae.yaml")
 	}
-
-	configPathCache = configPath
 
 	return configPath
 }
