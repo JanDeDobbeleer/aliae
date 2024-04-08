@@ -37,6 +37,16 @@
         "maintenance",
         "code"
       ]
+    },
+    {
+      "login": "kiliantyler",
+      "name": "Kilian Tyler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22827191?v=4",
+      "profile": "https://github.com/kiliantyler",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
