@@ -19,6 +19,12 @@ type Aliae struct {
 	Scripts shell.Scripts `yaml:"script"`
 }
 
+type FuncMap []StringFunc
+type StringFunc struct {
+	Name string
+	F    func([]string) (string, error)
+}
+
 func customUnmarshaler(a *Aliae, b []byte) error {
 	data, err := includeUnmarshaler(b)
 	if err != nil {
@@ -37,23 +43,29 @@ func customUnmarshaler(a *Aliae, b []byte) error {
 func includeUnmarshaler(b []byte) ([]byte, error) {
 	s := strings.Split(string(b), "\n")
 
-	includeFuncMap := map[string]func([]string) (string, error){
-		"!include_dir": getDirFiles,
-		"!include":     getFile,
+	includeFuncMap := FuncMap{
+		{
+			Name: "!include_dir",
+			F:    getDirFiles,
+		},
+		{
+			Name: "!include",
+			F:    getFile,
+		},
 	}
 
 	for i, line := range s {
-		for key, f := range includeFuncMap {
-			if !strings.HasPrefix(line, key) {
+		for _, f := range includeFuncMap {
+			if !strings.HasPrefix(line, f.Name) {
 				continue
 			}
 
 			parts := strings.Fields(line)
 			if len(parts) < 2 {
-				return nil, fmt.Errorf("invalid %s directive: \n%s", key, line)
+				return nil, fmt.Errorf("invalid %s directive: \n%s", f.Name, line)
 			}
 
-			data, err := f(parts[1:])
+			data, err := f.F(parts[1:])
 			if err != nil {
 				return nil, err
 			}
