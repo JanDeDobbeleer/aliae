@@ -150,6 +150,7 @@ func TestEnvFilter(t *testing.T) {
 		&Env{Name: "FOO", Value: "bar"},
 		&Env{Name: "BAR", Value: "foo"},
 		&Env{Name: "BAZ", Value: "baz", If: `eq .Shell "zsh"`},
+		&Env{Name: "BAZ", Value: "baz", If: []string{`eq .Shell "fish"`, `eq .Shell "zsh"`}},
 	}
 	context.Current = &context.Runtime{Shell: "FISH"}
 	filtered := env.filter()
@@ -207,6 +208,28 @@ $env:FOO = "bar"`,
 			Expected: `export-env {
     $env.HELLO = "world"
 }`,
+		},
+		{
+			Case:     "ZSH - If true",
+			Env:      Envs{&Env{Name: "HELLO", Value: "world", If: `eq .Shell "zsh"`}},
+			Shell:    ZSH,
+			Expected: `export HELLO="world"`,
+		},
+		{
+			Case:  "ZSH - If false",
+			Env:   Envs{&Env{Name: "HELLO", Value: "world", If: `eq .Shell "bash"`}},
+			Shell: ZSH,
+		},
+		{
+			Case:     "ZSH - Multi If true",
+			Env:      Envs{&Env{Name: "HELLO", Value: "world", If: []string{`eq .Shell "zsh"`, `match .Shell "zsh"`}}},
+			Shell:    ZSH,
+			Expected: `export HELLO="world"`,
+		},
+		{
+			Case:  "ZSH - Multi If false",
+			Env:   Envs{&Env{Name: "HELLO", Value: "world", If: []string{`eq .Shell "zsh"`, `match .Shell "bash"`}}},
+			Shell: ZSH,
 		},
 	}
 

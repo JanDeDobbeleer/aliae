@@ -13,7 +13,7 @@ type Env struct {
 	Name      string      `yaml:"name"`
 	Value     interface{} `yaml:"value"`
 	Delimiter Template    `yaml:"delimiter"`
-	If        If          `yaml:"if"`
+	If        interface{} `yaml:"if"`
 	Persist   bool        `yaml:"persist"`
 	Type      EnvType     `yaml:"type"`
 
@@ -114,10 +114,9 @@ func (e Envs) filter() Envs {
 	var env Envs
 
 	for _, variable := range e {
-		if variable.If.Ignore() {
+		if checkIf(variable.If) {
 			continue
 		}
-
 		if variable.Persist {
 			variable.parse()
 			registry.PersistEnvironmentVariable(variable.Name, variable.Value)

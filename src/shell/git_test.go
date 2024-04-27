@@ -3,6 +3,7 @@ package shell
 import (
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,6 +28,15 @@ func TestGit(t *testing.T) {
 			Alias:    &Alias{Name: "h", Value: "log --oneline --graph --decorate --all"},
 			Expected: `git config --global alias.h 'log --oneline --graph --decorate --all'`,
 		},
+		{
+			Case:     "If true",
+			Alias:    &Alias{Name: "foo", Value: "!echo bar", If: `eq .Shell "zsh"`},
+			Expected: `git config --global alias.foo '!echo bar'`,
+		},
+		{
+			Case:  "If false",
+			Alias: &Alias{Name: "foo", Value: "!echo bar", If: `eq .Shell "bash"`},
+		},
 	}
 
 	for _, tc := range cases {
@@ -34,6 +44,7 @@ func TestGit(t *testing.T) {
 			"hello": "!echo world",
 		}
 		gitError = tc.Error
+		context.Current = &context.Runtime{Shell: "zsh"}
 		assert.Equal(t, tc.Expected, tc.Alias.git(), tc.Case)
 	}
 }

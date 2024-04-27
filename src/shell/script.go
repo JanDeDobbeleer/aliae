@@ -3,8 +3,8 @@ package shell
 type Scripts []*Script
 
 type Script struct {
-	Value Template `yaml:"value"`
-	If    If       `yaml:"if"`
+	Value Template    `yaml:"value"`
+	If    interface{} `yaml:"if"`
 }
 
 func (s *Script) String() string {
@@ -20,7 +20,7 @@ func (s Scripts) Render() {
 	first := true
 	for _, script := range s {
 		scriptBlock := script.String()
-		if len(scriptBlock) == 0 || script.If.Ignore() {
+		if len(scriptBlock) == 0 || checkIf(script.If) {
 			continue
 		}
 

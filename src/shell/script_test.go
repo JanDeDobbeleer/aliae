@@ -37,6 +37,25 @@ func TestScriptRender(t *testing.T) {
 			},
 		},
 		{
+			Case: "Multi If true script",
+			Scripts: Scripts{
+				{
+					Value: "foo",
+					If:    []string{`match .Shell "pwsh"`, `eq .Shell "pwsh"`},
+				},
+			},
+			Expected: "foo",
+		},
+		{
+			Case: "Multi If false script",
+			Scripts: Scripts{
+				{
+					Value: "foo",
+					If:    []string{`match .Shell "bash"`, `eq .Shell "pwsh"`},
+				},
+			},
+		},
+		{
 			Case: "Non-Empty",
 			Scripts: Scripts{
 				{

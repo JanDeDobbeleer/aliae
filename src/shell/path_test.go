@@ -176,6 +176,21 @@ func TestPathRender(t *testing.T) {
 			Expected: `$env:PATH = '/usr/bin:' + $env:PATH`,
 		},
 		{
+			Case: "PWSH - Multi If false",
+			Paths: Paths{
+				&Path{Value: "/usr/bin", If: []string{`match .Shell "pwsh"`, `eq .Shell "fish"`}},
+			},
+			Shell: PWSH,
+		},
+		{
+			Case: "PWSH - Multi If true",
+			Paths: Paths{
+				&Path{Value: "/usr/bin", If: []string{`match .Shell "pwsh"`, `eq .Shell "pwsh"`}},
+			},
+			Shell:    PWSH,
+			Expected: `$env:PATH = '/usr/bin:' + $env:PATH`,
+		},
+		{
 			Case: "PWSH - 1 PATH definition",
 			Paths: Paths{
 				&Path{Value: "/usr/bin"},

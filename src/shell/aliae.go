@@ -11,10 +11,10 @@ var (
 type Aliae []*Alias
 
 type Alias struct {
-	Name  string   `yaml:"name"`
-	Value Template `yaml:"value"`
-	Type  Type     `yaml:"type"`
-	If    If       `yaml:"if"`
+	Name  string      `yaml:"name"`
+	Value Template    `yaml:"value"`
+	Type  Type        `yaml:"type"`
+	If    interface{} `yaml:"if"`
 
 	// PowerShell only options
 	Description string `yaml:"description"`
@@ -66,7 +66,7 @@ func (a Aliae) Render() {
 	first := true
 	for _, alias := range a {
 		script := alias.string()
-		if len(script) == 0 || alias.If.Ignore() {
+		if len(script) == 0 || checkIf(alias.If) {
 			continue
 		}
 

@@ -184,11 +184,24 @@ alias BAR="foo"`,
 				&Alias{Name: "FOO", Value: "bar", If: `eq .Shell "fish"`},
 			},
 		},
+		{
+			Case: "Unfiltered If List",
+			Aliae: Aliae{
+				&Alias{Name: "FOO", Value: "bar", If: []string{`eq .Shell "bash"`, `eq .OS "linux"`}},
+			},
+			Expected: `alias FOO="bar"`,
+		},
+		{
+			Case: "Filtered If List",
+			Aliae: Aliae{
+				&Alias{Name: "FOO", Value: "bar", If: []string{`eq .Shell "bash"`, `eq .OS "windows"`}},
+			},
+		},
 	}
 
 	for _, tc := range cases {
 		DotFile.Reset()
-		context.Current = &context.Runtime{Shell: BASH}
+		context.Current = &context.Runtime{Shell: BASH, OS: context.LINUX}
 		tc.Aliae.Render()
 		assert.Equal(t, tc.Expected, DotFile.String(), tc.Case)
 	}

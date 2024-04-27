@@ -10,10 +10,10 @@ import (
 type Paths []*Path
 
 type Path struct {
-	Value   Template `yaml:"value"`
-	If      If       `yaml:"if"`
-	Persist bool     `yaml:"persist"`
-	Force   bool     `yaml:"force"`
+	Value   Template    `yaml:"value"`
+	If      interface{} `yaml:"if"`
+	Persist bool        `yaml:"persist"`
+	Force   bool        `yaml:"force"`
 
 	template string
 }
@@ -74,7 +74,7 @@ func (p Paths) Render() {
 
 	first := true
 	for _, entry := range p {
-		if entry.If.Ignore() {
+		if checkIf(entry.If) {
 			continue
 		}
 
