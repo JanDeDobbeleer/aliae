@@ -10,6 +10,8 @@ sidebar_label: 🏛️ Templates
 env:
   - name: POSH_THEME
     value: {{ .Home }}/.configs/posh.omp.yaml
+  - name: SPRIG_TEMPLATE
+    value: {{ upper "hello" }} {{ "world" | title }}
 ```
 
 ## Description
@@ -17,16 +19,26 @@ env:
 Some fields have [text/template][go-text-template] abilities, allowing to reuse the same
 configuration across multiple environments resulting in environment specific values.
 
-Out of the box you get the following functionality:
+Out of the box you get the following variables for use:
 
-| Name         | Type      | Description                                                 | Example                                                                      |
-| ------------ | --------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `.Shell`     | `string`  | the current shell name                                      | `{{ .Shell }}`                                                               |
-| `.Home`      | `string`  | the user's `$HOME` folder                                   | `{{ .Home }}/go/bin/aliae`                                                   |
-| `.OS`        | `string`  | the current operating system (`windows`, `darwin`, `linux`) | `{{ .Home }}/go/bin/aliae{{ if eq .OS "windows" }}.exe{{ end }}`             |
-| `.Arch`      | `string`  | the `aliae` executable's compiled architecture              | `{{ .Home }}/go/bin/aliae-{{ .Arch }}{{ if eq .OS "windows" }}.exe{{ end }}` |
-| `env`        | `string`  | retrieve an environment variable value                      | `{{ env "POSH_THEME" }}`                                                     |
-| `match`      | `boolean` | match a shell name to one or multiple options               | `{{ match .Shell "zsh" "bash" }}`                                            |
-| `hasCommand` | `boolean` | check if an executable exists                               | `{{ hasCommand "oh-my-posh" }}`                                              |
+| Name         | Type      | Description                                                        | Example                                                                      |
+| ------------ | --------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `.Arch`      | `string`  | the `aliae` executable's compiled architecture                     | `{{ .Home }}/go/bin/aliae-{{ .Arch }}{{ if eq .OS "windows" }}.exe{{ end }}` |
+| `.CacheDir`  | `string`  | default root directory to use for user-specific cached data        | `{{ .CacheDir }}`                                                            |
+| `.ConfigDir` | `string`  | default root directory to use for user-specific configuration data | `!import {{ .ConfigDir }}/aliae/alias.yaml`                                  |
+| `.Home`      | `string`  | the user's `$HOME` folder                                          | `{{ .Home }}/go/bin/aliae`                                                   |
+| `.Hostname`  | `string`  | the computer's hostname                                            | `{{ match .Hostname "Server1" "Server2" }}`                                  |
+| `.OS`        | `string`  | the current operating system (`windows`, `darwin`, `linux`)        | `{{ .Home }}/go/bin/aliae{{ if eq .OS "windows" }}.exe{{ end }}`             |
+| `.Shell`     | `string`  | the current shell name                                             | `{{ .Shell }}`                                                               |
+| `.User`      | `string`  | Gets the current users' username                                   | `{{ eq .User "root" }}`                                                      |
+
+Any templated field also has access to [slim-sprig][slim-sprig] functions as well as the ones below:
+
+| Name         | Type      | Description                                   | Example                            |
+| ------------ | --------- | --------------------------------------------- | ---------------------------------- |
+| `match`      | `boolean` | match a shell name to one or multiple options | `{{ match .Shell "zsh" "bash" }}`  |
+| `hasCommand` | `boolean` | check if an executable exists                 | `{{ hasCommand "oh-my-posh" }}`    |
+
 
 [go-text-template]: https://golang.org/pkg/text/template/
+[slim-sprig]: https://go-task.github.io/slim-sprig/
