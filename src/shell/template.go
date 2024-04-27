@@ -3,7 +3,6 @@ package shell
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"os/exec"
 	"strings"
 	"text/template"
@@ -54,7 +53,6 @@ func funcMap() template.FuncMap {
 		"formatString": formatString,
 		"formatArray":  formatArray,
 		"escapeString": escapeString,
-		"env":          os.Getenv,
 		"match":        match,
 		"hasCommand":   hasCommand,
 	}
