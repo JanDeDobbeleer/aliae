@@ -14,6 +14,7 @@ const (
 	NuEnvBlockEnd   = "\n}"
 )
 
+//nolint:unused
 func (a *Alias) nu() *Alias {
 	switch a.Type { //nolint:exhaustive
 	case Command:
@@ -27,11 +28,13 @@ func (a *Alias) nu() *Alias {
 	return a
 }
 
+//nolint:unused
 func (e *Echo) nu() *Echo {
 	e.template = `echo "{{ .Message }}"`
 	return e
 }
 
+//nolint:unused
 func (e *Env) nu() *Env {
 	switch e.Type {
 	case Array:
@@ -45,6 +48,7 @@ func (e *Env) nu() *Env {
 	return e
 }
 
+//nolint:unused
 func (p *Path) nu() *Path {
 	template := `$env.%s = ($env.%s | prepend {{ formatString .Value }})`
 	pathName := "PATH"

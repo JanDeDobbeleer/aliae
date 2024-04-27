@@ -4,6 +4,7 @@ const (
 	FISH = "fish"
 )
 
+//nolint:unused
 func (a *Alias) fish() *Alias {
 	switch a.Type { //nolint:exhaustive
 	case Command:
@@ -17,12 +18,19 @@ end`
 	return a
 }
 
+//nolint:unused
 func (e *Env) fish() *Env {
 	e.template = `set --global {{ .Name }} {{ .Value }}`
 	return e
 }
 
+//nolint:unused
 func (e *Path) fish() *Path {
 	e.template = `fish_add_path {{ .Value }}`
 	return e
+}
+
+//nolint:unused
+func (e *Echo) fish() *Echo {
+	return e.zsh()
 }

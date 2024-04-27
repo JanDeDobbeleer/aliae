@@ -19,24 +19,7 @@ type Path struct {
 }
 
 func (p *Path) string() string {
-	switch context.Current.Shell {
-	case ZSH, BASH:
-		return p.zsh().render()
-	case PWSH:
-		return p.pwsh().render()
-	case NU:
-		return p.nu().render()
-	case FISH:
-		return p.fish().render()
-	case TCSH:
-		return p.tcsh().render()
-	case XONSH:
-		return p.xonsh().render()
-	case CMD:
-		return p.cmd().render()
-	default:
-		return ""
-	}
+	return renderForShell(p)
 }
 
 func (p *Path) render() string {

@@ -9,6 +9,7 @@ const (
 	XONSH = "xonsh"
 )
 
+//nolint:unused
 func (a *Alias) xonsh() *Alias {
 	switch a.Type { //nolint:exhaustive
 	case Command:
@@ -25,12 +26,14 @@ def __%s():
 	return a
 }
 
+//nolint:unused
 func (e *Echo) xonsh() *Echo {
 	e.template = `message = """{{ .Message }}"""
 print(message)`
 	return e
 }
 
+//nolint:unused
 func (e *Env) xonsh() *Env {
 	switch e.Type {
 	case Array:
@@ -44,6 +47,7 @@ func (e *Env) xonsh() *Env {
 	return e
 }
 
+//nolint:unused
 func (p *Path) xonsh() *Path {
 	p.template = `$PATH.add('{{ .Value }}', True, False)`
 	return p

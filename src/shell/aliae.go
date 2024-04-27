@@ -2,8 +2,6 @@ package shell
 
 import (
 	"strings"
-
-	"github.com/jandedobbeleer/aliae/src/context"
 )
 
 var (
@@ -48,24 +46,7 @@ func (a *Alias) string() string {
 
 	a.Value = a.Value.Parse()
 
-	switch context.Current.Shell {
-	case ZSH, BASH:
-		return a.zsh().render()
-	case PWSH:
-		return a.pwsh().render()
-	case NU:
-		return a.nu().render()
-	case FISH:
-		return a.fish().render()
-	case TCSH:
-		return a.tcsh().render()
-	case XONSH:
-		return a.xonsh().render()
-	case CMD:
-		return a.cmd().render()
-	default:
-		return ""
-	}
+	return renderForShell(a)
 }
 
 func (a *Alias) render() string {

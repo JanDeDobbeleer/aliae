@@ -22,24 +22,7 @@ type Env struct {
 }
 
 func (e *Env) string() string {
-	switch context.Current.Shell {
-	case ZSH, BASH:
-		return e.zsh().render()
-	case PWSH:
-		return e.pwsh().render()
-	case NU:
-		return e.nu().render()
-	case FISH:
-		return e.fish().render()
-	case TCSH:
-		return e.tcsh().render()
-	case XONSH:
-		return e.xonsh().render()
-	case CMD:
-		return e.cmd().render()
-	default:
-		return ""
-	}
+	return renderForShell(e)
 }
 
 func (e *Env) join() {

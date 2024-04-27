@@ -11,6 +11,7 @@ const (
 	BASH = "bash"
 )
 
+//nolint:unused
 func (a *Alias) zsh() *Alias {
 	switch a.Type { //nolint:exhaustive
 	case Command:
@@ -24,11 +25,13 @@ func (a *Alias) zsh() *Alias {
 	return a
 }
 
+//nolint:unused
 func (e *Echo) zsh() *Echo {
 	e.template = `echo "{{ .Message }}"`
 	return e
 }
 
+//nolint:unused
 func (e *Env) zsh() *Env {
 	switch e.Type {
 	case Array:
@@ -42,6 +45,7 @@ func (e *Env) zsh() *Env {
 	return e
 }
 
+//nolint:unused
 func (p *Path) zsh() *Path {
 	template := fmt.Sprintf(`export PATH="{{ .Value }}%s$PATH"`, context.PathDelimiter())
 	p.template = template
