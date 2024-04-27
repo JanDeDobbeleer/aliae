@@ -10,23 +10,62 @@ import (
 var Current *Runtime
 
 type Runtime struct {
-	Shell string
-	OS    string
-	Home  string
-	Arch  string
-	User  string
-	Path  *Path
+	Shell     string
+	OS        string
+	Home      string
+	ConfigDir string
+	CacheDir  string
+	Arch      string
+	User      string
+	Path      *Path
+	Hostname  string
 }
 
 func Init(shell string) {
 	Current = &Runtime{
-		Shell: shell,
-		OS:    runtime.GOOS,
-		Arch:  runtime.GOARCH,
-		User:  os.Getenv("USER"),
-		Home:  Home(),
-		Path:  getPath(),
+		Shell:     shell,
+		OS:        runtime.GOOS,
+		Arch:      runtime.GOARCH,
+		User:      os.Getenv("USER"),
+		Home:      Home(),
+		ConfigDir: ConfigDir(),
+		CacheDir:  CacheDir(),
+		Path:      getPath(),
+		Hostname:  Hostname(),
 	}
+}
+
+func ConfigDir() string {
+	if Current != nil {
+		return Current.ConfigDir
+	}
+	path, err := os.UserConfigDir()
+	if err == nil && len(path) > 0 {
+		return path
+	}
+	return ""
+}
+
+func CacheDir() string {
+	if Current != nil {
+		return Current.CacheDir
+	}
+	path, err := os.UserCacheDir()
+	if err == nil && len(path) > 0 {
+		return path
+	}
+	return ""
+}
+
+func Hostname() string {
+	if Current != nil {
+		return Current.Hostname
+	}
+	hostname, err := os.Hostname()
+	if err == nil && len(hostname) > 0 {
+		return hostname
+	}
+	return ""
 }
 
 func Home() string {
@@ -34,8 +73,8 @@ func Home() string {
 		return Current.Home
 	}
 
-	home := os.Getenv("HOME")
-	if len(home) > 0 {
+	home, err := os.UserHomeDir()
+	if err == nil && len(home) > 0 {
 		return home
 	}
 	// fallback to older implemenations on Windows
