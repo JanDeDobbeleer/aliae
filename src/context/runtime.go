@@ -14,6 +14,7 @@ type Runtime struct {
 	OS    string
 	Home  string
 	Arch  string
+	User  string
 	Path  *Path
 }
 
@@ -22,6 +23,7 @@ func Init(shell string) {
 		Shell: shell,
 		OS:    runtime.GOOS,
 		Arch:  runtime.GOARCH,
+		User:  os.Getenv("USER"),
 		Home:  Home(),
 		Path:  getPath(),
 	}

@@ -42,10 +42,15 @@ func TestIf(t *testing.T) {
 			If:       `match .Shell "pwsh" "nu"`,
 			Expected: true,
 		},
+		{
+			Case:     "Match User",
+			If:       `eq .User "root"`,
+			Expected: false,
+		},
 	}
 
 	for _, tc := range cases {
-		context.Current = &context.Runtime{Shell: "zsh"}
+		context.Current = &context.Runtime{Shell: "zsh", User: "root"}
 		assert.Equal(t, tc.Expected, tc.If.Ignore(), tc.Case)
 	}
 }
