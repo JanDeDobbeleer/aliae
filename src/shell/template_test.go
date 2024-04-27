@@ -1,8 +1,10 @@
 package shell
 
 import (
+	"os"
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -199,6 +201,71 @@ func TestHasCommand(t *testing.T) {
 
 	for _, tc := range cases {
 		got, _ := parse(text, tc)
+		assert.Equal(t, tc.Expected, got, tc.Case)
+	}
+}
+
+func TestTemplateFunctions(t *testing.T) {
+	cases := []struct {
+		Case     string
+		Template string
+		Expected string
+	}{
+		{
+			Case:     "env",
+			Template: `{{ env "USER" }}`,
+			Expected: os.Getenv("USER"),
+		},
+		{
+			Case:     "trim",
+			Template: `{{ trim "  hello  " }}`,
+			Expected: `hello`,
+		},
+		{
+			Case:     "upper",
+			Template: `{{ upper "hello" }}`,
+			Expected: `HELLO`,
+		},
+		{
+			Case:     "lower",
+			Template: `{{ lower "HELLO" }}`,
+			Expected: `hello`,
+		},
+		{
+			Case:     "title",
+			Template: `{{ title "hello world" }}`,
+			Expected: `Hello World`,
+		},
+		{
+			Case:     "regexMatch",
+			Template: `{{ regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" "test@acme.com" }}`,
+			Expected: `true`,
+		},
+		{
+			Case:     "default",
+			Template: `{{ default "hello" .Shell }}`,
+			Expected: `bash`,
+		},
+		{
+			Case:     "default",
+			Template: `{{ default "hello" .OS }}`,
+			Expected: `hello`,
+		},
+		{
+			Case:     "empty true",
+			Template: `{{ empty "" }}`,
+			Expected: `true`,
+		},
+		{
+			Case:     "empty false",
+			Template: `{{ empty .Shell }}`,
+			Expected: `false`,
+		},
+	}
+
+	for _, tc := range cases {
+		ctx := &context.Runtime{Shell: "bash"}
+		got, _ := parse(tc.Template, ctx)
 		assert.Equal(t, tc.Expected, got, tc.Case)
 	}
 }

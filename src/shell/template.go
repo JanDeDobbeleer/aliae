@@ -8,6 +8,7 @@ import (
 	"strings"
 	"text/template"
 
+	sprig "github.com/go-task/slim-sprig/v3"
 	"github.com/jandedobbeleer/aliae/src/context"
 )
 
@@ -57,7 +58,11 @@ func funcMap() template.FuncMap {
 		"match":        match,
 		"hasCommand":   hasCommand,
 	}
-	return template.FuncMap(funcMap)
+	templateFuncs := sprig.TxtFuncMap()
+	for key, value := range funcMap {
+		templateFuncs[key] = value
+	}
+	return templateFuncs
 }
 
 func formatString(variable interface{}) interface{} {
