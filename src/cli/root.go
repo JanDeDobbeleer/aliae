@@ -38,7 +38,7 @@ func Execute(version string) {
 	}
 }
 
-func init() { //nolint:gochecknoinits
+func init() {
 	RootCmd.PersistentFlags().StringVarP(&config, "config", "c", "", "config file path")
 	RootCmd.Flags().BoolVar(&displayVersion, "version", false, "version")
 }

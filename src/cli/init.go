@@ -38,7 +38,7 @@ See the documentation to initialize your shell: https://aliae.dev/docs/setup/she
 	}
 )
 
-func init() { //nolint:gochecknoinits
+func init() {
 	initCmd.Flags().BoolVarP(&printOutput, "print", "p", false, "print the init script")
 	_ = initCmd.MarkPersistentFlagRequired("config")
 	RootCmd.AddCommand(initCmd)
