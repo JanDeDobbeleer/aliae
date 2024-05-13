@@ -32,6 +32,6 @@ This command is used to get the value of the following variables:
 	},
 }
 
-func init() { //nolint:gochecknoinits
+func init() {
 	RootCmd.AddCommand(getCmd)
 }
