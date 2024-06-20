@@ -10,33 +10,16 @@ import (
 type Paths []*Path
 
 type Path struct {
-	Value   Template `yaml:"value"`
-	If      If       `yaml:"if"`
-	Persist bool     `yaml:"persist"`
-	Force   bool     `yaml:"force"`
+	Value   Template    `yaml:"value"`
+	If      interface{} `yaml:"if"`
+	Persist bool        `yaml:"persist"`
+	Force   bool        `yaml:"force"`
 
 	template string
 }
 
 func (p *Path) string() string {
-	switch context.Current.Shell {
-	case ZSH, BASH:
-		return p.zsh().render()
-	case PWSH:
-		return p.pwsh().render()
-	case NU:
-		return p.nu().render()
-	case FISH:
-		return p.fish().render()
-	case TCSH:
-		return p.tcsh().render()
-	case XONSH:
-		return p.xonsh().render()
-	case CMD:
-		return p.cmd().render()
-	default:
-		return ""
-	}
+	return renderForShell(p)
 }
 
 func (p *Path) render() string {
@@ -91,7 +74,7 @@ func (p Paths) Render() {
 
 	first := true
 	for _, entry := range p {
-		if entry.If.Ignore() {
+		if checkIf(entry.If) {
 			continue
 		}
 

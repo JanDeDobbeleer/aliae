@@ -7,10 +7,15 @@ sidebar_label: ❓ Conditionals
 ## Example
 
 ```yaml
-aliae:
-  - alias: a
-    value: aliae
+alias:
+  - name: a
+    value: hello
     if: eq .Shell "zsh"
+  - name: b
+    value: world
+    if:
+      - eq .Shell "zsh"
+      - eq .User "root"
 ```
 
 ## Description
@@ -18,5 +23,7 @@ aliae:
 The `if` field is a stripped down go [template][templates] conditional statement that
 is evaluated with the current environment as the context. If the template statement
 evaluates to true, the element is added to the shell.
+
+If `If` field can be either a single string, or a list of strings. Allowing you to have multiple `Ifs` evaluated.
 
 [templates]: templates.mdx

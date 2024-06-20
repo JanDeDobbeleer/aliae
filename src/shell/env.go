@@ -13,7 +13,7 @@ type Env struct {
 	Name      string      `yaml:"name"`
 	Value     interface{} `yaml:"value"`
 	Delimiter Template    `yaml:"delimiter"`
-	If        If          `yaml:"if"`
+	If        interface{} `yaml:"if"`
 	Persist   bool        `yaml:"persist"`
 	Type      EnvType     `yaml:"type"`
 
@@ -22,24 +22,7 @@ type Env struct {
 }
 
 func (e *Env) string() string {
-	switch context.Current.Shell {
-	case ZSH, BASH:
-		return e.zsh().render()
-	case PWSH:
-		return e.pwsh().render()
-	case NU:
-		return e.nu().render()
-	case FISH:
-		return e.fish().render()
-	case TCSH:
-		return e.tcsh().render()
-	case XONSH:
-		return e.xonsh().render()
-	case CMD:
-		return e.cmd().render()
-	default:
-		return ""
-	}
+	return renderForShell(e)
 }
 
 func (e *Env) join() {
@@ -131,10 +114,9 @@ func (e Envs) filter() Envs {
 	var env Envs
 
 	for _, variable := range e {
-		if variable.If.Ignore() {
+		if checkIf(variable.If) {
 			continue
 		}
-
 		if variable.Persist {
 			variable.parse()
 			registry.PersistEnvironmentVariable(variable.Name, variable.Value)

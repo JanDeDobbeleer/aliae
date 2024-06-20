@@ -7,6 +7,7 @@ sidebar_label: 🐧 Linux
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import InstallHomebrew from "./homebrew.mdx";
+import InstallZinit from "./zinit.mdx";
 
 ## Installation
 
@@ -15,7 +16,8 @@ import InstallHomebrew from "./homebrew.mdx";
   groupId="install"
   values={[
     { label: 'manual', value: 'manual', },
-    { label: 'homebrew', value: 'homebrew', }
+    { label: 'homebrew', value: 'homebrew', },
+    { label: 'zinit', value: 'zinit', }
   ]
 }>
 <TabItem value="manual">
@@ -38,6 +40,9 @@ curl -s https://aliae.dev/install.sh | bash -s -- -d ~/bin
 
 <InstallHomebrew />
 
+</TabItem>
+<TabItem value="zinit">
+<InstallZinit />
 </TabItem>
 </Tabs>
 

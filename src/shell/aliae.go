@@ -2,8 +2,6 @@ package shell
 
 import (
 	"strings"
-
-	"github.com/jandedobbeleer/aliae/src/context"
 )
 
 var (
@@ -13,10 +11,10 @@ var (
 type Aliae []*Alias
 
 type Alias struct {
-	Name  string   `yaml:"name"`
-	Value Template `yaml:"value"`
-	Type  Type     `yaml:"type"`
-	If    If       `yaml:"if"`
+	Name  string      `yaml:"name"`
+	Value Template    `yaml:"value"`
+	Type  Type        `yaml:"type"`
+	If    interface{} `yaml:"if"`
 
 	// PowerShell only options
 	Description string `yaml:"description"`
@@ -48,24 +46,7 @@ func (a *Alias) string() string {
 
 	a.Value = a.Value.Parse()
 
-	switch context.Current.Shell {
-	case ZSH, BASH:
-		return a.zsh().render()
-	case PWSH:
-		return a.pwsh().render()
-	case NU:
-		return a.nu().render()
-	case FISH:
-		return a.fish().render()
-	case TCSH:
-		return a.tcsh().render()
-	case XONSH:
-		return a.xonsh().render()
-	case CMD:
-		return a.cmd().render()
-	default:
-		return ""
-	}
+	return renderForShell(a)
 }
 
 func (a *Alias) render() string {
@@ -85,7 +66,7 @@ func (a Aliae) Render() {
 	first := true
 	for _, alias := range a {
 		script := alias.string()
-		if len(script) == 0 || alias.If.Ignore() {
+		if len(script) == 0 || checkIf(alias.If) {
 			continue
 		}
 

@@ -46,6 +46,7 @@ func (a *Alias) pwsh() *Alias {
 	return a
 }
 
+//nolint:unused
 func (e *Echo) pwsh() *Echo {
 	e.template = `$message = @"
 {{ .Message }}
@@ -54,6 +55,7 @@ Write-Host $message`
 	return e
 }
 
+//nolint:unused
 func (e *Env) pwsh() *Env {
 	switch e.Type {
 	case Array:
@@ -67,6 +69,7 @@ func (e *Env) pwsh() *Env {
 	return e
 }
 
+//nolint:unused
 func (p *Path) pwsh() *Path {
 	template := fmt.Sprintf(`$env:PATH = '{{ .Value }}%s' + $env:PATH`, context.PathDelimiter())
 	p.template = template

@@ -1,0 +1,41 @@
+[zinit][zinit] can be used in `zsh` to install Aliae automatically, as well as cache the output of the `init` command
+
+
+## [zinit][zinit] install
+
+It is highly recommended to use the [bin-gem-node annex][bgn-annex], the install instructions assume that is being used.
+
+```bash
+zinit ice lucid wait from'gh-r' as'null' sbin'aliae* -> aliae' \
+  atclone'./aliae* init zsh > init.zsh' atpull'%atclone' src'init.zsh'
+zinit light jandedobbeleer/aliae
+```
+
+## Using [eval annex][eval-annex]
+
+```bash
+zinit lucid wait from'gh-r' id-as'app/aliae' as'null' for \
+  eval'aliae init zsh' \
+  sbin'aliae* -> aliae' jandedobbeleer/aliae
+```
+
+## Updatating the application
+
+When not using the [eval annex][eval-annex] this is also how you update the cache
+
+```bash
+zinit update JanDeDobbeleer/aliae
+```
+
+## Updating [zinit][zinit] [eval annex][eval-annex] cache
+
+If having chosen to use the [eval annex][eval-annex], the eval cache needs to be updated if any changes are made to the aliae file(s).
+
+```bash
+zinit recache
+```
+
+
+[zinit]: https://github.com/zdharma-continuum/zinit
+[bgn-annex]: https://github.com/zdharma-continuum/zinit-annex-bin-gem-node
+[eval-annex]: https://github.com/vladdoster/z-a-eval

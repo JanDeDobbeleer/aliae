@@ -7,6 +7,7 @@ sidebar_label: 🍏 macOS
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import InstallHomebrew from "./homebrew.mdx";
+import InstallZinit from "./zinit.mdx";
 
 ## Installation
 
@@ -15,7 +16,8 @@ import InstallHomebrew from "./homebrew.mdx";
   groupId="install"
   values={[
     { label: 'homebrew', value: 'homebrew', },
-    { label: 'manual', value: 'manual', }
+    { label: 'manual', value: 'manual', },
+    { label: 'zinit', value: 'zinit', }
   ]
 }>
 <TabItem value="homebrew">
@@ -38,5 +40,8 @@ If you want to install to a different location you can specify it using the `-d`
 curl -s https://aliae.dev/install.sh | bash -s -- -d ~/bin
 ```
 
+</TabItem>
+<TabItem value="zinit">
+<InstallZinit />
 </TabItem>
 </Tabs>
