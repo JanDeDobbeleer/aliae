@@ -22,7 +22,7 @@ func (p *Path) string() string {
 	switch context.Current.Shell {
 	case ZSH, BASH:
 		return p.zsh().render()
-	case PWSH:
+	case PWSH, POWERSHELL:
 		return p.pwsh().render()
 	case NU:
 		return p.nu().render()

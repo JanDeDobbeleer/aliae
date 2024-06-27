@@ -51,7 +51,7 @@ func (a *Alias) string() string {
 	switch context.Current.Shell {
 	case ZSH, BASH:
 		return a.zsh().render()
-	case PWSH:
+	case PWSH, POWERSHELL:
 		return a.pwsh().render()
 	case NU:
 		return a.nu().render()
