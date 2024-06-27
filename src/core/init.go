@@ -9,8 +9,8 @@ import (
 )
 
 func Init(configPath, sh string, printOutput bool) string {
-	if sh == shell.PWSH && !printOutput {
-		return fmt.Sprintf("(@(& aliae init pwsh --config=%s --print) -join \"`n\") | Invoke-Expression", configPath)
+	if shell.IsPowerShell(sh) && !printOutput {
+		return fmt.Sprintf("(@(& aliae init %s --config=%s --print) -join \"`n\") | Invoke-Expression", sh, configPath)
 	}
 
 	context.Init(sh)

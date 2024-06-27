@@ -25,7 +25,7 @@ func (e *Env) string() string {
 	switch context.Current.Shell {
 	case ZSH, BASH:
 		return e.zsh().render()
-	case PWSH:
+	case PWSH, POWERSHELL:
 		return e.pwsh().render()
 	case NU:
 		return e.nu().render()

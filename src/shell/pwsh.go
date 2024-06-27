@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	PWSH = "pwsh"
+	PWSH       = "pwsh"
+	POWERSHELL = "powershell"
 
 	AllScope    Option = "AllScope"
 	Constant    Option = "Constant"
@@ -23,6 +24,10 @@ const (
 	NumberedScopes Option = "Numbered scopes"
 	ScriptScope    Option = "Script"
 )
+
+func IsPowerShell(shell string) bool {
+	return shell == PWSH || shell == POWERSHELL
+}
 
 func (a *Alias) pwsh() *Alias {
 	// PowerShell can't handle aliases with switches

@@ -23,7 +23,7 @@ func (e *Echo) String() string {
 		return e.zsh().render()
 	case NU:
 		return e.nu().render()
-	case PWSH:
+	case PWSH, POWERSHELL:
 		return e.pwsh().render()
 	case CMD:
 		return e.cmd().render()
