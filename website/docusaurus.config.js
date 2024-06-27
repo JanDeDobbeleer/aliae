@@ -121,11 +121,6 @@ module.exports = {
     appInsights: {
       instrumentationKey: 'b204d2e6-9a10-473c-9655-2ad79af82e5c',
     },
-    algolia: {
-      appId: '74C1NHYUDH',
-      apiKey: '213be8a995b3a12dbb1909a9cc10402d',
-      indexName: 'aliae',
-    },
   },
   presets: [
     [
