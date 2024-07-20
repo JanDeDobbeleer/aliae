@@ -18,14 +18,14 @@ func getPath() *Path {
 	paths := os.Getenv("PATH")
 
 	for _, p := range strings.Split(paths, PathDelimiter()) {
-		path.Append(p)
+		path.Append(cleanPath(p))
 	}
 
 	return path
 }
 
 func (p *Path) Append(path string) {
-	if len(path) == 0 || p.Contains(path) {
+	if len(path) == 0 || p.Contains(cleanPath(path)) {
 		return
 	}
 
@@ -36,5 +36,9 @@ func (p *Path) Append(path string) {
 }
 
 func (p *Path) Contains(path string) bool {
-	return slices.Contains(*p, path)
+	return slices.Contains(*p, cleanPath(path))
+}
+
+func cleanPath(path string) string {
+	return strings.TrimRight(path, PathSeparator())
 }
