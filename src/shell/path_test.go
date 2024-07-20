@@ -79,6 +79,12 @@ fish_add_path /usr/bin`,
 			Expected: `$env.PATH = ($env.PATH | prepend "/usr/local/bin")`,
 		},
 		{
+			Case:     "NU - single item, already in PATH",
+			Shell:    NU,
+			Path:     &Path{Value: "/usr/local/bin/src"},
+			Expected: "",
+		},
+		{
 			Case:  "NU - multiple items",
 			Shell: NU,
 			Path:  &Path{Value: "/usr/local/bin\n/usr/bin"},
@@ -142,7 +148,7 @@ export PATH="/usr/bin:$PATH"`,
 	}
 
 	for _, tc := range cases {
-		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan", OS: tc.OS, Path: &context.Path{}}
+		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan", OS: tc.OS, Path: &context.Path{"/usr/local/bin/src"}}
 		assert.Equal(t, tc.Expected, tc.Path.string(), tc.Case)
 	}
 }

@@ -18,3 +18,16 @@ func PathDelimiter() string {
 		return ":"
 	}
 }
+
+func PathSeparator() string {
+	if Current == nil {
+		return "/"
+	}
+
+	switch Current.OS {
+	case WINDOWS:
+		return "\\"
+	default:
+		return "/"
+	}
+}
