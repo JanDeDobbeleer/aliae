@@ -20,10 +20,9 @@ func TestAliasCommand(t *testing.T) {
 			Expected: "Set-Alias -Name foo -Value bar",
 		},
 		{
-			Case:  "CMD",
-			Shell: CMD,
-			Expected: `local p = assert(io.popen("doskey foo=bar"))
-p:close()`,
+			Case:     "CMD",
+			Shell:    CMD,
+			Expected: "macrofile:write(\"foo=bar\", \"\\n\")",
 		},
 		{
 			Case:     "FISH",

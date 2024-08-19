@@ -93,6 +93,10 @@ func (a Aliae) Render() {
 			DotFile.WriteString("\n\n")
 		}
 
+		if first && context.Current.Shell == CMD {
+			DotFile.WriteString(cmdAliasPre())
+		}
+
 		if !first {
 			DotFile.WriteString("\n")
 		}
@@ -100,5 +104,9 @@ func (a Aliae) Render() {
 		DotFile.WriteString(script)
 
 		first = false
+	}
+
+	if context.Current.Shell == CMD {
+		DotFile.WriteString(cmdAliasPost())
 	}
 }
