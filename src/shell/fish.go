@@ -18,7 +18,7 @@ end`
 }
 
 func (e *Env) fish() *Env {
-	e.template = `set --global {{ .Name }} {{ .Value }}`
+	e.template = `set --global --export {{ .Name }} {{ .Value }}`
 	return e
 }
 

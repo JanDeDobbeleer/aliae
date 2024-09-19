@@ -40,13 +40,13 @@ func TestEnvironmentVariable(t *testing.T) {
 			Case:     "FISH",
 			Shell:    FISH,
 			Env:      envs[String],
-			Expected: "set --global HELLO world",
+			Expected: "set --global --export HELLO world",
 		},
 		{
 			Case:     "FISH Array",
 			Shell:    FISH,
 			Env:      envs[Array],
-			Expected: "set --global ARRAY hello array world",
+			Expected: "set --global --export ARRAY hello array world",
 		},
 		{
 			Case:     "NU",
