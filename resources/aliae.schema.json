@@ -1,0 +1,123 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "alias": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "the alias name"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "the command(s) you want to execute, supports [templating](https://aliae.dev/docs/setup/templates)"
+                    },
+                    "type": {
+                        "type": "string",
+                        "oneOf": [
+                            {
+                                "const": "command",
+                                "description": "a regular alias, value is a one-liner (default)"
+                            },
+                            {
+                                "const": "function",
+                                "description": "a code block to be placed inside a function"
+                            },
+                            {
+                                "const": "git",
+                                "description": "a git alias definition"
+                            }
+                        ]
+                    },
+                    "if": {
+                        "type": "string",
+                        "description": "golang [template](https://golang.org/pkg/text/template/) conditional statement, see [if](https://aliae.dev/docs/setup/if)"
+                    }
+                },
+                "required": [
+                    "name",
+                    "value"
+                ]
+            }
+        },
+        "env": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "the variable name"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "the variable value, supports [templating](https://aliae.dev/docs/setup/templates)"
+                    },
+                    "delimiter": {
+                        "type": "string",
+                        "description": "if you want to join an array of string values (separated by newlines), supports [templating](https://aliae.dev/docs/setup/templates)"
+                    },
+                    "if": {
+                        "type": "string",
+                        "description": "golang template conditional statement, see if"
+                    },
+                    "persist": {
+                        "type": "boolean",
+                        "description": "if you want to persist the environment variable into the registry for the current user (Windows only)"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "type to export to",
+                        "enum": [
+                            "string",
+                            "array"
+                        ]
+                    }
+                }
+            },
+            "path": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "description": "the path entires you want to add, separated by a newline. Supports [templating](https://aliae.dev/docs/setup/templates)"
+                        },
+                        "if": {
+                            "type": "string",
+                            "description": "golang [template](https://golang.org/pkg/text/template/) conditional statement, see [if](https://aliae.dev/docs/setup/if)"
+                        },
+                        "persist": {
+                            "type": "boolean",
+                            "description": "if you want to persist the environment variable into the registry for the current user (Windows only)"
+                        },
+                        "force": {
+                            "type": "boolean",
+                            "description": "if you want to always export the path even if it already exists in your current shell"
+                        }
+                    }
+                }
+            },
+            "script": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "description": "the script you want to load. Supports [templating](https://aliae.dev/docs/setup/templates)"
+                        },
+                        "if": {
+                            "type": "string",
+                            "description": "golang [template](https://golang.org/pkg/text/template/) conditional statement, see [if](https://aliae.dev/docs/setup/if)"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
