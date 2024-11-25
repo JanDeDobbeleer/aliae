@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/jandedobbeleer/aliae/src/context"
@@ -228,7 +229,7 @@ $env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
 		}
 		context.Current = &context.Runtime{Shell: tc.Shell, Path: &context.Path{}}
 		tc.Paths.Render()
-		assert.Equal(t, tc.Expected, DotFile.String(), tc.Case)
+		assert.Equal(t, tc.Expected, strings.TrimSpace(DotFile.String()), tc.Case)
 	}
 }
 

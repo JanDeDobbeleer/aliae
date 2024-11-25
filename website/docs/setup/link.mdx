@@ -1,0 +1,32 @@
+---
+id: link
+title: Symbolic Link
+sidebar_label: 🔗 Symbolic Link
+---
+
+Create symlinks to files and directories. Useful for dotfiles.
+
+### Syntax
+
+```yaml
+link:
+  - name: {{ .Home }}/.aliae.yaml
+    target: {{ .Home }}/dotfiles/aliae.yaml
+  - name: {{ .Home }}/.zshrc
+    target: {{ .Env.DOTFILES }}/config/zsh/zshrc
+  - name: {{ .Home }}/Brewfile
+    value: /some/location/Brewfile
+    if: eq .OS "darwin"
+```
+
+### Link
+
+| Name     | Type     | Description                                                                    |
+| -------- | -------- | ------------------------------------------------------------------------------ |
+| `name`   | `string` | the link name, supports [templating][templates]                                |
+| `target` | `string` | the name of the file or directory to link to, supports [templating][templates] |
+| `if`     | `string` | golang [template][go-text-template] conditional statement, see [if][if]        |
+
+[go-text-template]: https://golang.org/pkg/text/template/
+[if]: if.mdx
+[templates]: templates.mdx

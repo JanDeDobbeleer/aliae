@@ -72,6 +72,12 @@ func (e *Env) pwsh() *Env {
 	return e
 }
 
+func (l *Link) pwsh() *Link {
+	template := `New-Item -Path {{ formatString .Name }} -ItemType SymbolicLink -Value {{ formatString .Target }} -Force`
+	l.template = template
+	return l
+}
+
 func (p *Path) pwsh() *Path {
 	template := fmt.Sprintf(`$env:PATH = '{{ .Value }}%s' + $env:PATH`, context.PathDelimiter())
 	p.template = template
