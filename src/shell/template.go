@@ -56,6 +56,7 @@ func funcMap() template.FuncMap {
 		"env":          os.Getenv,
 		"match":        match,
 		"hasCommand":   hasCommand,
+		"isDir":        isDir,
 	}
 	return template.FuncMap(funcMap)
 }
@@ -121,7 +122,8 @@ func escapeString(variable interface{}) interface{} {
 
 	switch v := variable.(type) {
 	case Template:
-		return clean(string(v))
+		value := v.String()
+		return clean(value)
 	case string:
 		return clean(v)
 	default:
@@ -141,4 +143,13 @@ func match(variable string, values ...string) bool {
 func hasCommand(command string) bool {
 	_, err := exec.LookPath(command)
 	return err == nil
+}
+
+func isDir(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+
+	return info.IsDir()
 }

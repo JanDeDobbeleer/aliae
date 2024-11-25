@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/jandedobbeleer/aliae/src/context"
@@ -76,6 +77,6 @@ func TestScriptRender(t *testing.T) {
 		}
 		context.Current = &context.Runtime{Shell: PWSH}
 		tc.Scripts.Render()
-		assert.Equal(t, tc.Expected, DotFile.String(), tc.Case)
+		assert.Equal(t, tc.Expected, strings.TrimSpace(DotFile.String()), tc.Case)
 	}
 }

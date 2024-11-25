@@ -42,6 +42,12 @@ func (e *Env) zsh() *Env {
 	return e
 }
 
+func (l *Link) zsh() *Link {
+	template := `ln -sf {{ .Target }} {{ .Name }}`
+	l.template = template
+	return l
+}
+
 func (p *Path) zsh() *Path {
 	template := fmt.Sprintf(`export PATH="{{ .Value }}%s$PATH"`, context.PathDelimiter())
 	p.template = template
