@@ -100,13 +100,10 @@ func (p Paths) Render() {
 		}
 
 		if first && DotFile.Len() > 0 {
-			DotFile.WriteString("\n\n")
-		}
-
-		if !first {
 			DotFile.WriteString("\n")
 		}
 
+		DotFile.WriteString("\n")
 		DotFile.WriteString(script)
 
 		first = false

@@ -17,6 +17,7 @@ type Aliae struct {
 	Envs    shell.Envs    `yaml:"env"`
 	Paths   shell.Paths   `yaml:"path"`
 	Scripts shell.Scripts `yaml:"script"`
+	Links   shell.Links   `yaml:"link"`
 }
 
 type FuncMap []StringFunc
