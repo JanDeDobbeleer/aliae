@@ -17,6 +17,12 @@ func (e *Env) tcsh() *Env {
 	return e
 }
 
+func (l *Link) tcsh() *Link {
+	template := `ln -sf {{ .Target }} {{ .Name }};`
+	l.template = template
+	return l
+}
+
 func (p *Path) tcsh() *Path {
 	p.template = `set path = ( {{ .Value }} $path );`
 	return p

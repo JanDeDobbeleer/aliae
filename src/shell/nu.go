@@ -45,6 +45,12 @@ func (e *Env) nu() *Env {
 	return e
 }
 
+func (l *Link) nu() *Link {
+	template := `ln -sf {{ .Target }} {{ .Name }}`
+	l.template = template
+	return l
+}
+
 func (p *Path) nu() *Path {
 	template := `$env.%s = ($env.%s | prepend {{ formatString .Value }})`
 	pathName := "PATH"

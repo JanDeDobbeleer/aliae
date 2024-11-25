@@ -44,6 +44,12 @@ func (e *Env) xonsh() *Env {
 	return e
 }
 
+func (l *Link) xonsh() *Link {
+	template := `ln -sf {{ .Target }} {{ .Name }}`
+	l.template = template
+	return l
+}
+
 func (p *Path) xonsh() *Path {
 	p.template = `$PATH.add('{{ .Value }}', True, False)`
 	return p
