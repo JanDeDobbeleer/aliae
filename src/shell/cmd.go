@@ -8,8 +8,7 @@ const (
 
 func (a *Alias) cmd() *Alias {
 	if a.Type == Command {
-		a.template = `local p = assert(io.popen("doskey {{ .Name }}={{ escapeString .Value }}"))
-p:close()`
+		a.template = "macrofile:write(\"{{ .Name }}={{ escapeString .Value }}\", \"\\n\")"
 	}
 
 	return a
@@ -31,4 +30,19 @@ func (e *Env) cmd() *Env {
 func (p *Path) cmd() *Path {
 	p.template = `os.setenv("PATH", "{{ escapeString .Value }};" .. os.getenv("PATH"))`
 	return p
+}
+
+func cmdAliasPre() string {
+	return `
+local filename  = os.tmpname()
+local macrofile = io.open(filename, "w+")
+`
+}
+
+func cmdAliasPost() string {
+	return `
+macrofile:close()
+local _ = io.popen(string.format("doskey /macrofile=%s", filename)):close()
+os.remove(filename)
+`
 }
