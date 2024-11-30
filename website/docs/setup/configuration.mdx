@@ -65,6 +65,11 @@ script:
   - value: |
       eval "$(oh-my-posh init {{ .Shell }})"
     if: match .Shell "bash" "zsh"
+link:
+  - name: ~/.aliae.yaml
+    target: ~/dotfiles/aliae.yaml
+  - name: ~/.zshrc
+    target: $DOTFILES/config/zsh/zshrc
 ```
 
 You can find out more about the configuration options below.
@@ -74,8 +79,10 @@ You can find out more about the configuration options below.
 - [Environment variable][env]
 - [PATH entry][path]
 - [Script][script]
+- [Symbolic link][link]
 
 [alias]: setup/alias.mdx
 [env]: setup/env.mdx
 [path]: setup/path.mdx
 [script]: setup/script.mdx
+[link]: setup/link.mdx
