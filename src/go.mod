@@ -3,7 +3,7 @@ module github.com/jandedobbeleer/aliae/src
 go 1.22
 
 require (
-	github.com/goccy/go-yaml v1.14.3
+	github.com/goccy/go-yaml v1.15.8
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cobra v1.8.1
 )
@@ -22,5 +22,5 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/sys v0.27.0
+	golang.org/x/sys v0.28.0
 )
