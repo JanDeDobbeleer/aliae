@@ -28,6 +28,13 @@ func (e *Env) cmd() *Env {
 	return e
 }
 
+// TODO: cmd doesn't have a -force flag. would need to delete existing first
+func (l *Link) cmd() *Link {
+	template := `mklink {{ .Name }} {{ .Target }}`
+	l.template = template
+	return l
+}
+
 func (p *Path) cmd() *Path {
 	p.template = `os.setenv("PATH", "{{ escapeString .Value }};" .. os.getenv("PATH"))`
 	return p

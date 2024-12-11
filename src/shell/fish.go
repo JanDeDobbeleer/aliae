@@ -22,6 +22,12 @@ func (e *Env) fish() *Env {
 	return e
 }
 
+func (l *Link) fish() *Link {
+	template := `ln -sf {{ .Target }} {{ .Name }}`
+	l.template = template
+	return l
+}
+
 func (e *Path) fish() *Path {
 	e.template = `fish_add_path {{ .Value }}`
 	return e
