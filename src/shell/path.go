@@ -10,12 +10,11 @@ import (
 type Paths []*Path
 
 type Path struct {
-	Value   Template `yaml:"value"`
-	If      If       `yaml:"if"`
-	Persist bool     `yaml:"persist"`
-	Force   bool     `yaml:"force"`
-
+	Value    Template `yaml:"value"`
+	If       If       `yaml:"if"`
 	template string
+	Persist  bool `yaml:"persist"`
+	Force    bool `yaml:"force"`
 }
 
 func (p *Path) string() string {

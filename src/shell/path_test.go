@@ -157,9 +157,9 @@ func TestPathRender(t *testing.T) {
 	cases := []struct {
 		Case           string
 		Shell          string
+		Expected       string
 		Paths          Paths
 		NonEmptyScript bool
-		Expected       string
 	}{
 		{
 			Case:  "PWSH - No PATHS",

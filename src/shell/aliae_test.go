@@ -152,8 +152,8 @@ def __foobar():
 func TestAliaeRender(t *testing.T) {
 	cases := []struct {
 		Case     string
-		Aliae    Aliae
 		Expected string
+		Aliae    Aliae
 	}{
 		{
 			Case: "Single alias",

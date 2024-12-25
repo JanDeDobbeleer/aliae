@@ -10,15 +10,14 @@ import (
 type Envs []*Env
 
 type Env struct {
-	Name      string      `yaml:"name"`
 	Value     interface{} `yaml:"value"`
+	Name      string      `yaml:"name"`
 	Delimiter Template    `yaml:"delimiter"`
 	If        If          `yaml:"if"`
-	Persist   bool        `yaml:"persist"`
 	Type      EnvType     `yaml:"type"`
-
-	template string
-	parsed   bool
+	template  string
+	Persist   bool `yaml:"persist"`
+	parsed    bool
 }
 
 func (e *Env) string() string {

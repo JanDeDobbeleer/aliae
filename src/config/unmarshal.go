@@ -21,8 +21,8 @@ type Aliae struct {
 
 type FuncMap []StringFunc
 type StringFunc struct {
-	Name []byte
 	F    func(string) ([]byte, error)
+	Name []byte
 }
 
 func customUnmarshaler(a *Aliae, b []byte) error {

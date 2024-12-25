@@ -8,10 +8,10 @@ import (
 
 func TestPowerShellCommandAlias(t *testing.T) {
 	cases := []struct {
+		Alias    *Alias
 		Case     string
 		Shell    string
 		Expected string
-		Alias    *Alias
 	}{
 		{
 			Case:     "PWSH",

@@ -14,9 +14,9 @@ func TestEnvironmentVariable(t *testing.T) {
 	}
 	cases := []struct {
 		Case     string
-		Env      Env
 		Shell    string
 		Expected string
+		Env      Env
 	}{
 		{
 			Case:     "PWSH",
@@ -160,9 +160,9 @@ func TestEnvRender(t *testing.T) {
 	cases := []struct {
 		Case           string
 		Shell          string
+		Expected       string
 		Env            Envs
 		NonEmptyScript bool
-		Expected       string
 	}{
 		{
 			Case:  "PWSH - No elements",
@@ -223,9 +223,9 @@ $env:FOO = "bar"`,
 
 func TestEnvironmentVariableDelimiter(t *testing.T) {
 	cases := []struct {
+		Env      *Env
 		Case     string
 		Expected string
-		Env      *Env
 	}{
 		{
 			Case:     "No delimiter",
