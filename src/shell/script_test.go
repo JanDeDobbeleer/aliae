@@ -10,9 +10,9 @@ import (
 func TestScriptRender(t *testing.T) {
 	cases := []struct {
 		Case           string
+		Expected       string
 		Scripts        Scripts
 		NonEmptyScript bool
-		Expected       string
 	}{
 		{
 			Case:    "No content",

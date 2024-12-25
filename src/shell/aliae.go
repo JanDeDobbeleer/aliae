@@ -13,18 +13,15 @@ var (
 type Aliae []*Alias
 
 type Alias struct {
-	Name  string   `yaml:"name"`
-	Value Template `yaml:"value"`
-	Type  Type     `yaml:"type"`
-	If    If       `yaml:"if"`
-
-	// PowerShell only options
-	Description string `yaml:"description"`
-	Force       bool   `yaml:"force"`
-	Option      Option `yaml:"option"`
-	Scope       Option `yaml:"scope"`
-
-	template string
+	Name        string   `yaml:"name"`
+	Value       Template `yaml:"value"`
+	Type        Type     `yaml:"type"`
+	If          If       `yaml:"if"`
+	Description string   `yaml:"description"`
+	Option      Option   `yaml:"option"`
+	Scope       Option   `yaml:"scope"`
+	template    string
+	Force       bool `yaml:"force"`
 }
 
 type Option string

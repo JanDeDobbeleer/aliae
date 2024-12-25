@@ -10,11 +10,11 @@ import (
 var Current *Runtime
 
 type Runtime struct {
+	Path  *Path
 	Shell string
 	OS    string
 	Home  string
 	Arch  string
-	Path  *Path
 }
 
 func Init(shell string) {

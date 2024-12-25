@@ -31,15 +31,15 @@ func TestResolveConfigPath(t *testing.T) {
 
 func TestLoadConfig(t *testing.T) {
 	tests := []struct {
+		expected    *Aliae
 		name        string
 		config      string
-		expected    *Aliae
 		expectError bool
 	}{
 		{
-			"Valid",
-			"aliae.valid.yaml",
-			&Aliae{
+			name:   "Valid",
+			config: "aliae.valid.yaml",
+			expected: &Aliae{
 				Aliae: shell.Aliae{
 					{Name: "test", Value: shell.Template("test")},
 					{Name: "test2", Value: shell.Template("test2")},
@@ -48,13 +48,11 @@ func TestLoadConfig(t *testing.T) {
 					{Name: "TEST_ENV", Value: "test"},
 				},
 			},
-			false,
 		},
 		{
-			"Invalid",
-			"aliae.invalid.yaml",
-			nil,
-			true,
+			name:        "Invalid",
+			config:      "aliae.invalid.yaml",
+			expectError: true,
 		},
 	}
 
