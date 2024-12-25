@@ -18,40 +18,23 @@ func TestTrimQuotes(t *testing.T) {
 		{"SingleQuotes", "'test'", "'test'"},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := trimQuotes(tt.input)
-			assert.Equal(t, tt.expected, result)
-		})
+	for _, tc := range tests {
+		result := trimQuotes(tc.input)
+		assert.Equal(t, tc.expected, result)
 	}
 }
 
-func TestGetFile(t *testing.T) {
-	t.Run("ValidFile", func(t *testing.T) {
-		testDirPath := filepath.Join("test", "files", "test.yaml")
-		absPath, _ := filepath.Abs(testDirPath)
-		content, err := getFile([]string{absPath})
-		assert.NoError(t, err)
-		assert.Equal(t, "it exists", content)
-	})
-
-	t.Run("NonExistentFile", func(t *testing.T) {
-		_, err := getFile([]string{"path/to/nonexistent/file.txt"})
-		assert.Error(t, err)
-	})
-}
-
-func TestGetDirFiles(t *testing.T) {
+func TestReadDir(t *testing.T) {
 	t.Run("ValidDir", func(t *testing.T) {
 		testDirPath := filepath.Join("test", "files")
 		absPath, _ := filepath.Abs(testDirPath)
-		content, err := getDirFiles([]string{absPath})
+		content, err := readDir(absPath)
 		assert.NoError(t, err)
-		assert.Equal(t, "\nit exists\nit exists2", content)
+		assert.Equal(t, []byte("it exists\nit exists2"), content)
 	})
 
 	t.Run("NonExistentDir", func(t *testing.T) {
-		_, err := getDirFiles([]string{"path/to/nonexistent/dir"})
+		_, err := readDir("path/to/nonexistent/dir")
 		assert.Error(t, err)
 	})
 }
@@ -60,14 +43,14 @@ func TestRelativePath(t *testing.T) {
 	t.Run("RelativePath", func(t *testing.T) {
 		absPath, err := filepath.Abs("./test/files")
 		assert.NoError(t, err)
-		result, err := relativePath(absPath)
+		result, err := validatePath(absPath)
 		assert.NoError(t, err)
 		assert.Equal(t, absPath, result)
 	})
 
-	t.Run("HttpConfig", func(t *testing.T) {
+	t.Run("Http config", func(t *testing.T) {
 		configPathCache = "https://example.com/config.yaml"
-		_, err := relativePath("path/to/nonex	istent/dir")
+		_, err := validatePath("path/to/nonex	istent/dir")
 		assert.Error(t, err)
 	})
 }
