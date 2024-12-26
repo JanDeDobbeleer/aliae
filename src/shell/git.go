@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+
+	"github.com/jandedobbeleer/aliae/src/context"
 )
 
 var (
@@ -33,6 +35,10 @@ func (a *Alias) git() string {
 
 	// safe to add the alias
 	format := `git config --global alias.%s '%s'`
+	if context.Current.Shell == NU {
+		format = `git config --global alias.%s r#'%s'#`
+	}
+
 	return fmt.Sprintf(format, a.Name, a.Value)
 }
 
