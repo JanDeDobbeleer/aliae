@@ -73,7 +73,7 @@ func (e *Env) pwsh() *Env {
 }
 
 func (l *Link) pwsh() *Link {
-	template := `New-Item -Path {{ formatString .Name }} -ItemType SymbolicLink -Value {{ formatString .Target }} -Force`
+	template := `New-Item -Path {{ formatString .Name }} -ItemType SymbolicLink -Value {{ formatString .Target }} -Force | Out-Null`
 	l.template = template
 	return l
 }
