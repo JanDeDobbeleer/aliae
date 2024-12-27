@@ -19,7 +19,7 @@ func TestLinkCommand(t *testing.T) {
 		{
 			Case:     "PWSH",
 			Shell:    PWSH,
-			Expected: "New-Item -Path \"foo\" -ItemType SymbolicLink -Value \"bar\" -Force",
+			Expected: "New-Item -Path \"foo\" -ItemType SymbolicLink -Value \"bar\" -Force | Out-Null",
 		},
 		{
 			Case:     "CMD",
