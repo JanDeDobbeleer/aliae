@@ -86,7 +86,17 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 
 			indented := bytes.Join(splitted, newline)
 
-			result := append(parts[0][0:], newline...) //nolint:gocritic
+			result := parts[0][0:]
+
+			switch string(result) {
+			case "-":
+				// check if we're in the list instead of the key
+				// if so, drop the dash and start with a newline
+				result = newline
+			default:
+				result = append(result, newline...)
+			}
+
 			result = append(result, indented...)
 
 			s[i] = result

@@ -1,0 +1,4 @@
+alias:
+  - !include_dir ./aliases
+  - name: test3
+    value: test3
