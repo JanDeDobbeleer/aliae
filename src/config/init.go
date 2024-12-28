@@ -1,9 +1,8 @@
-package core
+package config
 
 import (
 	"fmt"
 
-	"github.com/jandedobbeleer/aliae/src/config"
 	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/jandedobbeleer/aliae/src/shell"
 )
@@ -15,7 +14,7 @@ func Init(configPath, sh string, printOutput bool) string {
 
 	context.Init(sh)
 
-	aliae, err := config.LoadConfig(configPath)
+	aliae, err := LoadConfig(configPath)
 	if err != nil {
 		errorString := formatError(err)
 		if sh == shell.NU {

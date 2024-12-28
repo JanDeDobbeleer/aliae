@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 
-	"github.com/jandedobbeleer/aliae/src/core"
-
 	"github.com/spf13/cobra"
+
+	cfg "github.com/jandedobbeleer/aliae/src/config"
 )
 
 var (
@@ -46,6 +46,6 @@ func init() {
 }
 
 func runInit(shellName string) {
-	init := core.Init(config, shellName, printOutput)
+	init := cfg.Init(config, shellName, printOutput)
 	fmt.Print(init)
 }
