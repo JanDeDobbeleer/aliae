@@ -22,6 +22,47 @@ env: !include_dir "{{ .Home }}/.aliae/envs"
 
 The `!include` and `!include_dir` yaml tags allow you to include a single file or a directory of .yaml files respectively.
 This allows for clean organization of aliae, envs, and all other things handled by Aliae.
-File/Directory paths support [templating][templates]
+File/Directory paths support [templating][templates].
+
+## Inline Include
+
+If you want to have a more fine grained control over the included file, you can use the `!include` tag inline in combination
+with other defined aliases.
+
+```yaml title=".aliae.yaml"
+aliae:
+  - !include "{{ .Home }}/.aliae/kubernetes.yaml"
+  - name: g
+    value: git
+```
+
+```yaml title="$HOME/.aliae/kubernetes.yaml"
+- name: k
+  value: kubectl
+- name: kg
+  value: kubectl get
+- name: kgpo
+  value: kubectl get pod
+- name: ksysgpo
+  value: kubectl --namespace=kube-system get pod
+- name: krm
+  value: kubectl delete
+- name: krmf
+  value: kubectl delete -f
+- name: krming
+  value: kubectl delete ingress
+- name: krmingl
+  value: kubectl delete ingress -l
+- name: krmingall
+  value: kubectl delete ingress --all-namespaces
+- name: kgsvcoyaml
+  value: kubectl get service -o=yaml
+- name: kgsvcwn
+  value: kubectl get service --watch --namespace
+- name: kgsvcslwn
+  value: kubectl get service --show-labels --watch --namespace
+- name: kgwf
+  value: kubectl get --watch -f
+```
 
 [templates]: templates.mdx

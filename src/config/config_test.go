@@ -54,6 +54,17 @@ func TestLoadConfig(t *testing.T) {
 			config:      "aliae.invalid.yaml",
 			expectError: true,
 		},
+		{
+			name:   "Valid with generic",
+			config: "aliae.valid_generic.yaml",
+			expected: &Aliae{
+				Aliae: shell.Aliae{
+					{Name: "test", Value: shell.Template("test")},
+					{Name: "test2", Value: shell.Template("test2")},
+					{Name: "test3", Value: shell.Template("test3")},
+				},
+			},
+		},
 	}
 
 	for _, tc := range tests {
