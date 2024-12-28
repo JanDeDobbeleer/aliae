@@ -21,10 +21,11 @@ module.exports = {
         "setup/alias",
         "setup/env",
         "setup/path",
+        "setup/link",
         "setup/script",
         "setup/if",
         "setup/templates",
-        "setup/include"
+        "setup/include",
       ],
     },
     {
