@@ -9,7 +9,7 @@ import (
 )
 
 func TestLinkCommand(t *testing.T) {
-	link := &Link{Name: "foo", Target: "bar"}
+	link := &Link{Name: "foo", Target: "bar", force: true}
 	cases := []struct {
 		Case     string
 		Shell    string
@@ -80,15 +80,15 @@ func TestLinkRender(t *testing.T) {
 		{
 			Case: "Single link",
 			Links: Links{
-				&Link{Name: "FOO", Target: "bar"},
+				&Link{Name: "FOO", Target: "bar", force: true},
 			},
 			Expected: "ln -sf bar FOO",
 		},
 		{
 			Case: "Double link",
 			Links: Links{
-				&Link{Name: "FOO", Target: "bar"},
-				&Link{Name: "BAR", Target: "foo"},
+				&Link{Name: "FOO", Target: "bar", force: true},
+				&Link{Name: "BAR", Target: "foo", force: true},
 			},
 			Expected: `ln -sf bar FOO
 ln -sf foo BAR`,
@@ -96,7 +96,7 @@ ln -sf foo BAR`,
 		{
 			Case: "Filtered out",
 			Links: Links{
-				&Link{Name: "FOO", Target: "bar", If: `eq .Shell "fish"`},
+				&Link{Name: "FOO", Target: "bar", If: `eq .Shell "fish"`, force: true},
 			},
 		},
 	}
@@ -133,7 +133,7 @@ func TestLinkWithTemplate(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		link := &Link{Name: "/tmp/l", Target: tc.Target}
+		link := &Link{Name: "/tmp/l", Target: tc.Target, force: true}
 		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: context.WINDOWS}
 		assert.Equal(t, tc.Expected, link.string(), tc.Case)
 	}

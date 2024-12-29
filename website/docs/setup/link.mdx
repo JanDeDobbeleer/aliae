@@ -4,7 +4,7 @@ title: Symbolic Link
 sidebar_label: 🔗 Symbolic Link
 ---
 
-Create symlinks to files and directories. Useful for dotfiles.
+Create symlinks to files and directories. Will validate the targets exist before creating the link.
 
 ### Syntax
 
@@ -21,11 +21,12 @@ link:
 
 ### Link
 
-| Name     | Type     | Description                                                                    |
-| -------- | -------- | ------------------------------------------------------------------------------ |
-| `name`   | `string` | the link name, supports [templating][templates]                                |
-| `target` | `string` | the name of the file or directory to link to, supports [templating][templates] |
-| `if`     | `string` | golang [template][go-text-template] conditional statement, see [if][if]        |
+| Name     | Type      | Description                                                                    |
+| -------- | --------- | ------------------------------------------------------------------------------ |
+| `name`   | `string`  | the link name, supports [templating][templates]                                |
+| `target` | `string`  | the name of the file or directory to link to, supports [templating][templates] |
+| `if`     | `string`  | golang [template][go-text-template] conditional statement, see [if][if]        |
+| `mkdir`  | `boolean` | create `name`'s parent folder when it does not exist                           |
 
 [go-text-template]: https://golang.org/pkg/text/template/
 [if]: if.mdx
