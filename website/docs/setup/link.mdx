@@ -10,11 +10,11 @@ Create symlinks to files and directories. Will validate the targets exist before
 
 ```yaml
 link:
-  - name: {{ .Home }}/.aliae.yaml
-    target: {{ .Home }}/dotfiles/aliae.yaml
-  - name: {{ .Home }}/.zshrc
-    target: {{ .Env.DOTFILES }}/config/zsh/zshrc
-  - name: {{ .Home }}/Brewfile
+  - name: '{{ .Home }}/.aliae.yaml'
+    target: '{{ .Home }}/dotfiles/aliae.yaml'
+  - name: '{{ .Home }}/.zshrc'
+    target: '{{ .Env.DOTFILES }}/config/zsh/zshrc'
+  - name: '{{ .Home }}/Brewfile'
     value: /some/location/Brewfile
     if: eq .OS "darwin"
 ```
