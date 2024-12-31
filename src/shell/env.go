@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"os"
 	"strings"
 
 	"github.com/jandedobbeleer/aliae/src/context"
@@ -117,6 +118,8 @@ func (e Envs) Render() {
 		}
 
 		DotFile.WriteString(variable.string())
+
+		os.Setenv(variable.Name, variable.Value.(string))
 
 		first = false
 	}
