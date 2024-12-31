@@ -14,11 +14,12 @@ import (
 type Template string
 
 func (t Template) Parse() Template {
-	if value, err := parse(string(t), context.Current); err == nil {
-		return Template(value)
+	value, err := parse(string(t), context.Current)
+	if err != nil {
+		return t
 	}
 
-	return t
+	return Template(value)
 }
 
 func (t Template) String() string {
