@@ -9,7 +9,7 @@ sidebar_label: 🏛️ Templates
 ```yaml
 env:
   - name: POSH_THEME
-    value: {{ .Home }}/.configs/posh.omp.yaml
+    value: '{{ .Home }}/.configs/posh.omp.yaml'
 ```
 
 ## Description
@@ -28,5 +28,15 @@ Out of the box you get the following functionality:
 | `env`        | `string`  | retrieve an environment variable value                      | `{{ env "POSH_THEME" }}`                                                     |
 | `match`      | `boolean` | match a shell name to one or multiple options               | `{{ match .Shell "zsh" "bash" }}`                                            |
 | `hasCommand` | `boolean` | check if an executable exists                               | `{{ hasCommand "oh-my-posh" }}`                                              |
+
+:::tip
+When using a template in a single line, you have to use quotes to wrap the template string.
+
+```yaml
+env:
+  - name: POSH_THEME
+    value: '{{ .Home }}/.configs/posh.omp.yaml'
+```
+:::
 
 [go-text-template]: https://golang.org/pkg/text/template/
