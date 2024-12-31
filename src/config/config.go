@@ -102,7 +102,7 @@ func getRemoteConfig(url string) (*Aliae, error) {
 func parseConfig(data []byte) (*Aliae, error) {
 	var aliae Aliae
 
-	decoder := yaml.NewDecoder(bytes.NewBuffer(data), yaml.CustomUnmarshaler(customUnmarshaler))
+	decoder := yaml.NewDecoder(bytes.NewBuffer(data), yaml.CustomUnmarshaler(aliaeUnmarshaler))
 	err := decoder.Decode(&aliae)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse config file: %s", err)

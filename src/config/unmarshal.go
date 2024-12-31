@@ -26,13 +26,13 @@ type StringFunc struct {
 	Name []byte
 }
 
-func customUnmarshaler(a *Aliae, b []byte) error {
+func aliaeUnmarshaler(a *Aliae, b []byte) error {
 	data, err := includeUnmarshaler(b)
 	if err != nil {
 		return err
 	}
 
-	decoder := yaml.NewDecoder(bytes.NewBuffer(data))
+	decoder := yaml.NewDecoder(bytes.NewBuffer(data), yaml.CustomUnmarshaler(templateUmarshaler))
 	if err = decoder.Decode(a); err != nil {
 		return err
 	}
