@@ -57,6 +57,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "cethien",
+      "name": "Borislaw Sotnikow",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60463918?v=4",
+      "profile": "https://github.com/cethien",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
