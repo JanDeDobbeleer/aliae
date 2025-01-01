@@ -32,7 +32,7 @@ func unmarshalFoldedBlockScalar(value string) (string, bool) {
 		lineBreak = "\r\n"
 	}
 
-	value = strings.ReplaceAll(value, ">", "")
+	value = strings.TrimLeft(value, ">")
 	value = strings.TrimSpace(value)
 	splitted := strings.Split(value, lineBreak)
 

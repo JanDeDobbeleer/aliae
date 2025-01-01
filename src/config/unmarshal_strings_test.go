@@ -22,6 +22,14 @@ func TestUnmarshalStrings(t *testing.T) {
 	  three`,
 		},
 		{
+			name:     "folded block scalar, multiple >",
+			expected: "one two > three",
+			input: `>
+      one
+	  two >
+	  three`,
+		},
+		{
 			name: "literal block scalar",
 			expected: `one
 two`,
