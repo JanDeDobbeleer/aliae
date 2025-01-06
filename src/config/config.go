@@ -2,17 +2,19 @@ package config
 
 import (
 	"bytes"
-	"context"
+	context_ "context"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"os"
 	"path"
+	"runtime"
 	"strings"
 	"time"
 
 	"github.com/goccy/go-yaml"
+	"github.com/jandedobbeleer/aliae/src/context"
 )
 
 type httpClient interface {
@@ -73,11 +75,36 @@ func resolveConfigPath(configPath string) string {
 		configPath = path.Join(home(), ".aliae.yaml")
 	}
 
-	return configPath
+	return replaceTildePrefixWithHomeDir(configPath)
+}
+
+func replaceTildePrefixWithHomeDir(path string) string {
+	if !strings.HasPrefix(path, "~") {
+		return path
+	}
+
+	rem := path[1:]
+	if len(rem) == 0 || isSeparator(rem[0]) {
+		return home() + rem
+	}
+
+	return path
+}
+
+func isSeparator(c uint8) bool {
+	if c == '/' {
+		return true
+	}
+
+	if runtime.GOOS == context.WINDOWS && c == '\\' {
+		return true
+	}
+
+	return false
 }
 
 func getRemoteConfig(url string) (*Aliae, error) {
-	req, err := http.NewRequestWithContext(context.Background(), "GET", url, nil)
+	req, err := http.NewRequestWithContext(context_.Background(), "GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
