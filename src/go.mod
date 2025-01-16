@@ -3,7 +3,7 @@ module github.com/jandedobbeleer/aliae/src
 go 1.22
 
 require (
-	github.com/goccy/go-yaml v1.15.13
+	github.com/goccy/go-yaml v1.15.14
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cobra v1.8.1
 )
