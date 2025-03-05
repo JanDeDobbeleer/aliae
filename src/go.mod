@@ -1,6 +1,7 @@
 module github.com/jandedobbeleer/aliae/src
 
 go 1.22
+toolchain go1.23.7
 
 require (
 	github.com/goccy/go-yaml v1.15.23
@@ -22,5 +23,5 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/sys v0.30.0
+	golang.org/x/sys v0.31.0
 )
