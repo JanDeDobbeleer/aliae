@@ -172,11 +172,11 @@ func validatePath(path string) (string, error) {
 	}
 
 	if len(configPathCache) == 0 {
-		return "", errors.New("Config file not found")
+		return "", errors.New("config file not found")
 	}
 
 	if strings.HasPrefix(configPathCache, "https://") || strings.HasPrefix(configPathCache, "http://") {
-		return "", errors.New("Remote files are not allowed to contain include directives")
+		return "", errors.New("remote files are not allowed to contain include directives")
 	}
 
 	// get the directory of the config file
