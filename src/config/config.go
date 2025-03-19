@@ -43,7 +43,7 @@ func LoadConfig(configPath string) (*Aliae, error) {
 	}
 
 	if filepath, err := os.Stat(configPathCache); os.IsNotExist(err) || filepath.IsDir() {
-		return nil, fmt.Errorf("Config file not found: %s", configPathCache)
+		return nil, fmt.Errorf("config file not found: %s", configPathCache)
 	}
 
 	data, _ := os.ReadFile(configPathCache)
@@ -115,7 +115,7 @@ func getRemoteConfig(url string) (*Aliae, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Failed to download config file: %s\n→ %s", url, resp.Status)
+		return nil, fmt.Errorf("failed to download config file: %s\n→ %s", url, resp.Status)
 	}
 
 	data, err := io.ReadAll(resp.Body)
@@ -132,7 +132,7 @@ func parseConfig(data []byte) (*Aliae, error) {
 	decoder := yaml.NewDecoder(bytes.NewBuffer(data), yaml.CustomUnmarshaler(aliaeUnmarshaler))
 	err := decoder.Decode(&aliae)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse config file: %s", err)
+		return nil, fmt.Errorf("failed to parse config file: %s", err)
 	}
 
 	return &aliae, nil
