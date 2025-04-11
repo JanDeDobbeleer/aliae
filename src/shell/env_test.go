@@ -244,7 +244,7 @@ func TestEnvironmentVariableDelimiter(t *testing.T) {
 		},
 		{
 			Case:     "Not a string value",
-			Expected: `$env:HELLO = 2`,
+			Expected: `$env:HELLO = "2"`,
 			Env:      &Env{Name: "HELLO", Value: 2, Delimiter: ";"},
 		},
 		{

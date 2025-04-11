@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -11,14 +12,33 @@ import (
 type Envs []*Env
 
 type Env struct {
-	Value     interface{} `yaml:"value"`
-	Name      string      `yaml:"name"`
-	Delimiter Template    `yaml:"delimiter"`
-	If        If          `yaml:"if"`
-	Type      EnvType     `yaml:"type"`
+	Value     any      `yaml:"value"`
+	Name      string   `yaml:"name"`
+	Delimiter Template `yaml:"delimiter"`
+	If        If       `yaml:"if"`
+	Type      EnvType  `yaml:"type"`
 	template  string
 	Persist   bool `yaml:"persist"`
 	parsed    bool
+}
+
+func toString(value any) string {
+	switch v := value.(type) {
+	case string:
+		return v
+	case []string:
+		return strings.Join(v, ";")
+	case int:
+		return fmt.Sprintf("%d", v)
+	case float64:
+		return fmt.Sprintf("%f", v)
+	case bool:
+		return fmt.Sprintf("%v", v)
+	case fmt.Stringer:
+		return v.String()
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
 
 func (e *Env) string() string {
@@ -75,12 +95,7 @@ func (e *Env) parse() {
 
 	e.parsed = true
 
-	text, OK := e.Value.(string)
-	if !OK {
-		return
-	}
-
-	template := Template(text)
+	template := Template(toString(e.Value))
 	e.Value = template.Parse().String()
 	e.join()
 }
@@ -119,7 +134,7 @@ func (e Envs) Render() {
 
 		DotFile.WriteString(variable.string())
 
-		os.Setenv(variable.Name, variable.Value.(string))
+		os.Setenv(variable.Name, toString(variable.Value))
 
 		first = false
 	}
