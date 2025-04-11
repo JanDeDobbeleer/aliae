@@ -10,7 +10,7 @@ func TestFormatString(t *testing.T) {
 	text := `{{ formatString .Value}}`
 	cases := []struct {
 		Case     string
-		Value    interface{}
+		Value    any
 		Expected string
 	}{
 		{
@@ -42,7 +42,7 @@ func TestFormatArray(t *testing.T) {
 	textDelim := `{{ formatArray .Value .Delim }}`
 	cases := []struct {
 		Case     string
-		Value    interface{}
+		Value    any
 		Expected string
 		Delim    string
 	}{
@@ -117,7 +117,7 @@ func TestEscapeString(t *testing.T) {
 	text := `{{ escapeString .Value}}`
 	cases := []struct {
 		Case     string
-		Value    interface{}
+		Value    any
 		Expected string
 	}{
 		{

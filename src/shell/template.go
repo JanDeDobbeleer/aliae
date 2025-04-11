@@ -8,6 +8,8 @@ import (
 	"strings"
 	"text/template"
 
+	"slices"
+
 	"github.com/jandedobbeleer/aliae/src/context"
 )
 
@@ -26,7 +28,7 @@ func (t Template) String() string {
 	return string(t.Parse())
 }
 
-func parse(text string, ctx interface{}) (string, error) {
+func parse(text string, ctx any) (string, error) {
 	if !strings.Contains(text, "{{") || !strings.Contains(text, "}}") {
 		return text, nil
 	}
@@ -48,7 +50,7 @@ func parse(text string, ctx interface{}) (string, error) {
 }
 
 func funcMap() template.FuncMap {
-	funcMap := map[string]interface{}{
+	funcMap := map[string]any{
 		"isPwshOption": isPwshOption,
 		"isPwshScope":  isPwshScope,
 		"formatString": formatString,
@@ -62,7 +64,7 @@ func funcMap() template.FuncMap {
 	return template.FuncMap(funcMap)
 }
 
-func formatString(variable interface{}) interface{} {
+func formatString(variable any) any {
 	switch variable.(type) {
 	case string, Template:
 		return fmt.Sprintf(`"%s"`, escapeString(variable))
@@ -71,7 +73,7 @@ func formatString(variable interface{}) interface{} {
 	}
 }
 
-func splitString(variable interface{}) interface{} {
+func splitString(variable any) any {
 	switch variable := variable.(type) {
 	case string:
 		variable = strings.TrimSpace(variable)
@@ -91,7 +93,7 @@ func splitString(variable interface{}) interface{} {
 	}
 }
 
-func formatArray(variable interface{}, delim ...string) interface{} {
+func formatArray(variable any, delim ...string) any {
 	delimiter := " "
 	if len(delim) > 0 {
 		delimiter = delim[0]
@@ -114,7 +116,7 @@ func formatArray(variable interface{}, delim ...string) interface{} {
 	}
 }
 
-func escapeString(variable interface{}) interface{} {
+func escapeString(variable any) any {
 	clean := func(v string) string {
 		v = strings.ReplaceAll(v, `\`, `\\`)
 		v = strings.ReplaceAll(v, `"`, `\"`)
@@ -133,12 +135,7 @@ func escapeString(variable interface{}) interface{} {
 }
 
 func match(variable string, values ...string) bool {
-	for _, value := range values {
-		if variable == value {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(values, variable)
 }
 
 func hasCommand(command string) bool {
