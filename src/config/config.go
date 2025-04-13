@@ -78,17 +78,17 @@ func resolveConfigPath(configPath string) string {
 	return replaceTildePrefixWithHomeDir(configPath)
 }
 
-func replaceTildePrefixWithHomeDir(path string) string {
-	if !strings.HasPrefix(path, "~") {
-		return path
+func replaceTildePrefixWithHomeDir(dir string) string {
+	if !strings.HasPrefix(dir, "~") {
+		return dir
 	}
 
-	rem := path[1:]
+	rem := dir[1:]
 	if len(rem) == 0 || isSeparator(rem[0]) {
 		return home() + rem
 	}
 
-	return path
+	return dir
 }
 
 func isSeparator(c uint8) bool {
