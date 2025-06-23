@@ -3,9 +3,9 @@ module github.com/jandedobbeleer/aliae/src
 go 1.24
 
 require (
-	github.com/goccy/go-yaml v1.17.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cobra v1.9.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

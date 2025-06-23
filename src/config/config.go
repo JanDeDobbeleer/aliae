@@ -1,21 +1,31 @@
 package config
 
 import (
-	"bytes"
 	context_ "context"
+	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 
-	"github.com/goccy/go-yaml"
 	"github.com/jandedobbeleer/aliae/src/context"
+	"github.com/jandedobbeleer/aliae/src/shell"
+	"gopkg.in/yaml.v3"
 )
+
+type Aliae struct {
+	Aliae   shell.Aliae   `yaml:"alias"`
+	Envs    shell.Envs    `yaml:"env"`
+	Paths   shell.Paths   `yaml:"path"`
+	Scripts shell.Scripts `yaml:"script"`
+	Links   shell.Links   `yaml:"link"`
+}
 
 type httpClient interface {
 	Do(req *http.Request) (*http.Response, error)
@@ -127,12 +137,25 @@ func getRemoteConfig(url string) (*Aliae, error) {
 }
 
 func parseConfig(data []byte) (*Aliae, error) {
+	var rootNode yaml.Node
 	var aliae Aliae
 
-	decoder := yaml.NewDecoder(bytes.NewBuffer(data), yaml.CustomUnmarshaler(aliaeUnmarshaler))
-	err := decoder.Decode(&aliae)
-	if err != nil {
+	if len(configPathCache) == 0 {
+		return nil, errors.New("Config file not found")
+	}
+
+	if err := yaml.Unmarshal(data, &rootNode); err != nil {
 		return nil, fmt.Errorf("failed to parse config file: %s", err)
+	}
+
+	defaultPath := filepath.Dir(configPathCache)
+
+	if err := resolveIncludes(&rootNode, defaultPath); err != nil {
+		return nil, err
+	}
+
+	if err := rootNode.Decode(&aliae); err != nil {
+		return nil, fmt.Errorf("Failed to decode config into Aliae struct: %w", err)
 	}
 
 	return &aliae, nil
