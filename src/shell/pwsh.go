@@ -41,7 +41,7 @@ func (a *Alias) pwsh() *Alias {
 
 	switch a.Type { //nolint:exhaustive
 	case Command:
-		a.template = `Set-Alias -Name {{ .Name }} -Value {{ .Value }}{{ if .Description }} -Description '{{ .Description }}'{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ .Scope }}{{ end }}` //nolint: lll
+		a.template = `Set-Alias -Name {{ .Name }} -Value {{ formatString .Value }}{{ if .Description }} -Description {{ formatString .Description }}{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ formatString .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ formatString .Scope }}{{ end }}` //nolint: lll
 	case Function:
 		a.template = `function {{ .Name }}() {
     {{ .Value }}
@@ -79,7 +79,7 @@ func (l *Link) pwsh() *Link {
 }
 
 func (p *Path) pwsh() *Path {
-	template := fmt.Sprintf(`$env:PATH = '{{ .Value }}%s' + $env:PATH`, context.PathDelimiter())
+	template := fmt.Sprintf(`$env:PATH = {{ formatString .Value }} + '%s' + $env:PATH`, context.PathDelimiter())
 	p.template = template
 	return p
 }

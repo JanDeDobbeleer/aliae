@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 	"text/template"
-
-	"slices"
 
 	"github.com/jandedobbeleer/aliae/src/context"
 )
@@ -50,7 +49,7 @@ func parse(text string, ctx any) (string, error) {
 }
 
 func funcMap() template.FuncMap {
-	funcMap := map[string]any{
+	funcMap := template.FuncMap{
 		"isPwshOption": isPwshOption,
 		"isPwshScope":  isPwshScope,
 		"formatString": formatString,
@@ -61,12 +60,12 @@ func funcMap() template.FuncMap {
 		"hasCommand":   hasCommand,
 		"isDir":        isDir,
 	}
-	return template.FuncMap(funcMap)
+	return funcMap
 }
 
 func formatString(variable any) any {
 	switch variable.(type) {
-	case string, Template:
+	case string, Template, Option:
 		return fmt.Sprintf(`"%s"`, escapeString(variable))
 	default:
 		return variable
@@ -118,9 +117,18 @@ func formatArray(variable any, delim ...string) any {
 
 func escapeString(variable any) any {
 	clean := func(v string) string {
-		v = strings.ReplaceAll(v, `\`, `\\`)
-		v = strings.ReplaceAll(v, `"`, `\"`)
-		return v
+		switch context.Current.Shell {
+		case PWSH, POWERSHELL:
+			return strings.NewReplacer(
+				"`", "``",
+				`"`, "`\"",
+			).Replace(v)
+		default:
+			return strings.NewReplacer(
+				`\`, `\\`,
+				`"`, `\"`,
+			).Replace(v)
+		}
 	}
 
 	switch v := variable.(type) {
