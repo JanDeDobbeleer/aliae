@@ -3,6 +3,7 @@ package shell
 import (
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,6 +32,7 @@ func TestFormatString(t *testing.T) {
 	}
 
 	for _, tc := range cases {
+		context.Current = &context.Runtime{Shell: BASH}
 		got, _ := parse(text, tc)
 		assert.Equal(t, tc.Expected, got, tc.Case)
 	}
@@ -103,7 +105,8 @@ string`,
 	}
 
 	for _, tc := range cases {
-		got := ""
+		context.Current = &context.Runtime{Shell: BASH}
+		var got string
 		if tc.Delim == "" {
 			got, _ = parse(text, tc)
 		} else {
@@ -117,6 +120,7 @@ func TestEscapeString(t *testing.T) {
 	text := `{{ escapeString .Value}}`
 	cases := []struct {
 		Case     string
+		Shell    string
 		Value    any
 		Expected string
 	}{
@@ -126,12 +130,12 @@ func TestEscapeString(t *testing.T) {
 			Expected: `hello`,
 		},
 		{
-			Case:     "stringWithQuotes",
+			Case:     "string with quotes",
 			Value:    `hello "world"`,
 			Expected: `hello \"world\"`,
 		},
 		{
-			Case:     "stringWithBackslashes",
+			Case:     "string with backslashes",
 			Value:    `hello \world`,
 			Expected: `hello \\world`,
 		},
@@ -140,9 +144,37 @@ func TestEscapeString(t *testing.T) {
 			Value:    Template(`hello "world"`),
 			Expected: `hello \"world\"`,
 		},
+		{
+			Case:     "PowerShell: string",
+			Shell:    PWSH,
+			Value:    `hello`,
+			Expected: `hello`,
+		},
+		{
+			Case:     "PowerShell: string with quotes",
+			Shell:    PWSH,
+			Value:    `hello "world"`,
+			Expected: "hello `\"world`\"",
+		},
+		{
+			Case:     "PowerShell: string with backticks",
+			Shell:    PWSH,
+			Value:    "hello `world",
+			Expected: "hello ``world",
+		},
+		{
+			Case:     "PowerShell: template",
+			Shell:    PWSH,
+			Value:    Template(`hello "world"`),
+			Expected: "hello `\"world`\"",
+		},
 	}
 
 	for _, tc := range cases {
+		context.Current = &context.Runtime{Shell: tc.Shell}
+		if len(tc.Shell) == 0 {
+			tc.Shell = BASH
+		}
 		got, _ := parse(text, tc)
 		assert.Equal(t, tc.Expected, got, tc.Case)
 	}

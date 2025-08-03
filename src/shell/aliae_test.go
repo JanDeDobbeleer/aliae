@@ -17,7 +17,7 @@ func TestAliasCommand(t *testing.T) {
 		{
 			Case:     "PWSH",
 			Shell:    PWSH,
-			Expected: "Set-Alias -Name foo -Value bar",
+			Expected: `Set-Alias -Name foo -Value "bar"`,
 		},
 		{
 			Case:     "CMD",

@@ -25,27 +25,27 @@ func TestPath(t *testing.T) {
 			Case:     "PWSH - single item",
 			Shell:    PWSH,
 			Path:     &Path{Value: "/usr/local/bin"},
-			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/usr/local/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case:     "PWSH - single item with template",
 			Shell:    PWSH,
 			Path:     &Path{Value: "{{ .Home }}/.tools/bin"},
-			Expected: `$env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/Users/jan/.tools/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case:  "PWSH - single item with blank line",
 			Shell: PWSH,
 			Path:  &Path{Value: "/usr/local/bin\n\n/usr/bin"},
-			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH
-$env:PATH = '/usr/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/usr/local/bin" + ':' + $env:PATH
+$env:PATH = "/usr/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case:  "PWSH - multiple items",
 			Shell: PWSH,
 			Path:  &Path{Value: "/usr/local/bin\n/usr/bin"},
-			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH
-$env:PATH = '/usr/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/usr/local/bin" + ':' + $env:PATH
+$env:PATH = "/usr/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case:     "CMD - single item",
@@ -180,7 +180,7 @@ func TestPathRender(t *testing.T) {
 				&Path{Value: "/usr/bin", If: `eq .Shell "pwsh"`},
 			},
 			Shell:    PWSH,
-			Expected: `$env:PATH = '/usr/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/usr/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - 1 PATH definition",
@@ -188,7 +188,7 @@ func TestPathRender(t *testing.T) {
 				&Path{Value: "/usr/bin"},
 			},
 			Shell:    PWSH,
-			Expected: `$env:PATH = '/usr/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/usr/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - Single PATH, non empty",
@@ -199,7 +199,7 @@ func TestPathRender(t *testing.T) {
 			NonEmptyScript: true,
 			Expected: `foo
 
-$env:PATH = '/usr/bin:' + $env:PATH`,
+$env:PATH = "/usr/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - 2 PATH definitions",
@@ -208,8 +208,8 @@ $env:PATH = '/usr/bin:' + $env:PATH`,
 				&Path{Value: "/Users/jan/.tools/bin"},
 			},
 			Shell: PWSH,
-			Expected: `$env:PATH = '/usr/bin:' + $env:PATH
-$env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/usr/bin" + ':' + $env:PATH
+$env:PATH = "/Users/jan/.tools/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case: "PWSH - 2 PATH definitions with conditional",
@@ -218,7 +218,7 @@ $env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
 				&Path{Value: "/Users/jan/.tools/bin"},
 			},
 			Shell:    PWSH,
-			Expected: `$env:PATH = '/Users/jan/.tools/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/Users/jan/.tools/bin" + ':' + $env:PATH`,
 		},
 	}
 
@@ -250,7 +250,7 @@ func TestPathForce(t *testing.T) {
 			Case:     "PWSH - Force",
 			Shell:    PWSH,
 			Path:     &Path{Value: "/usr/local/bin", Force: true},
-			Expected: `$env:PATH = '/usr/local/bin:' + $env:PATH`,
+			Expected: `$env:PATH = "/usr/local/bin" + ':' + $env:PATH`,
 		},
 		{
 			Case:     "PWSH - Not Force",
