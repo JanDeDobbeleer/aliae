@@ -1,6 +1,7 @@
 package shell
 
 import (
+	context_ "context"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -62,8 +63,7 @@ func (a *Alias) getGitAliasOutput() (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	cmd := exec.Command(path, "config", "--get-regexp", "^alias\\.")
+	cmd := exec.CommandContext(context_.Background(), path, "config", "--get-regexp", "^alias\\.")
 	// when no aliae have been set, it causes git to panic
 	raw, _ := cmd.Output()
 	return string(raw), nil
