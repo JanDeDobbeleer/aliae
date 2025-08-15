@@ -67,6 +67,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "lewis-yeung",
+      "name": "L. Yeung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83903009?v=4",
+      "profile": "https://github.com/lewis-yeung",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
