@@ -19,7 +19,7 @@ jobs:
       skipped: ${{ steps.changelog.outputs.skipped }}
     steps:
       - name: Checkout code 👋
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
       - name: Create changelog ✍️
         id: changelog
         uses: TriPSs/conventional-changelog-action@67139193614f5b9e8db87da1bd4240922b34d765
@@ -39,9 +39,9 @@ jobs:
         working-directory: ${{ github.workspace }}/src
     steps:
       - name: Checkout code 👋
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
       - name: Install Go 🗳
-        uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5
         with:
           go-version: '1.24.1'
       - name: Tag HEAD 😸
@@ -50,14 +50,14 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag ${{ needs.changelog.outputs.tag }}
       - name: Run GoReleaser 🚀
-        uses: goreleaser/goreleaser-action@9c156ee8a17a598857849441385a2041ef570552
+        uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a
         with:
           distribution: goreleaser
           version: latest
           args: build --clean
           workdir: src
       - name: Release 🎓
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
         with:
           tag_name: ${{ needs.changelog.outputs.tag }}
           body: ${{ needs.changelog.outputs.body }}
