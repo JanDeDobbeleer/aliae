@@ -14,7 +14,6 @@ import TabItem from "@theme/TabItem";
   groupId="install"
   values={[
     { label: 'winget', value: 'winget', },
-    { label: 'scoop', value: 'scoop', },
     { label: 'manual', value: 'manual', },
   ]
 }>
@@ -24,15 +23,6 @@ Open a PowerShell prompt and run the following command:
 
 ```powershell
 winget install JanDeDobbeleer.Aliae -s winget
-```
-
-</TabItem>
-<TabItem value="scoop">
-
-Open a PowerShell prompt and run the following command:
-
-```powershell
-scoop install https://github.com/JanDeDobbeleer/aliae/releases/latest/download/aliae.json
 ```
 
 </TabItem>
@@ -54,7 +44,6 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object
   groupId="install"
   values={[
     { label: 'winget', value: 'winget', },
-    { label: 'scoop', value: 'scoop', },
     { label: 'manual', value: 'manual', },
   ]
 }>
@@ -64,15 +53,6 @@ Open a PowerShell prompt and run the following command:
 
 ```powershell
 winget upgrade JanDeDobbeleer.Aliae -s winget
-```
-
-</TabItem>
-<TabItem value="scoop">
-
-Open a PowerShell prompt and run the following command:
-
-```powershell
-scoop update Aliae
 ```
 
 </TabItem>
