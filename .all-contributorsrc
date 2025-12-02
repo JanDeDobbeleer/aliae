@@ -76,6 +76,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tylerbutler",
+      "name": "Tyler Butler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19589?v=4",
+      "profile": "https://tylerbutler.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
