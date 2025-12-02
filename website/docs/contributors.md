@@ -20,6 +20,9 @@ Thanks goes to these wonderful people ([emoji key][acek]):
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/cethien"><img src="https://avatars.githubusercontent.com/u/60463918?v=4?s=100" width="100px;" alt="Borislaw Sotnikow"/><br /><sub><b>Borislaw Sotnikow</b></sub></a><br /><a href="https://github.com/JanDeDobbeleer/aliae/commits?author=cethien" title="Code">💻</a> <a href="https://github.com/JanDeDobbeleer/aliae/commits?author=cethien" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lewis-yeung"><img src="https://avatars.githubusercontent.com/u/83903009?v=4?s=100" width="100px;" alt="L. Yeung"/><br /><sub><b>L. Yeung</b></sub></a><br /><a href="https://github.com/JanDeDobbeleer/aliae/commits?author=lewis-yeung" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://tylerbutler.com"><img src="https://avatars.githubusercontent.com/u/19589?v=4?s=100" width="100px;" alt="Tyler Butler"/><br /><sub><b>Tyler Butler</b></sub></a><br /><a href="https://github.com/JanDeDobbeleer/aliae/commits?author=tylerbutler" title="Documentation">📖</a></td>
+    </tr>
   </tbody>
 </table>
 
