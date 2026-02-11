@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -228,8 +229,14 @@ func indent(data []byte) []byte {
 
 func readDir(dir string) ([]byte, error) {
 	files, err := os.ReadDir(dir)
-	if err != nil {
+	switch {
+	case errors.Is(err, fs.ErrNotExist):
+		// If the directory does not exist, treat it as empty
+		return []byte{}, nil
+	case err != nil:
 		return []byte{}, err
+	case len(files) == 0:
+		return []byte{}, nil
 	}
 
 	var configData []byte

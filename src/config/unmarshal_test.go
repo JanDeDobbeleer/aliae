@@ -36,8 +36,9 @@ func TestReadDir(t *testing.T) {
 	})
 
 	t.Run("NonExistentDir", func(t *testing.T) {
-		_, err := readDir("path/to/nonexistent/dir")
-		assert.Error(t, err)
+		content, err := readDir("path/to/nonexistent/dir")
+		assert.NoError(t, err)
+		assert.Equal(t, []byte{}, content)
 	})
 }
 
