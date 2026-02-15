@@ -1,0 +1,37 @@
+{
+  "name": "aliae",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.24.1"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20.9.0",
+      "nodeGypDependencies": true,
+      "npmVersion": "10.1.0"
+    }
+  },
+  "workspaceFolder": "/workspaces/aliae",
+  "postCreateCommand": "bash -lc 'cd src && go mod download && go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest && go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest && cd ../website && npm ci'",
+  "forwardPorts": [
+    3000
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.Go",
+        "ms-vscode.vscode-typescript-next",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "go.toolsManagement.autoUpdate": true,
+        "go.useLanguageServer": true,
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}
