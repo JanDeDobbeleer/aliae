@@ -24,7 +24,8 @@
       "extensions": [
         "golang.Go",
         "ms-vscode.vscode-typescript-next",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "hbenl.vscode-test-explorer"
       ],
       "settings": {
         "go.toolsManagement.autoUpdate": true,
