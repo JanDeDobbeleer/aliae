@@ -62,17 +62,17 @@ func parse(text string, ctx any) (string, error) {
 
 func funcMap() template.FuncMap {
 	funcMap := template.FuncMap{
-		"isPwshOption": isPwshOption,
-		"isPwshScope":  isPwshScope,
-		"formatString": formatString,
-		"formatArray":  formatArray,
-		"escapeString": escapeString,
-		"env":          os.Getenv,
-		"match":        match,
-		"hasCommand":   hasCommand,
+		"isPwshOption":   isPwshOption,
+		"isPwshScope":    isPwshScope,
+		"formatString":   formatString,
+		"formatArray":    formatArray,
+		"escapeString":   escapeString,
+		"env":            os.Getenv,
+		"match":          match,
+		"hasCommand":     hasCommand,
 		"homeFileExists": homeFileExists,
 		"homeDirExists":  homeDirExists,
-		"isDir":        isDir,
+		"isDir":          isDir,
 	}
 	return funcMap
 }
