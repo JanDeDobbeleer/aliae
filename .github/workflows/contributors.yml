@@ -8,4 +8,4 @@ jobs:
   contributors:
     uses: jandedobbeleer/workflows/.github/workflows/contributors.yml@main
     secrets:
-      token: ${{ secrets.GH_PAT }}
+      token: ${{ secrets.GITHUB_TOKEN }}

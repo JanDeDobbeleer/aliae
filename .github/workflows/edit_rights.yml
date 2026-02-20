@@ -17,4 +17,4 @@ jobs:
   notify-when-maintainers-cannot-edit:
     uses: jandedobbeleer/workflows/.github/workflows/edit_rights.yml@main
     secrets:
-      token: ${{ secrets.GH_PAT }}
+      token: ${{ secrets.GITHUB_TOKEN }}
