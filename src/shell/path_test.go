@@ -146,6 +146,20 @@ export PATH="/usr/bin:$PATH"`,
 			Path:     &Path{Value: "/usr/local/bin"},
 			Expected: `export PATH="/usr/local/bin;$PATH"`,
 		},
+		{
+			Case:     "BASH - Windows",
+			Shell:    BASH,
+			OS:       context.WINDOWS,
+			Path:     &Path{Value: "/usr/local/bin"},
+			Expected: `export PATH="/usr/local/bin:$PATH"`,
+		},
+		{
+			Case:     "BASH - Windows with home template",
+			Shell:    BASH,
+			OS:       context.WINDOWS,
+			Path:     &Path{Value: "{{ .Home }}/.tools/bin"},
+			Expected: `export PATH="/Users/jan/.tools/bin:$PATH"`,
+		},
 	}
 
 	for _, tc := range cases {
@@ -351,6 +365,13 @@ $env.Path = ($env.Path | prepend "D:\\bin")`,
 			OS:       context.WINDOWS,
 			Path:     &Path{Value: "/usr/local/bin", Force: true},
 			Expected: `export PATH="/usr/local/bin;$PATH"`,
+		},
+		{
+			Case:     "BASH - Windows Force",
+			Shell:    BASH,
+			OS:       context.WINDOWS,
+			Path:     &Path{Value: "/usr/local/bin", Force: true},
+			Expected: `export PATH="/usr/local/bin:$PATH"`,
 		},
 		{
 			Case:     "ZSH - Windows Not Force",

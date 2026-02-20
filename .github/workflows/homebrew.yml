@@ -1,21 +1,11 @@
 name: Homebrew
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
 
 jobs:
-  notify:
+  disabled:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
-    - name: Notify Homebrew Repo 🙋🏾‍♀️
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-      with:
-        github-token: ${{ secrets.GH_PAT }}
-        script: |
-          await github.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
-            owner: 'jandedobbeleer',
-            repo: 'homebrew-aliae',
-            workflow_id: 'release.yml',
-            ref: 'main',
-            inputs: {"version": process.env.GITHUB_REF.replace('refs/tags/v', '')}
-          })
+    - name: Disabled
+      run: echo "Homebrew publishing is disabled in this fork."
