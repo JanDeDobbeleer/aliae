@@ -62,6 +62,6 @@ jobs:
           tag_name: ${{ needs.changelog.outputs.tag }}
           body: ${{ needs.changelog.outputs.body }}
           fail_on_unmatched_files: true
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ github.token }}
           files: |
             src/dist/aliae-*
