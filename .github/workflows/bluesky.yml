@@ -1,17 +1,11 @@
 name: Bluesky
 on:
-  release:
-    types: [published]
   workflow_dispatch:
 
 jobs:
-  bluesky:
+  disabled:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
-      - name: Publish
-        uses: JanDeDobbeleer/bluesky-releasenotes-action@main
-        with:
-          title: "Something is sprouting 🌱"
-          bluesky-identifier: ${{ secrets.BLUESKY_IDENTIFIER }}
-          bluesky-password: ${{ secrets.BLUESKY_PASSWORD }}
-          github-token: ${{ secrets.GH_PAT }}
+      - name: Disabled
+        run: echo "Bluesky announcements are disabled in this fork."

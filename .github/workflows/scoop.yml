@@ -1,42 +1,11 @@
 name: Scoop
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'The latest version'
-        required: true
-      release:
-        description: 'The release id'
-        required: true
 
 jobs:
-  publish:
+  disabled:
+    if: ${{ false }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: pwsh
-        working-directory: ${{ github.workspace }}/packages/scoop
     steps:
-    - name: Checkout code 👋
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-    - name: Update Template ✍️
-      run: |
-        ./build.ps1 -Version ${{ github.event.inputs.version }}
-    - name: Upload artifacts 🆙
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          console.log('environment', process.versions);
-
-          const fs = require('fs').promises;
-
-          const { repo: { owner, repo }, sha } = context;
-          console.log({ owner, repo, sha });
-
-          await github.rest.repos.uploadReleaseAsset({
-            owner, repo,
-            release_id: ${{ github.event.inputs.release }},
-            name: 'aliae.json',
-            data: await fs.readFile('./packages/scoop/dist/aliae.json')
-          });
+      - name: Disabled
+        run: echo "Scoop publishing is disabled in this fork."
