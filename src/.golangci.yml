@@ -36,6 +36,10 @@ linters:
         - style
       disabled-tags:
         - experimental
+    revive:
+      rules:
+        - name: var-naming
+          disabled: true
     lll:
       line-length: 180
   exclusions:
