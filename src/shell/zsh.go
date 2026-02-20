@@ -49,7 +49,11 @@ func (l *Link) zsh() *Link {
 }
 
 func (p *Path) zsh() *Path {
-	template := fmt.Sprintf(`export PATH="{{ .Value }}%s$PATH"`, context.PathDelimiter())
+	delimiter := ":"
+	if context.Current.Shell == ZSH {
+		delimiter = context.PathDelimiter()
+	}
+	template := fmt.Sprintf(`export PATH="{{ .Value }}%s$PATH"`, delimiter)
 	p.template = template
 	return p
 }
