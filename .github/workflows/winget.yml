@@ -17,7 +17,7 @@ jobs:
       WINGETCREATE_TOKEN: ${{ secrets.WINGETCREATE_TOKEN }}
     steps:
     - name: Checkout code 👋
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
     - name: Create manifest and submit PR 📦
       run: |
         ./build.ps1 -Version "${{ github.event.inputs.version }}" -Token $env:WINGETCREATE_TOKEN
