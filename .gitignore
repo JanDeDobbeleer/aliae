@@ -163,3 +163,9 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/docusaurus
 
 .DS_Store
+
+# APM dependencies
+apm_modules/
+.agents/
+.claude/
+.github/instructions
