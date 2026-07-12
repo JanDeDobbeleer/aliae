@@ -19,10 +19,5 @@ func canRetryWrite(err error) bool {
 		return false
 	}
 
-	switch errno {
-	case windows.ERROR_ACCESS_DENIED, windows.ERROR_SHARING_VIOLATION, windows.ERROR_LOCK_VIOLATION:
-		return true
-	default:
-		return false
-	}
+	return errno == windows.ERROR_ACCESS_DENIED || errno == windows.ERROR_SHARING_VIOLATION || errno == windows.ERROR_LOCK_VIOLATION
 }
