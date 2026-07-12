@@ -50,15 +50,17 @@ func parse(text string, ctx any) (string, error) {
 
 func funcMap() template.FuncMap {
 	funcMap := template.FuncMap{
-		"isPwshOption": isPwshOption,
-		"isPwshScope":  isPwshScope,
-		"formatString": formatString,
-		"formatArray":  formatArray,
-		"escapeString": escapeString,
-		"env":          os.Getenv,
-		"match":        match,
-		"hasCommand":   hasCommand,
-		"isDir":        isDir,
+		"isPwshOption":   isPwshOption,
+		"isPwshScope":    isPwshScope,
+		"formatString":   formatString,
+		"formatArray":    formatArray,
+		"escapeString":   escapeString,
+		"env":            os.Getenv,
+		"match":          match,
+		"hasCommand":     hasCommand,
+		"isDir":          isDir,
+		"dirAccessible":  dirAccessible,
+		"pathAccessible": pathAccessible,
 	}
 	return funcMap
 }
@@ -158,4 +160,28 @@ func isDir(path string) bool {
 	}
 
 	return info.IsDir()
+}
+
+// pathAccessible reports whether path exists and is readable by the current user.
+func pathAccessible(path string) bool {
+	if _, err := os.Stat(path); err != nil {
+		return false
+	}
+
+	return canReadPath(path)
+}
+
+// dirAccessible reports whether path exists, is a directory, and is traversable
+// (i.e. its contents can be listed) by the current user.
+func dirAccessible(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+
+	if !info.IsDir() {
+		return false
+	}
+
+	return canTraverseDir(path)
 }

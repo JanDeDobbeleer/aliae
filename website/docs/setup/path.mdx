@@ -28,7 +28,13 @@ path:
 | `value`   | `string`  | the path entires you want to add, separated by a newline. Supports [templating][templates]  |
 | `if`      | `string`  | golang [template][go-text-template] conditional statement, see [if][if]                     |
 | `persist` | `boolean` | if you want to persist the path entry into the registry for the current user (Windows only) |
-| `force`   | `boolean` | if you want to always export the path even if it already exists in your current shell       |
+| `force`   | `boolean` | if you want to always export the path, even if already present or missing on disk           |
+
+:::info
+Entries pointing to a directory that doesn't exist on disk are skipped automatically, so your
+shell never tries to traverse into a missing path. Set `force: true` to bypass this check, along
+with the "already in `PATH`" check.
+:::
 
 [templates]: templates.mdx
 [go-text-template]: https://golang.org/pkg/text/template/
