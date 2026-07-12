@@ -2,6 +2,7 @@ package registry
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"golang.org/x/sys/windows"
@@ -63,10 +64,8 @@ func PersistPathEntry(path string) {
 
 	// split the current value using the ; delimiter and check if we already have this path entry
 	entries := strings.Split(keyValue, ";")
-	for _, entry := range entries {
-		if entry == path {
-			return
-		}
+	if slices.Contains(entries, path) {
+		return
 	}
 
 	keyValue = fmt.Sprintf("%s;%s", path, keyValue)
