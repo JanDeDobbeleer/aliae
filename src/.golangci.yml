@@ -36,6 +36,8 @@ linters:
         - style
       disabled-tags:
         - experimental
+    goconst:
+      ignore-tests: true
     lll:
       line-length: 180
   exclusions:
