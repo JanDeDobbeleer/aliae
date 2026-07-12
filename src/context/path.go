@@ -17,7 +17,7 @@ func getPath() *Path {
 	path := &Path{}
 	paths := os.Getenv("PATH")
 
-	for _, p := range strings.Split(paths, PathDelimiter()) {
+	for p := range strings.SplitSeq(paths, PathDelimiter()) {
 		path.Append(cleanPath(p))
 	}
 

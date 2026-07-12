@@ -72,7 +72,7 @@ func (a *Alias) getGitAliasOutput() (string, error) {
 func (a *Alias) parsegitConfig(config string) {
 	gitConfigCache = make(map[string]string)
 
-	for _, line := range strings.Split(config, "\n") {
+	for line := range strings.SplitSeq(config, "\n") {
 		if len(line) == 0 {
 			continue
 		}
