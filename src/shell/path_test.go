@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -9,6 +10,10 @@ import (
 )
 
 func TestPath(t *testing.T) {
+	origIsValidPathEntry := isValidPathEntry
+	t.Cleanup(func() { isValidPathEntry = origIsValidPathEntry })
+	isValidPathEntry = func(string) bool { return true }
+
 	cases := []struct {
 		Case     string
 		Shell    string
@@ -155,6 +160,10 @@ export PATH="/usr/bin:$PATH"`,
 }
 
 func TestPathRender(t *testing.T) {
+	origIsValidPathEntry := isValidPathEntry
+	t.Cleanup(func() { isValidPathEntry = origIsValidPathEntry })
+	isValidPathEntry = func(string) bool { return true }
+
 	cases := []struct {
 		Case           string
 		Shell          string
@@ -234,6 +243,10 @@ $env:PATH = "/Users/jan/.tools/bin" + ':' + $env:PATH`,
 }
 
 func TestPathForce(t *testing.T) {
+	origIsValidPathEntry := isValidPathEntry
+	t.Cleanup(func() { isValidPathEntry = origIsValidPathEntry })
+	isValidPathEntry = func(string) bool { return true }
+
 	cases := []struct {
 		Case     string
 		Shell    string
@@ -363,6 +376,38 @@ $env.Path = ($env.Path | prepend "D:\\bin")`,
 
 	for _, tc := range cases {
 		context.Current = &context.Runtime{Shell: tc.Shell, Home: "/Users/jan", OS: tc.OS, Path: &context.Path{"/usr/local/bin", "C:\\bin", "D:\\bin"}}
+		assert.Equal(t, tc.Expected, tc.Path.string(), tc.Case)
+	}
+}
+
+func TestPathDirectoryExists(t *testing.T) {
+	existingDir := t.TempDir()
+	missingDir := existingDir + "-missing"
+
+	cases := []struct {
+		Case     string
+		Path     *Path
+		Expected string
+	}{
+		{
+			Case:     "missing directory is skipped",
+			Path:     &Path{Value: Template(missingDir)},
+			Expected: "",
+		},
+		{
+			Case:     "missing directory is kept with force",
+			Path:     &Path{Value: Template(missingDir), Force: true},
+			Expected: fmt.Sprintf(`$env:PATH = "%s" + ':' + $env:PATH`, missingDir),
+		},
+		{
+			Case:     "mixed multi-line value, only existing dirs survive",
+			Path:     &Path{Value: Template(existingDir + "\n" + missingDir)},
+			Expected: fmt.Sprintf(`$env:PATH = "%s" + ':' + $env:PATH`, existingDir),
+		},
+	}
+
+	for _, tc := range cases {
+		context.Current = &context.Runtime{Shell: PWSH, Home: "/Users/jan", Path: &context.Path{}}
 		assert.Equal(t, tc.Expected, tc.Path.string(), tc.Case)
 	}
 }

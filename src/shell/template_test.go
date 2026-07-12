@@ -1,6 +1,8 @@
 package shell
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/jandedobbeleer/aliae/src/context"
@@ -200,6 +202,74 @@ func TestMatch(t *testing.T) {
 		{
 			Case:     "noMatch",
 			Variable: "goodbye",
+			Expected: `false`,
+		},
+	}
+
+	for _, tc := range cases {
+		got, _ := parse(text, tc)
+		assert.Equal(t, tc.Expected, got, tc.Case)
+	}
+}
+
+func TestDirAccessible(t *testing.T) {
+	dir := t.TempDir()
+	file := filepath.Join(dir, "file.txt")
+	assert.NoError(t, os.WriteFile(file, []byte("hello"), 0o644))
+
+	text := `{{ dirAccessible .Path }}`
+	cases := []struct {
+		Case     string
+		Path     string
+		Expected string
+	}{
+		{
+			Case:     "existing directory",
+			Path:     dir,
+			Expected: `true`,
+		},
+		{
+			Case:     "existing file, not a directory",
+			Path:     file,
+			Expected: `false`,
+		},
+		{
+			Case:     "nonexistent path",
+			Path:     filepath.Join(dir, "does-not-exist"),
+			Expected: `false`,
+		},
+	}
+
+	for _, tc := range cases {
+		got, _ := parse(text, tc)
+		assert.Equal(t, tc.Expected, got, tc.Case)
+	}
+}
+
+func TestPathAccessible(t *testing.T) {
+	dir := t.TempDir()
+	file := filepath.Join(dir, "file.txt")
+	assert.NoError(t, os.WriteFile(file, []byte("hello"), 0o644))
+
+	text := `{{ pathAccessible .Path }}`
+	cases := []struct {
+		Case     string
+		Path     string
+		Expected string
+	}{
+		{
+			Case:     "existing directory",
+			Path:     dir,
+			Expected: `true`,
+		},
+		{
+			Case:     "existing file",
+			Path:     file,
+			Expected: `true`,
+		},
+		{
+			Case:     "nonexistent path",
+			Path:     filepath.Join(dir, "does-not-exist"),
 			Expected: `false`,
 		},
 	}

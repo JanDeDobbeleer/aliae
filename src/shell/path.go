@@ -9,6 +9,11 @@ import (
 
 type Paths []*Path
 
+// isValidPathEntry reports whether a PATH entry should be added to the shell's
+// PATH. It is a package-level variable so tests can stub it without touching
+// the filesystem.
+var isValidPathEntry = isDir
+
 type Path struct {
 	Value    Template `yaml:"value"`
 	If       If       `yaml:"if"`
@@ -52,6 +57,10 @@ func (p *Path) render() string {
 	for _, line := range splitted {
 		line = strings.TrimSpace(line)
 		if len(line) == 0 {
+			continue
+		}
+
+		if !isValidPathEntry(line) && !p.Force {
 			continue
 		}
 
