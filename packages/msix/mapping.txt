@@ -1,0 +1,8 @@
+[ResourceMetadata]
+"ResourceDimensions"                    "language-en-us"
+"ResourceId"                            "English"
+
+[Files]
+"./dist/aliae.exe" "aliae.exe"
+"./icons/icon.png" "/icons/icon.png"
+"./icons/44.png" "/icons/44.png"

@@ -28,7 +28,7 @@ go.work
 .docusaurus
 
 # Docusaurus Build Directory
-/build/
+website/build/
 
 ### Docusaurus.Node Stack ###
 # Logs
@@ -169,3 +169,8 @@ apm_modules/
 .agents/
 .claude/
 .github/instructions
+
+# Windows packaging
+# dist/ and out/ are already covered by the generic "dist" and "out" patterns above.
+Microsoft.Trusted.Signing.Client/
+*.msix

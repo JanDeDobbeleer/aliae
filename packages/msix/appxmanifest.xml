@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" xmlns:desktop6="http://schemas.microsoft.com/appx/manifest/desktop/windows10/6" IgnorableNamespaces="rescap uap uap3 uap5 desktop6">
+  <Identity Name="aliae.cli" Version="0.0.1.0" Publisher="CN=Jan Joris De Dobbeleer, O=Jan Joris De Dobbeleer, L=Diest, C=BE" ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Aliae</DisplayName>
+    <PublisherDisplayName>Jan Joris De Dobbeleer</PublisherDisplayName>
+    <Description>Cross platform shell management.</Description>
+    <Logo>icons\icon.png</Logo>
+    <desktop6:RegistryWriteVirtualization>disabled</desktop6:RegistryWriteVirtualization>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17134.0" MaxVersionTested="10.0.22631.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+    <rescap:Capability Name="unvirtualizedResources" />
+  </Capabilities>
+  <Applications>
+    <Application Id="Aliae" Executable="aliae.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap3:VisualElements DisplayName="Aliae" Description="Aliae CLI" Square150x150Logo="icons\icon.png" Square44x44Logo="icons\44.png" BackgroundColor="#1a7f7c" AppListEntry="default" VisualGroup="Aliae">
+      </uap3:VisualElements>
+      <Extensions>
+        <uap5:Extension Category="windows.appExecutionAlias">
+          <uap5:AppExecutionAlias>
+            <uap5:ExecutionAlias Alias="aliae.exe" />
+          </uap5:AppExecutionAlias>
+        </uap5:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+</Package>
