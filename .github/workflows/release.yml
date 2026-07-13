@@ -8,6 +8,10 @@ on:
       - 'src/**'
       - 'packages/**'
       - '.github/workflows/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
 
 jobs:
   changelog:
@@ -29,14 +33,16 @@ jobs:
           output-file: "false"
           skip-commit: "true"
           skip-on-empty: "true"
+          skip-tag: "true"
+
   artifacts:
     needs: changelog
     if: ${{ needs.changelog.outputs.skipped == 'false' }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     defaults:
       run:
         shell: pwsh
-        working-directory: ${{ github.workspace }}/src
+        working-directory: ${{ github.workspace }}/build
     steps:
       - name: Checkout code 👋
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -44,11 +50,9 @@ jobs:
         uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5
         with:
           go-version: '1.26.5'
-      - name: Tag HEAD 😸
+      - name: Pre Build 😸
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag ${{ needs.changelog.outputs.tag }}
+          ./pre.ps1 -Tag ${{ needs.changelog.outputs.tag }} -SDKVersion "10.0.26100.0"
       - name: Run GoReleaser 🚀
         uses: goreleaser/goreleaser-action@ec59f474b9834571250b370d4735c50f8e2d1e29
         with:
@@ -56,12 +60,158 @@ jobs:
           version: latest
           args: build --clean
           workdir: src
-      - name: Release 🎓
+        env:
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: build-artifacts
+          path: |
+            src/dist/aliae-*
+
+  inno:
+    needs:
+      - changelog
+      - artifacts
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64, 386]
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: ${{ github.workspace }}/packages/inno
+    steps:
+      - name: Checkout code 👋
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: build-artifacts
+          path: dist
+      - name: Build installer 📦
+        id: build
+        env:
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: |
+          $version = '${{ needs.changelog.outputs.tag }}'.TrimStart("v")
+          ./build.ps1 -Architecture ${{ matrix.arch }} -Version $version
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: inno-artifact-${{ matrix.arch }}
+          path: |
+            packages/inno/Output/install-${{ matrix.arch }}.exe
+            packages/inno/Output/install-${{ matrix.arch }}.exe.sha256
+
+  msix:
+    needs:
+      - changelog
+      - artifacts
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [x64, arm64]
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: ${{ github.workspace }}/packages/msix
+    steps:
+      - name: Checkout code 👋
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: build-artifacts
+          path: dist
+      - name: Build installer 📦
+        id: build
+        env:
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: |
+          $version = '${{ needs.changelog.outputs.tag }}'.TrimStart("v")
+          ./build.ps1 -Architecture ${{ matrix.arch }} -Version $version -Copy -Sign -SDKVersion "10.0.26100.0"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: msix-artifact-${{ matrix.arch }}
+          path: |
+            packages/msix/out/install-${{ matrix.arch }}.msix
+
+  scoop:
+    needs:
+      - changelog
+      - inno
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: ${{ github.workspace }}/packages/scoop
+    steps:
+      - name: Checkout code 👋
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          pattern: inno-artifact-*
+          merge-multiple: true
+          path: dist
+      - name: Update template ✍️
+        run: |
+          $version = '${{ needs.changelog.outputs.tag }}'.TrimStart("v")
+          ./build.ps1 -Version $version
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: scoop-artifact
+          path: |
+            packages/scoop/dist/aliae.json
+
+  release:
+    runs-on: ubuntu-latest
+    needs:
+      - changelog
+      - artifacts
+      - inno
+      - msix
+      - scoop
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          merge-multiple: true
+      - name: Create draft release 📝
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b
         with:
           tag_name: ${{ needs.changelog.outputs.tag }}
           body: ${{ needs.changelog.outputs.body }}
           fail_on_unmatched_files: true
+          draft: true
           token: ${{ secrets.GH_PAT }}
           files: |
-            src/dist/aliae-*
+            *
+      - name: Publish release 🎓
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: gh release edit ${{ needs.changelog.outputs.tag }} --draft=false --repo ${{ github.repository }}
+
+  winget:
+    needs:
+      - changelog
+      - release
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: ${{ github.workspace }}/packages/winget
+    env:
+      WINGETCREATE_TOKEN: ${{ secrets.WINGETCREATE_TOKEN }}
+    steps:
+      - name: Checkout code 👋
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # NOTE: this still submits the Inno-based (.exe) manifests. Once the
+      # winget-pkgs manifest has been manually migrated to InstallerType msix,
+      # switch this to `wingetcreate update` with the MSIX asset URLs, like
+      # oh-my-posh's winget job does.
+      - name: Create manifest and submit PR 📦
+        run: |
+          $version = '${{ needs.changelog.outputs.tag }}'.TrimStart("v")
+          ./build.ps1 -Version $version -Token $env:WINGETCREATE_TOKEN
