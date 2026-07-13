@@ -23,4 +23,9 @@ The package is created at `out/install-x64.msix`.
 Add-AppxPackage -Path ./out/install-x64.msix
 ```
 
+## Icons
+
+The icons are derived from the seedling emoji in [Noto Emoji], licensed under Apache 2.0.
+
 [Windows SDK]: https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
+[Noto Emoji]: https://github.com/googlefonts/noto-emoji
