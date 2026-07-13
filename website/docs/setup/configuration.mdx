@@ -73,14 +73,19 @@ link:
     target: $DOTFILES/config/zsh/zshrc
 ```
 
-You can find out more about the configuration options below.
+## Execution order
 
-- [Alias][alias]
-- [Function][alias]
-- [Environment variable][env]
-- [PATH entry][path]
-- [Script][script]
-- [Symbolic link][link]
+Regardless of the order in which sections appear in your configuration file, aliae
+always renders them in the following order:
+
+1. [Environment variable][env]
+2. [PATH entry][path]
+3. [Alias][alias] / [Function][alias]
+4. [Symbolic link][link]
+5. [Script][script]
+
+Within a section, entries are rendered in the order they appear in the
+configuration file.
 
 [alias]: setup/alias.mdx
 [env]: setup/env.mdx
