@@ -70,41 +70,6 @@ jobs:
           path: |
             src/dist/aliae-*
 
-  inno:
-    needs:
-      - changelog
-      - artifacts
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        arch: [amd64, arm64, 386]
-    defaults:
-      run:
-        shell: pwsh
-        working-directory: ${{ github.workspace }}/packages/inno
-    steps:
-      - name: Checkout code 👋
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
-        with:
-          name: build-artifacts
-          path: dist
-      - name: Build installer 📦
-        id: build
-        env:
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        run: |
-          $version = '${{ needs.changelog.outputs.tag }}'.TrimStart("v")
-          ./build.ps1 -Architecture ${{ matrix.arch }} -Version $version
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: inno-artifact-${{ matrix.arch }}
-          path: |
-            packages/inno/Output/install-${{ matrix.arch }}.exe
-            packages/inno/Output/install-${{ matrix.arch }}.exe.sha256
-
   msix:
     needs:
       - changelog
@@ -144,7 +109,6 @@ jobs:
     needs:
       - changelog
       - artifacts
-      - inno
       - msix
     steps:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c

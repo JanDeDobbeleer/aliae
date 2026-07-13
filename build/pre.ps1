@@ -6,7 +6,7 @@
     Tags the current commit and sets up the Azure Trusted Signing tooling used
     to code sign the produced Windows binaries. The resulting SIGNTOOL and
     SIGNTOOLDLIB paths are written to $env:GITHUB_ENV so later workflow steps
-    (goreleaser, the Inno Setup build) can use them.
+    (goreleaser) can use them.
 
 .PARAMETER Tag
     The git tag to create for this release (e.g. "v1.2.3").
