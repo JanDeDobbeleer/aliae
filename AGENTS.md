@@ -56,7 +56,8 @@ Instructions for AI coding agents working in this repository.
 ## Release And Packaging Notes
 
 - Release builds are handled by GoReleaser config in [src/.goreleaser.yml](src/.goreleaser.yml).
-- Distribution/package scripts live under [packages](packages) for the MSIX installer; winget updates are submitted directly from the release workflow.
+- Distribution/package scripts live under [packages](packages) for the MSIX installer; winget updates are
+  submitted directly from the release workflow.
 - If changing packaging behavior, keep related GitHub workflows in [.github/workflows](.github/workflows) consistent.
 
 ## Practical Guardrails
