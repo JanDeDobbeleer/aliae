@@ -6,6 +6,16 @@ sidebar_label: ✍🏽 Script
 
 Specify the same script cross shell.
 
+### Execution
+
+Scripts are not evaluated at shell startup, they are rendered once, when you run `aliae init
+<shell>` (which is what your shell profile calls on every new session). At that point, aliae
+builds the whole init script in a fixed order — env, then path, then alias, then link, then
+script — and templating (`{{ }}`, `if`) is resolved during this generation step, not when the
+resulting shell script actually runs. This means a script's `value` and `if` cannot depend on
+things set by an alias or another script at runtime; they only see the template context (`.Shell`,
+`.OS`, ...) available at generation time.
+
 ### Syntax
 
 ```yaml
