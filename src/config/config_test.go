@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/jandedobbeleer/aliae/src/context"
 	"github.com/jandedobbeleer/aliae/src/shell"
 	"github.com/stretchr/testify/assert"
 )
@@ -79,4 +80,15 @@ func TestLoadConfig(t *testing.T) {
 
 		assert.Equal(t, tc.expected, got, tc.name)
 	}
+}
+
+func TestLoadConfigSetsContextConfigPath(t *testing.T) {
+	context.Current = &context.Runtime{}
+
+	configFile := filepath.Join("test", "aliae.valid.yaml")
+
+	_, err := LoadConfig(configFile)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "test", context.Current.ConfigPath)
 }

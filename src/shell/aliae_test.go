@@ -214,11 +214,21 @@ func TestAliasWithTemplate(t *testing.T) {
 			Value:    "{{ .Home }}/go/bin/aliae{{ if eq .OS \"windows\" }}.exe{{ end }}",
 			Expected: `alias a="/Users/jan/go/bin/aliae.exe"`,
 		},
+		{
+			Case:     "Hostname in template",
+			Value:    "{{ .Hostname }}",
+			Expected: `alias a="my-host"`,
+		},
+		{
+			Case:     "ConfigPath in template",
+			Value:    "{{ .ConfigPath }}/.aliae.yaml",
+			Expected: `alias a="/Users/jan/.config/.aliae.yaml"`,
+		},
 	}
 
 	for _, tc := range cases {
 		alias := &Alias{Name: "a", Value: tc.Value}
-		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: context.WINDOWS}
+		context.Current = &context.Runtime{Shell: BASH, Home: "/Users/jan", OS: context.WINDOWS, Hostname: "my-host", ConfigPath: "/Users/jan/.config"}
 		assert.Equal(t, tc.Expected, alias.string(), tc.Case)
 	}
 }
