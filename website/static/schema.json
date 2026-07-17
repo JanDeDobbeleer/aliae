@@ -109,6 +109,22 @@
                 }
             }
         },
+        "cdpath": {
+            "type": "array",
+            "description": "CDPATH entry definitions (https://aliae.dev/docs/setup/cdpath)",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "string",
+                        "description": "the cdpath entires you want to add, separated by a newline. Supports templating (https://aliae.dev/docs/setup/templates)"
+                    },
+                    "if": {
+                        "$ref": "#/definitions/if"
+                    }
+                }
+            }
+        },
         "script": {
             "type": "array",
             "description": "script definitions (https://aliae.dev/docs/setup/script)",

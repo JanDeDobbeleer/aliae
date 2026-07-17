@@ -26,3 +26,8 @@ func (e *Path) fish() *Path {
 	e.template = `fish_add_path {{ .Value }}`
 	return e
 }
+
+func (c *CDPath) fish() *CDPath {
+	c.template = `set -gx CDPATH {{ .Value }} $CDPATH`
+	return c
+}

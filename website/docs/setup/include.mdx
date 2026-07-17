@@ -65,4 +65,19 @@ aliae:
   value: kubectl get --watch -f
 ```
 
+## Conditional Include
+
+Both `!include` and `!include_dir` support an optional trailing `if="..."` condition, using
+the same [conditional statement][if] syntax as the `if` field. When the condition evaluates
+to false, the include is skipped entirely and nothing is read from disk.
+
+```yaml title=".aliae.yaml"
+env: !include "{{ .Home }}/.aliae/kubernetes-env.yaml" if="hasCommand \"kubectl\""
+aliae:
+  - !include "{{ .Home }}/.aliae/kubernetes.yaml" if="hasCommand \"kubectl\""
+  - name: g
+    value: git
+```
+
+[if]: if.mdx
 [templates]: templates.mdx
