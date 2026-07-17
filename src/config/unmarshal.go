@@ -69,17 +69,21 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 				return nil, fmt.Errorf("invalid %s directive: \n%s", f.Name, line)
 			}
 
-			pathParts, condition, hasCondition := splitIncludeCondition(parts)
-			if len(pathParts) < 3 {
+			tagIdx := bytes.Index(line, f.Name)
+			argument := bytes.TrimSpace(line[tagIdx+len(f.Name):])
+
+			content, ok := unquoteArgument(argument)
+			if !ok {
 				return nil, fmt.Errorf("invalid %s directive: \n%s", f.Name, line)
 			}
 
+			folder, condition, hasCondition := splitIncludeCondition(content)
+
 			if hasCondition && shell.If(condition).Ignore() {
-				s[i] = skippedIncludeLine(pathParts[0])
+				s[i] = skippedIncludeLine(parts[0])
 				break
 			}
 
-			folder := string(bytes.Join(pathParts[2:][0:], []byte(" ")))
 			path, err := validatePath(folder)
 			if err != nil {
 				return nil, err
@@ -97,7 +101,7 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 
 			indented := bytes.Join(splitted, newline)
 
-			result := pathParts[0][0:]
+			result := parts[0][0:]
 
 			switch string(result) {
 			case "-":
@@ -123,26 +127,68 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 	return includeUnmarshaler(data)
 }
 
-// splitIncludeCondition extracts a trailing `if="..."` marker from an already
-// whitespace-split include directive line, e.g. !include "extras.yaml" if="hasCommand kubectl".
-// The condition may contain spaces, so once an `if=`-prefixed token is found, it and every
-// token after it are rejoined into the condition; everything before it is the key/tag/path,
-// preserving the existing path-with-spaces join logic.
-func splitIncludeCondition(parts [][]byte) (pathParts [][]byte, condition string, ok bool) {
-	ifPrefix := []byte("if=")
+// unquoteArgument strips one matching pair of outer quotes from an include directive's
+// argument, e.g. !include "path.yaml" or !include 'path.yaml if="hasCommand kubectl"'.
+// The condition (if any) must live inside these same outer quotes: the raw YAML document
+// must be syntactically valid before any of this preprocessing ever runs, so nothing may
+// follow the quoted argument on the line. A double-quoted argument supports `\"` to embed a
+// literal double quote; a single-quoted argument treats its content literally.
+func unquoteArgument(argument []byte) (content string, ok bool) {
+	if len(argument) == 0 {
+		return "", false
+	}
 
-	for idx := 2; idx < len(parts); idx++ {
-		if !bytes.HasPrefix(parts[idx], ifPrefix) {
+	quote := argument[0]
+	if quote != '"' && quote != '\'' {
+		// bare, unquoted argument: a plain YAML scalar can't carry a trailing
+		// condition (that would be a second value on the same line), so the
+		// whole argument is the path.
+		return string(argument), true
+	}
+
+	if len(argument) < 2 {
+		return "", false
+	}
+
+	if quote == '\'' {
+		if argument[len(argument)-1] != '\'' {
+			return "", false
+		}
+
+		return string(argument[1 : len(argument)-1]), true
+	}
+
+	var builder strings.Builder
+
+	for idx := 1; idx < len(argument)-1; idx++ {
+		if argument[idx] == '\\' && idx+1 < len(argument)-1 && argument[idx+1] == '"' {
+			builder.WriteByte('"')
+			idx++
+
 			continue
 		}
 
-		raw := string(bytes.Join(parts[idx:], []byte(" ")))
-		raw = strings.TrimPrefix(raw, "if=")
-
-		return parts[:idx], trimQuotes(raw), true
+		builder.WriteByte(argument[idx])
 	}
 
-	return parts, "", false
+	if argument[len(argument)-1] != '"' {
+		return "", false
+	}
+
+	return builder.String(), true
+}
+
+// splitIncludeCondition splits an unquoted include argument into its path and an optional
+// trailing `if=<condition>` marker, e.g. `path.yaml if=hasCommand "kubectl"`.
+func splitIncludeCondition(content string) (path, condition string, ok bool) {
+	marker := " if="
+
+	before, after, ok := strings.Cut(content, marker)
+	if !ok {
+		return content, "", false
+	}
+
+	return before, after, true
 }
 
 // skippedIncludeLine replaces a skipped (condition evaluated to false) include directive

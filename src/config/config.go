@@ -47,7 +47,7 @@ func LoadConfig(configPath string) (*Aliae, error) {
 		context.Current.ConfigPath = filepath.Dir(configPathCache)
 	}
 
-	if filepath, err := os.Stat(configPathCache); os.IsNotExist(err) || filepath.IsDir() {
+	if stat, err := os.Stat(configPathCache); os.IsNotExist(err) || stat.IsDir() {
 		return nil, fmt.Errorf("config file not found: %s", configPathCache)
 	}
 
