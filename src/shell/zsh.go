@@ -53,3 +53,14 @@ func (p *Path) zsh() *Path {
 	p.template = template
 	return p
 }
+
+func (c *CDPath) zsh() *CDPath {
+	c.template = `cdpath=({{ .Value }} $cdpath)`
+	return c
+}
+
+func (c *CDPath) bash() *CDPath {
+	template := fmt.Sprintf(`export CDPATH="{{ .Value }}%s$CDPATH"`, context.PathDelimiter())
+	c.template = template
+	return c
+}

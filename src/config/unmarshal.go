@@ -16,6 +16,7 @@ type Aliae struct {
 	Aliae   shell.Aliae   `yaml:"alias"`
 	Envs    shell.Envs    `yaml:"env"`
 	Paths   shell.Paths   `yaml:"path"`
+	CDPaths shell.CDPaths `yaml:"cdpath"`
 	Scripts shell.Scripts `yaml:"script"`
 	Links   shell.Links   `yaml:"link"`
 }
@@ -68,7 +69,17 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 				return nil, fmt.Errorf("invalid %s directive: \n%s", f.Name, line)
 			}
 
-			folder := string(bytes.Join(parts[2:][0:], []byte(" ")))
+			pathParts, condition, hasCondition := splitIncludeCondition(parts)
+			if len(pathParts) < 3 {
+				return nil, fmt.Errorf("invalid %s directive: \n%s", f.Name, line)
+			}
+
+			if hasCondition && shell.If(condition).Ignore() {
+				s[i] = skippedIncludeLine(pathParts[0])
+				break
+			}
+
+			folder := string(bytes.Join(pathParts[2:][0:], []byte(" ")))
 			path, err := validatePath(folder)
 			if err != nil {
 				return nil, err
@@ -86,7 +97,7 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 
 			indented := bytes.Join(splitted, newline)
 
-			result := parts[0][0:]
+			result := pathParts[0][0:]
 
 			switch string(result) {
 			case "-":
@@ -110,6 +121,41 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 	}
 
 	return includeUnmarshaler(data)
+}
+
+// splitIncludeCondition extracts a trailing `if="..."` marker from an already
+// whitespace-split include directive line, e.g. !include "extras.yaml" if="hasCommand kubectl".
+// The condition may contain spaces, so once an `if=`-prefixed token is found, it and every
+// token after it are rejoined into the condition; everything before it is the key/tag/path,
+// preserving the existing path-with-spaces join logic.
+func splitIncludeCondition(parts [][]byte) (pathParts [][]byte, condition string, ok bool) {
+	ifPrefix := []byte("if=")
+
+	for idx := 2; idx < len(parts); idx++ {
+		if !bytes.HasPrefix(parts[idx], ifPrefix) {
+			continue
+		}
+
+		raw := string(bytes.Join(parts[idx:], []byte(" ")))
+		raw = strings.TrimPrefix(raw, "if=")
+
+		return parts[:idx], trimQuotes(raw), true
+	}
+
+	return parts, "", false
+}
+
+// skippedIncludeLine replaces a skipped (condition evaluated to false) include directive
+// with a YAML-safe no-op: `null` for a map key, or nothing for a list item.
+func skippedIncludeLine(key []byte) []byte {
+	if string(key) == "-" {
+		return []byte{}
+	}
+
+	result := key[0:]
+	result = append(result, []byte(" null")...)
+
+	return result
 }
 
 func trimQuotes(s string) string {
