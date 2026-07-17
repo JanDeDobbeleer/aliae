@@ -65,42 +65,42 @@ func TestIncludeUnmarshalerCondition(t *testing.T) {
 	assert.NoError(t, err)
 
 	t.Run("include - true condition includes the file", func(t *testing.T) {
-		input := fmt.Sprintf(`env: !include %q if="eq 1 1"`, envPath)
+		input := fmt.Sprintf(`env: !include "%s if=eq 1 1"`, envPath)
 		result, err := includeUnmarshaler([]byte(input))
 		assert.NoError(t, err)
 		assert.Contains(t, string(result), "TEST_ENV")
 	})
 
 	t.Run("include - false condition skips the file", func(t *testing.T) {
-		input := fmt.Sprintf(`env: !include %q if="eq 1 2"`, envPath)
+		input := fmt.Sprintf(`env: !include "%s if=eq 1 2"`, envPath)
 		result, err := includeUnmarshaler([]byte(input))
 		assert.NoError(t, err)
 		assert.Equal(t, "env: null", string(result))
 	})
 
 	t.Run("include - false condition never reads a nonexistent file", func(t *testing.T) {
-		input := `env: !include "does/not/exist.yaml" if="eq 1 2"`
+		input := `env: !include "does/not/exist.yaml if=eq 1 2"`
 		result, err := includeUnmarshaler([]byte(input))
 		assert.NoError(t, err)
 		assert.Equal(t, "env: null", string(result))
 	})
 
 	t.Run("include_dir - true condition includes the directory contents", func(t *testing.T) {
-		input := fmt.Sprintf(`alias: !include_dir %q if="eq 1 1"`, aliasesDir)
+		input := fmt.Sprintf(`alias: !include_dir "%s if=eq 1 1"`, aliasesDir)
 		result, err := includeUnmarshaler([]byte(input))
 		assert.NoError(t, err)
 		assert.Contains(t, string(result), "test2")
 	})
 
 	t.Run("include_dir - false condition never reads the directory", func(t *testing.T) {
-		input := `alias: !include_dir "does/not/exist" if="eq 1 2"`
+		input := `alias: !include_dir "does/not/exist if=eq 1 2"`
 		result, err := includeUnmarshaler([]byte(input))
 		assert.NoError(t, err)
 		assert.Equal(t, "alias: null", string(result))
 	})
 
 	t.Run("list item - false condition drops the entry, leaving the rest intact", func(t *testing.T) {
-		input := "alias:\n  - !include \"does/not/exist.yaml\" if=\"eq 1 2\"\n  - name: g\n    value: git"
+		input := "alias:\n  - !include \"does/not/exist.yaml if=eq 1 2\"\n  - name: g\n    value: git"
 		result, err := includeUnmarshaler([]byte(input))
 		assert.NoError(t, err)
 		assert.Equal(t, "alias:\n\n  - name: g\n    value: git", string(result))
@@ -111,10 +111,31 @@ func TestIncludeUnmarshalerCondition(t *testing.T) {
 		spacedPath := filepath.Join(dir, "my file.yaml")
 		assert.NoError(t, os.WriteFile(spacedPath, []byte("- name: sp\n  value: spaced"), 0o644))
 
-		input := fmt.Sprintf(`alias: !include "%s" if="eq 1 1"`, spacedPath)
+		input := fmt.Sprintf(`alias: !include "%s if=eq 1 1"`, spacedPath)
 		result, err := includeUnmarshaler([]byte(input))
 		assert.NoError(t, err)
 		assert.Contains(t, string(result), "spaced")
+	})
+
+	t.Run("condition with a quoted argument, single-quoted outer", func(t *testing.T) {
+		input := fmt.Sprintf(`env: !include '%s if=eq "a" "a"'`, envPath)
+		result, err := includeUnmarshaler([]byte(input))
+		assert.NoError(t, err)
+		assert.Contains(t, string(result), "TEST_ENV")
+	})
+
+	t.Run("condition with a quoted argument, double-quoted outer with escaped quotes", func(t *testing.T) {
+		input := fmt.Sprintf(`env: !include "%s if=eq \"a\" \"a\""`, envPath)
+		result, err := includeUnmarshaler([]byte(input))
+		assert.NoError(t, err)
+		assert.Contains(t, string(result), "TEST_ENV")
+	})
+
+	t.Run("real YAML decode round-trip through a false condition", func(t *testing.T) {
+		input := `env: !include "does/not/exist.yaml if=eq 1 2"` + "\n"
+		var a Aliae
+		err := aliaeUnmarshaler(&a, []byte(input))
+		assert.NoError(t, err)
 	})
 }
 

@@ -67,14 +67,17 @@ aliae:
 
 ## Conditional Include
 
-Both `!include` and `!include_dir` support an optional trailing `if="..."` condition, using
-the same [conditional statement][if] syntax as the `if` field. When the condition evaluates
-to false, the include is skipped entirely and nothing is read from disk.
+Both `!include` and `!include_dir` support an optional `if=<condition>` marker, using the same
+[conditional statement][if] syntax as the `if` field. When the condition evaluates to false, the
+include is skipped entirely and nothing is read from disk. The marker must live inside the same
+quotes as the path — a bare, unquoted include can't carry one, since the underlying YAML document
+has to be valid before this preprocessing ever runs. Use single quotes to wrap the whole argument
+when the condition itself needs double quotes, so nothing needs escaping:
 
 ```yaml title=".aliae.yaml"
-env: !include "{{ .Home }}/.aliae/kubernetes-env.yaml" if="hasCommand \"kubectl\""
+env: !include '{{ .Home }}/.aliae/kubernetes-env.yaml if=hasCommand "kubectl"'
 aliae:
-  - !include "{{ .Home }}/.aliae/kubernetes.yaml" if="hasCommand \"kubectl\""
+  - !include '{{ .Home }}/.aliae/kubernetes.yaml if=hasCommand "kubectl"'
   - name: g
     value: git
 ```
