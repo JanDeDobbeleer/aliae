@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
@@ -40,6 +41,10 @@ func LoadConfig(configPath string) (*Aliae, error) {
 
 	if strings.HasPrefix(configPathCache, "http://") || strings.HasPrefix(configPathCache, "https://") {
 		return getRemoteConfig(configPathCache)
+	}
+
+	if context.Current != nil {
+		context.Current.ConfigPath = filepath.Dir(configPathCache)
 	}
 
 	if filepath, err := os.Stat(configPathCache); os.IsNotExist(err) || filepath.IsDir() {
