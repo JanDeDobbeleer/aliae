@@ -6,6 +6,7 @@ require (
 	github.com/goccy/go-yaml v1.19.2
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cobra v1.10.2
+	golang.org/x/term v0.45.0
 )
 
 require (
