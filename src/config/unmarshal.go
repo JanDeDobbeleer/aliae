@@ -235,8 +235,6 @@ func readDir(dir string) ([]byte, error) {
 		return []byte{}, nil
 	case err != nil:
 		return []byte{}, err
-	case len(files) == 0:
-		return []byte{}, nil
 	}
 
 	var configData []byte
