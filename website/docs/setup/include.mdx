@@ -24,6 +24,9 @@ The `!include` and `!include_dir` yaml tags allow you to include a single file o
 This allows for clean organization of aliae, envs, and all other things handled by Aliae.
 File/Directory paths support [templating][templates].
 
+If the directory given to `!include_dir` does not exist, it is treated as empty rather than raising an
+error. This lets you define a multi-folder config layout upfront and add the subfolders as you need them.
+
 ## Inline Include
 
 If you want to have a more fine grained control over the included file, you can use the `!include` tag inline in combination
