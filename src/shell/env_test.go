@@ -115,6 +115,68 @@ func TestEnvironmentVariable(t *testing.T) {
 	}
 }
 
+func TestEnvironmentVariablePwshOptions(t *testing.T) {
+	cases := []struct {
+		Case     string
+		Expected string
+		Env      Env
+	}{
+		{
+			Case:     "no PowerShell fields set, stays a real environment variable",
+			Env:      Env{Name: "HELLO", Value: "world"},
+			Expected: `$env:HELLO = "world"`,
+		},
+		{
+			Case:     "description switches to Set-Variable",
+			Env:      Env{Name: "HELLO", Value: "world", Description: "a variable"},
+			Expected: `Set-Variable -Name HELLO -Value "world" -Description "a variable"`,
+		},
+		{
+			Case:     "force switches to Set-Variable",
+			Env:      Env{Name: "HELLO", Value: "world", Force: true},
+			Expected: `Set-Variable -Name HELLO -Value "world" -Force`,
+		},
+		{
+			Case:     "a valid option switches to Set-Variable and renders -Option",
+			Env:      Env{Name: "HELLO", Value: "world", Option: ReadOnly},
+			Expected: `Set-Variable -Name HELLO -Value "world" -Option "ReadOnly"`,
+		},
+		{
+			Case:     "an invalid option still switches to Set-Variable but is not rendered",
+			Env:      Env{Name: "HELLO", Value: "world", Option: "NotARealOption"},
+			Expected: `Set-Variable -Name HELLO -Value "world"`,
+		},
+		{
+			Case:     "a valid scope switches to Set-Variable and renders -Scope",
+			Env:      Env{Name: "HELLO", Value: "world", Scope: Global},
+			Expected: `Set-Variable -Name HELLO -Value "world" -Scope "Global"`,
+		},
+		{
+			Case: "all fields combined, in Set-Alias's switch order",
+			Env: Env{
+				Name:        "HELLO",
+				Value:       "world",
+				Description: "a variable",
+				Force:       true,
+				Option:      ReadOnly,
+				Scope:       Global,
+			},
+			Expected: `Set-Variable -Name HELLO -Value "world" -Description "a variable" -Force -Option "ReadOnly" -Scope "Global"`,
+		},
+		{
+			Case:     "array value with a PowerShell field renders a real PS array",
+			Env:      Env{Name: "ARRAY", Value: "hello array world", Type: Array, Force: true},
+			Expected: `Set-Variable -Name ARRAY -Value @("hello","array","world") -Force`,
+		},
+	}
+
+	for _, tc := range cases {
+		tc.Env.template = ""
+		context.Current = &context.Runtime{Shell: PWSH}
+		assert.Equal(t, tc.Expected, tc.Env.string(), tc.Case)
+	}
+}
+
 func TestEnvironmentVariableWithTemplate(t *testing.T) {
 	cases := []struct {
 		Case     string
