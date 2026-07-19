@@ -32,6 +32,13 @@ Out of the box you get the following functionality:
 | `hasCommand`     | `boolean` | check if an executable exists                               | `{{ hasCommand "oh-my-posh" }}`                                              |
 | `dirAccessible`  | `boolean` | check if a directory exists and is traversable              | `{{ dirAccessible "/opt/homebrew/bin" }}`                                    |
 | `pathAccessible` | `boolean` | check if a path exists and is readable                      | `{{ pathAccessible "/etc/hosts" }}`                                          |
+| `wslPath`        | `string`  | convert a Windows path to its WSL equivalent                | `{{ wslPath "C:\\Documents\\theme.omp.yml" }}`                               |
+
+:::tip
+`wslPath` relies on the `wslpath` binary, which only exists inside WSL's interop layer. Outside
+WSL (or if the binary can't convert the given path) it returns the path unchanged, so it's safe to
+use unconditionally in a config shared across machines.
+:::
 
 :::tip
 When using a template in a single line, you have to use quotes to wrap the template string.

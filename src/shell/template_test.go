@@ -1,8 +1,10 @@
 package shell
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/jandedobbeleer/aliae/src/context"
@@ -278,6 +280,65 @@ func TestPathAccessible(t *testing.T) {
 		got, _ := parse(text, tc)
 		assert.Equal(t, tc.Expected, got, tc.Case)
 	}
+}
+
+// writeFakeBinary drops a script named "wslpath" (plus a Windows-executable
+// extension when needed) into dir that, when run, prints output and exits with
+// exitCode. It returns dir so callers can prepend it to PATH.
+func writeFakeBinary(t *testing.T, output string, exitCode int) string {
+	t.Helper()
+
+	dir := t.TempDir()
+
+	if runtime.GOOS == "windows" {
+		script := "@echo off\r\n"
+		if len(output) > 0 {
+			script += "echo " + output + "\r\n"
+		}
+		script += fmt.Sprintf("exit /b %d\r\n", exitCode)
+
+		assert.NoError(t, os.WriteFile(filepath.Join(dir, "wslpath.cmd"), []byte(script), 0o755))
+
+		return dir
+	}
+
+	script := "#!/bin/sh\n"
+	if len(output) > 0 {
+		script += "echo " + output + "\n"
+	}
+	script += fmt.Sprintf("exit %d\n", exitCode)
+
+	assert.NoError(t, os.WriteFile(filepath.Join(dir, "wslpath"), []byte(script), 0o755))
+
+	return dir
+}
+
+func TestWslPath(t *testing.T) {
+	origPath := os.Getenv("PATH")
+	t.Cleanup(func() { os.Setenv("PATH", origPath) })
+
+	t.Run("wslpath not on PATH returns the input unchanged", func(t *testing.T) {
+		os.Setenv("PATH", t.TempDir())
+
+		got := wslPath(`C:\Documents\theme.omp.yml`)
+		assert.Equal(t, `C:\Documents\theme.omp.yml`, got)
+	})
+
+	t.Run("wslpath converts the path", func(t *testing.T) {
+		dir := writeFakeBinary(t, "/mnt/c/Documents/theme.omp.yml", 0)
+		os.Setenv("PATH", dir+string(os.PathListSeparator)+origPath)
+
+		got := wslPath(`C:\Documents\theme.omp.yml`)
+		assert.Equal(t, "/mnt/c/Documents/theme.omp.yml", got)
+	})
+
+	t.Run("wslpath failing returns the input unchanged", func(t *testing.T) {
+		dir := writeFakeBinary(t, "", 1)
+		os.Setenv("PATH", dir+string(os.PathListSeparator)+origPath)
+
+		got := wslPath(`C:\Documents\theme.omp.yml`)
+		assert.Equal(t, `C:\Documents\theme.omp.yml`, got)
+	})
 }
 
 func TestHasCommand(t *testing.T) {
