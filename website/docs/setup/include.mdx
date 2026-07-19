@@ -85,5 +85,34 @@ aliae:
     value: git
 ```
 
+## Section Files
+
+A file included directly at a section's own key (`alias: !include ...`, not the inline list-item
+form above) may itself be wrapped in one or more of Aliae's top-level keys — `alias`, `env`,
+`path`, `cdpath`, `script`, or `link` — instead of a bare list. This lets you keep everything for
+one "workflow" together in a single file, and pull only the relevant section in at each include
+site. Only the section matching the include's own key is used; any other sections in the file are
+ignored at that site.
+
+```yaml title=".aliae.yaml"
+alias: !include "{{ .Home }}/.aliae/python.yaml"
+env: !include "{{ .Home }}/.aliae/python.yaml"
+```
+
+```yaml title="$HOME/.aliae/python.yaml"
+alias:
+  - name: venv
+    value: python -m venv .venv
+env:
+  - name: PYTHONDONTWRITEBYTECODE
+    value: "1"
+```
+
+A file that doesn't carry the section being included resolves to nothing, same as a false
+[conditional include](#conditional-include). Section files can also be used with `!include_dir`:
+each file in the directory contributes only its own matching section, and a file that doesn't
+carry that section is skipped. This is not supported for the inline list-item form, since there's
+no single destination key for an entry inside an existing list.
+
 [if]: if.mdx
 [templates]: templates.mdx
