@@ -10,6 +10,8 @@ import (
 	"strings"
 
 	"github.com/goccy/go-yaml"
+	"github.com/goccy/go-yaml/ast"
+	"github.com/goccy/go-yaml/parser"
 	"github.com/jandedobbeleer/aliae/src/shell"
 )
 
@@ -22,10 +24,16 @@ type Aliae struct {
 	Links   shell.Links   `yaml:"link"`
 }
 
-type FuncMap []StringFunc
-type StringFunc struct {
-	F    func(string) ([]byte, error)
-	Name []byte
+// sectionKeys are the top-level Aliae document keys (config.go's Aliae struct tags)
+// that an included file may itself be wrapped in, e.g. a file combining alias/env/script
+// sections that gets included separately at each section's own position.
+var sectionKeys = map[string]bool{
+	"alias":  true,
+	"env":    true,
+	"path":   true,
+	"cdpath": true,
+	"script": true,
+	"link":   true,
 }
 
 func aliaeUnmarshaler(a *Aliae, b []byte) error {
@@ -48,34 +56,28 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 
 	s := bytes.Split(b, newline)
 
-	includeFuncMap := FuncMap{
-		{
-			Name: []byte("!include_dir"),
-			F:    readDir,
-		},
-		{
-			Name: []byte("!include"),
-			F:    os.ReadFile,
-		},
+	tagNames := [][]byte{
+		[]byte("!include_dir"),
+		[]byte("!include"),
 	}
 
 	for i, line := range s {
-		for _, f := range includeFuncMap {
-			if !bytes.Contains(line, f.Name) {
+		for _, name := range tagNames {
+			if !bytes.Contains(line, name) {
 				continue
 			}
 
 			parts := bytes.Fields(line)
 			if len(parts) < 3 {
-				return nil, fmt.Errorf("invalid %s directive: \n%s", f.Name, line)
+				return nil, fmt.Errorf("invalid %s directive: \n%s", name, line)
 			}
 
-			tagIdx := bytes.Index(line, f.Name)
-			argument := bytes.TrimSpace(line[tagIdx+len(f.Name):])
+			tagIdx := bytes.Index(line, name)
+			argument := bytes.TrimSpace(line[tagIdx+len(name):])
 
 			content, ok := unquoteArgument(argument)
 			if !ok {
-				return nil, fmt.Errorf("invalid %s directive: \n%s", f.Name, line)
+				return nil, fmt.Errorf("invalid %s directive: \n%s", name, line)
 			}
 
 			folder, condition, hasCondition := splitIncludeCondition(content)
@@ -90,9 +92,34 @@ func includeUnmarshaler(b []byte) ([]byte, error) {
 				return nil, err
 			}
 
-			data, err := f.F(path)
+			destKey := sectionDestKey(parts[0])
+			isDir := string(name) == "!include_dir"
+
+			var data []byte
+			if isDir {
+				data, err = readDir(path, destKey)
+			} else {
+				data, err = os.ReadFile(path)
+			}
+
 			if err != nil {
 				return nil, err
+			}
+
+			if !isDir && destKey != "" {
+				extracted, wrapped, extractErr := extractSection(data, destKey)
+				if extractErr != nil {
+					return nil, extractErr
+				}
+
+				if wrapped && len(extracted) == 0 {
+					s[i] = skippedIncludeLine(parts[0])
+					break
+				}
+
+				if wrapped {
+					data = extracted
+				}
 			}
 
 			splitted := bytes.Split(data, newline)
@@ -227,7 +254,12 @@ func indent(data []byte) []byte {
 	return newData
 }
 
-func readDir(dir string) ([]byte, error) {
+// readDir reads every YAML file in dir and joins their content with a blank line.
+// When destKey is one of sectionKeys, each file's content is first passed through
+// extractSection: a file wrapped in that section contributes only that section
+// (or nothing, if it doesn't carry that section); a bare-list file (today's shape)
+// is used unchanged.
+func readDir(dir, destKey string) ([]byte, error) {
 	files, err := os.ReadDir(dir)
 	switch {
 	case errors.Is(err, fs.ErrNotExist):
@@ -237,9 +269,9 @@ func readDir(dir string) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	var configData []byte
+	var chunks [][]byte
 
-	for i, file := range files {
+	for _, file := range files {
 		if !isYAMLExtension(file.Name()) {
 			continue
 		}
@@ -250,14 +282,88 @@ func readDir(dir string) ([]byte, error) {
 			continue
 		}
 
-		configData = append(configData, data...)
+		if destKey != "" {
+			extracted, wrapped, err := extractSection(data, destKey)
+			if err != nil {
+				return nil, err
+			}
 
-		if i != len(files)-1 {
-			configData = append(configData, []byte("\n")...)
+			if wrapped {
+				data = extracted
+			}
+		}
+
+		if len(data) == 0 {
+			continue
+		}
+
+		chunks = append(chunks, data)
+	}
+
+	return bytes.Join(chunks, []byte("\n")), nil
+}
+
+// sectionDestKey returns the top-level Aliae section (see sectionKeys) an include
+// directive targets directly, e.g. "alias" for `alias: !include ...`. It returns ""
+// for a list-item include (`- !include ...`, no ancestor key tracked) or a key that
+// isn't a recognized section — signaling that section extraction must not run.
+func sectionDestKey(key []byte) string {
+	trimmed := strings.TrimSuffix(string(key), ":")
+	if !sectionKeys[trimmed] {
+		return ""
+	}
+
+	return trimmed
+}
+
+// extractSection inspects an included file's content for a top-level mapping
+// carrying one or more sectionKeys, e.g. a file combining alias/env/script into one
+// document. When such a mapping is found, wrapped is true and extracted holds the
+// raw source text of destKey's value (empty when the file doesn't carry that
+// section), so nested !include tags, block scalars, and Go-template syntax within
+// it survive untouched for the next unmarshal pass. wrapped is false when the
+// content isn't shaped this way (e.g. a bare list), signaling the caller to use the
+// original content unchanged.
+func extractSection(data []byte, destKey string) (extracted []byte, wrapped bool, err error) {
+	file, err := parser.ParseBytes(data, 0)
+	if err != nil {
+		// not valid enough to inspect; let the normal decode path surface the error
+		return nil, false, nil
+	}
+
+	if len(file.Docs) == 0 || file.Docs[0].Body == nil {
+		return nil, false, nil
+	}
+
+	if len(file.Docs) > 1 {
+		return nil, false, errors.New("included file with multiple YAML documents is not supported")
+	}
+
+	mapping, ok := file.Docs[0].Body.(*ast.MappingNode)
+	if !ok {
+		return nil, false, nil
+	}
+
+	var found *ast.MappingValueNode
+
+	for _, value := range mapping.Values {
+		key := strings.Trim(value.Key.String(), `"'`)
+		if !sectionKeys[key] {
+			continue
+		}
+
+		wrapped = true
+
+		if key == destKey {
+			found = value
 		}
 	}
 
-	return configData, nil
+	if !wrapped || found == nil {
+		return nil, wrapped, nil
+	}
+
+	return []byte(found.Value.String()), true, nil
 }
 
 func validatePath(path string) (string, error) {
