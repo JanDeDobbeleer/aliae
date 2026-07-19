@@ -81,6 +81,22 @@
                             "string",
                             "array"
                         ]
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "PowerShell only: specifies a description for the variable. Setting this, force, option, or scope switches this entry from a real environment variable to a PowerShell-only variable (Set-Variable), no longer visible to child processes"
+                    },
+                    "force": {
+                        "type": "boolean",
+                        "description": "PowerShell only: use the force parameter to change or delete a variable that has the option parameter set to ReadOnly. The Force parameter cannot change or delete a variable with the option parameter set to Constant"
+                    },
+                    "option": {
+                        "type": "string",
+                        "description": "PowerShell only: see https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-variable#-option"
+                    },
+                    "scope": {
+                        "type": "string",
+                        "description": "PowerShell only: see https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-variable#-scope"
                     }
                 }
             }
