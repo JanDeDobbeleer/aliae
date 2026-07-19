@@ -2,6 +2,7 @@ package shell
 
 import (
 	"bytes"
+	context_ "context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -61,6 +62,7 @@ func funcMap() template.FuncMap {
 		"isDir":          isDir,
 		"dirAccessible":  dirAccessible,
 		"pathAccessible": pathAccessible,
+		"wslPath":        wslPath,
 	}
 	return funcMap
 }
@@ -184,4 +186,22 @@ func dirAccessible(path string) bool {
 	}
 
 	return canTraverseDir(path)
+}
+
+// wslPath converts a Windows path to its WSL equivalent via the wslpath binary.
+// wslpath only exists inside WSL's interop layer, so its presence on PATH is
+// itself the WSL signal; path is returned unchanged when the binary isn't found
+// or fails to convert it (e.g. running natively, or the path can't be resolved).
+func wslPath(path string) string {
+	bin, err := exec.LookPath("wslpath")
+	if err != nil {
+		return path
+	}
+
+	out, err := exec.CommandContext(context_.Background(), bin, "-a", path).Output()
+	if err != nil {
+		return path
+	}
+
+	return strings.TrimSpace(string(out))
 }
