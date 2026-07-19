@@ -60,6 +60,22 @@ Write-Host $message`
 }
 
 func (e *Env) pwsh() *Env {
+	// description/force/option/scope only exist on the Variable provider, not the
+	// Environment provider, so using any of them switches this entry from a real
+	// (child-process-visible) environment variable to a PowerShell-only variable.
+	if e.hasPwshOptions() {
+		switch e.Type {
+		case Array:
+			e.template = `Set-Variable -Name {{ .Name }} -Value @({{ formatArray .Value "," }}){{ if .Description }} -Description {{ formatString .Description }}{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ formatString .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ formatString .Scope }}{{ end }}` //nolint: lll
+		case String:
+			fallthrough
+		default:
+			e.template = `Set-Variable -Name {{ .Name }} -Value {{ formatString .Value }}{{ if .Description }} -Description {{ formatString .Description }}{{ end }}{{ if .Force }} -Force{{ end }}{{ if isPwshOption .Option }} -Option {{ formatString .Option }}{{ end }}{{ if isPwshScope .Scope }} -Scope {{ formatString .Scope }}{{ end }}` //nolint: lll
+		}
+
+		return e
+	}
+
 	switch e.Type {
 	case Array:
 		e.template = `$env:{{ .Name }} = @({{ formatArray .Value "," }})`
@@ -70,6 +86,12 @@ func (e *Env) pwsh() *Env {
 	}
 
 	return e
+}
+
+// hasPwshOptions reports whether e sets any PowerShell Variable-provider-only
+// field, which requires rendering via Set-Variable instead of $env:.
+func (e *Env) hasPwshOptions() bool {
+	return len(e.Description) > 0 || e.Force || len(e.Option) > 0 || len(e.Scope) > 0
 }
 
 func (l *Link) pwsh() *Link {

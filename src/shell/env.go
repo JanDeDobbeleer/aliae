@@ -12,14 +12,18 @@ import (
 type Envs []*Env
 
 type Env struct {
-	Value     any      `yaml:"value"`
-	Name      string   `yaml:"name"`
-	Delimiter Template `yaml:"delimiter"`
-	If        If       `yaml:"if"`
-	Type      EnvType  `yaml:"type"`
-	template  string
-	Persist   bool `yaml:"persist"`
-	parsed    bool
+	Value       any      `yaml:"value"`
+	Name        string   `yaml:"name"`
+	Delimiter   Template `yaml:"delimiter"`
+	If          If       `yaml:"if"`
+	Type        EnvType  `yaml:"type"`
+	Description string   `yaml:"description"`
+	Option      Option   `yaml:"option"`
+	Scope       Option   `yaml:"scope"`
+	template    string
+	Persist     bool `yaml:"persist"`
+	Force       bool `yaml:"force"`
+	parsed      bool
 }
 
 func toString(value any) string {
