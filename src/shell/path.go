@@ -93,28 +93,9 @@ func (p *Path) render() string {
 }
 
 func (p Paths) Render() {
-	if len(p) == 0 {
-		return
-	}
-
-	first := true
-	for _, entry := range p {
-		if entry.If.Ignore() {
-			continue
-		}
-
-		script := entry.string()
-		if len(script) == 0 {
-			continue
-		}
-
-		if first && DotFile.Len() > 0 {
-			DotFile.WriteString("\n")
-		}
-
-		DotFile.WriteString("\n")
-		DotFile.WriteString(script)
-
-		first = false
-	}
+	renderEntries(p, true, func(entry *Path) bool {
+		return entry.If.Ignore()
+	}, func(entry *Path) string {
+		return entry.string()
+	})
 }

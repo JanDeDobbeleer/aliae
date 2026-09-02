@@ -25,9 +25,9 @@ type httpClient interface {
 var (
 	defaultTransport http.RoundTripper = &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
-		Dial: (&net.Dialer{
+		DialContext: (&net.Dialer{
 			Timeout: 10 * time.Second,
-		}).Dial,
+		}).DialContext,
 		TLSHandshakeTimeout:   10 * time.Second,
 		ResponseHeaderTimeout: 10 * time.Second,
 	}

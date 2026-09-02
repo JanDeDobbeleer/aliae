@@ -13,24 +13,9 @@ func (s *Script) String() string {
 }
 
 func (s Scripts) Render() {
-	if len(s) == 0 {
-		return
-	}
-
-	first := true
-	for _, script := range s {
-		scriptBlock := script.String()
-		if len(scriptBlock) == 0 || script.If.Ignore() {
-			continue
-		}
-
-		if first && DotFile.Len() > 0 {
-			DotFile.WriteString("\n")
-		}
-
-		DotFile.WriteString("\n")
-		DotFile.WriteString(scriptBlock)
-
-		first = false
-	}
+	renderEntries(s, false, func(entry *Script) bool {
+		return entry.If.Ignore()
+	}, func(entry *Script) string {
+		return entry.String()
+	})
 }
