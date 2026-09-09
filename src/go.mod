@@ -6,8 +6,8 @@ require (
 	github.com/goccy/go-yaml v1.19.2
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cobra v1.10.2
-	github.com/stretchr/testify v1.12.0
-	golang.org/x/sys v0.47.0
+	github.com/stretchr/testify v1.12.1
+	golang.org/x/sys v0.48.0
 	golang.org/x/term v0.45.0
 )
 
@@ -18,5 +18,5 @@ require (
 	github.com/tklauser/go-sysconf v0.4.0 // indirect
 	github.com/tklauser/numcpus v0.12.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 )
