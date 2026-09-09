@@ -14,7 +14,7 @@ jobs:
     - name: Install Go
       uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
       with:
-        go-version: '1.26.5'
+        go-version: '1.27.0'
     - name: Checkout code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
     - name: Golang CI

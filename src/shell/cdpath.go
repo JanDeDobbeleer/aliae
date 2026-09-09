@@ -67,28 +67,9 @@ func (c *CDPath) render() string {
 }
 
 func (c CDPaths) Render() {
-	if len(c) == 0 {
-		return
-	}
-
-	first := true
-	for _, entry := range c {
-		if entry.If.Ignore() {
-			continue
-		}
-
-		script := entry.string()
-		if len(script) == 0 {
-			continue
-		}
-
-		if first && DotFile.Len() > 0 {
-			DotFile.WriteString("\n")
-		}
-
-		DotFile.WriteString("\n")
-		DotFile.WriteString(script)
-
-		first = false
-	}
+	renderEntries(c, true, func(entry *CDPath) bool {
+		return entry.If.Ignore()
+	}, func(entry *CDPath) string {
+		return entry.string()
+	})
 }

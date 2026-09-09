@@ -76,24 +76,9 @@ func (l *Link) render() string {
 }
 
 func (l Links) Render() {
-	if len(l) == 0 {
-		return
-	}
-
-	first := true
-	for _, link := range l {
-		script := link.string()
-		if len(script) == 0 || link.If.Ignore() {
-			continue
-		}
-
-		if first && DotFile.Len() > 0 {
-			DotFile.WriteString("\n")
-		}
-
-		DotFile.WriteString("\n")
-		DotFile.WriteString(script)
-
-		first = false
-	}
+	renderEntries(l, false, func(entry *Link) bool {
+		return entry.If.Ignore()
+	}, func(entry *Link) string {
+		return entry.string()
+	})
 }
