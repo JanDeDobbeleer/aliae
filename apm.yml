@@ -1,19 +1,13 @@
-name: oh-my-posh
+name: aliae
 version: 1.0.0
-description: A prompt theme engine for any shell.
+description: A cross-platform command-line tool for managing aliases.
 
 dependencies:
   apm:
     - JanDeDobbeleer/agentic/instructions/golang.instructions.md
-    - JanDeDobbeleer/agentic/instructions/markdown.instructions.md
-    - JanDeDobbeleer/agentic/instructions/powershell.instructions.md
     - JanDeDobbeleer/agentic/skills/conventional-commit
     - JanDeDobbeleer/agentic/skills/golang
-    - JanDeDobbeleer/agentic/skills/markdown
-    - JanDeDobbeleer/agentic/skills/powershell
-    - JanDeDobbeleer/agentic/skills/writing-clearly-and-concisely
     - JanDeDobbeleer/agentic/skills/code-changes
-    - ast-grep/agent-skill/ast-grep/skills/ast-grep
 
 targets:
   - claude
